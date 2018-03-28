@@ -2,9 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Root } from 'native-base';
 import Router from './src/Router';
+import firebase from 'firebase';
 
 class App extends React.Component {
-  componentWillMount() {
+	componentWillMount() {
 		const config = {
 			apiKey: "AIzaSyBOE0wGW9TRzP_InQz0cOnh-OR7SwyLM9w",
 			authDomain: "reactnative-auth-66287.firebaseapp.com",
@@ -18,11 +19,12 @@ class App extends React.Component {
 	}
   
 	render() {
-	
 		return (
-				<Root>
-					<Router />
-				</Root>
+			<Root>
+				<Router />
+			</Root>
 		);
 	}
 }
+
+export default App;
