@@ -1,6 +1,7 @@
 import { GiftedChat } from 'react-native-gifted-chat'
+import React, { Component }  from 'react';
 
-class Chat extends React.Component {
+export default class Chat extends Component {
   state = {
     messages: [],
   }
@@ -19,13 +20,13 @@ class Chat extends React.Component {
           },
         },
       ],
-    })
+    });
   }
 
   onSend(messages = []) {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
-    }))
+    }));
   }
 
   render() {
@@ -37,6 +38,7 @@ class Chat extends React.Component {
           _id: 1,
         }}
       />
-    )
+    );
   }
 }
+
