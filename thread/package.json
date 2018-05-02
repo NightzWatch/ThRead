@@ -2,6 +2,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "dependencies": {
+    "@pusher/chatkit": "^0.7.12",
     "expo": "^25.0.0",
     "firebase": "^4.12.0",
     "native-base": "^2.4.1",
