@@ -1,11 +1,21 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk';
 import { Root } from 'native-base';
 import Router from './src/Router';
 import firebase from 'firebase';
+import reducers from './src/reducers';
 
-class App extends React.Component {
-	componentWillMount() {
+/**
+ * Firebase quirk for firestore
+ */
+require('firebase/firestore');
+
+class App extends Component {
+	constructor() {
+		super();
+
 		const config = {
 			apiKey: "AIzaSyBOE0wGW9TRzP_InQz0cOnh-OR7SwyLM9w",
 			authDomain: "reactnative-auth-66287.firebaseapp.com",
@@ -19,10 +29,14 @@ class App extends React.Component {
 	}
   
 	render() {
+		const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+
 		return (
-			<Root>
-				<Router />
-			</Root>
+			<Provider store={store}>
+				<Root>
+					<Router />
+				</Root>
+			</Provider>
 		);
 	}
 }
