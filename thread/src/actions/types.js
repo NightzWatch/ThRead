@@ -36,3 +36,9 @@ export const RESET_PASSWORD_FAIL = 'reset_password_fail';
  */
 export const CHAT_ROOMS_SET_ROOMS = 'chat_rooms_set_rooms';
 export const CHAT_ROOMS_ADDED_TO_ROOM = 'chat_rooms_added_to_room';
+
+/**
+ * Profile Actions
+ */
+export const PROFILE_FETCH = 'profile_fetch';
+export const PROFILE_SET = 'profile_set';

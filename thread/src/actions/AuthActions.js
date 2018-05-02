@@ -13,7 +13,9 @@ import {
     LOGOUT_USER_FAIL,
     LOGIN_CHAT_USER_SUCCESS,
     CHAT_ROOMS_ADDED_TO_ROOM,
-    CHAT_ROOMS_SET_ROOMS
+    CHAT_ROOMS_SET_ROOMS,
+    PROFILE_FETCH,
+    PROFILE_SET
 } from './types';
 
 export const loginEmailChanged = (text) => {
@@ -52,6 +54,66 @@ const loginUserSuccess = (dispatch, user) => {
     });
 
     initChatkit(dispatch, user.uid);
+};
+
+
+const initChatkit = (dispatch, userID) => {
+    const chatManager = new ChatManager({
+        instanceLocator: 'v1:us1:ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea',
+        userId: userID,
+        tokenProvider: new TokenProvider({
+            url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea/token'
+        })
+    });
+    
+    chatManager.connect({
+        onAddedToRoom: room => {
+            console.log(`Added to room ${room.name}`);
+
+            dispatch({
+                type: CHAT_ROOMS_ADDED_TO_ROOM,
+                payload: room
+            });
+        }
+    })
+    .then(currentUser => {
+        dispatch({
+            type: LOGIN_CHAT_USER_SUCCESS,
+            payload: currentUser
+        });
+
+        dispatch({
+            type: CHAT_ROOMS_SET_ROOMS,
+            payload: currentUser.rooms
+        });
+
+        fetchProfile(dispatch, userID);
+
+        Actions.main({ type: 'reset' });
+    })
+    .catch(err => {
+        console.log('Error on connection', err);
+    });
+};
+
+const fetchProfile = (dispatch, userID) => {
+    dispatch({
+        type: PROFILE_FETCH
+    });
+
+    const db = firebase.firestore();
+
+    db.collection('users')
+        .doc(userID)
+        .onSnapshot(doc => {
+            dispatch({
+                type: PROFILE_SET,
+                payload: {
+                    ...doc.data(),
+                    doc_id: userID
+                }
+            })
+        });
 };
 
 const loginUserFail = (dispatch, { code, message }) => {
@@ -108,42 +170,5 @@ const logoutUserFail = (dispatch, { code, message }) => {
         text: message,
         position: 'bottom',
         buttonText: ''
-    });
-};
-
-const initChatkit = (dispatch, userID) => {
-    const chatManager = new ChatManager({
-        instanceLocator: 'v1:us1:ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea',
-        userId: userID,
-        tokenProvider: new TokenProvider({
-            url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea/token'
-        })
-    });
-    
-    chatManager.connect({
-        onAddedToRoom: room => {
-            console.log(`Added to room ${room.name}`);
-
-            dispatch({
-                type: CHAT_ROOMS_ADDED_TO_ROOM,
-                payload: room
-            });
-        }
-    })
-    .then(currentUser => {
-        dispatch({
-            type: LOGIN_CHAT_USER_SUCCESS,
-            payload: currentUser
-        });
-
-        dispatch({
-            type: CHAT_ROOMS_SET_ROOMS,
-            payload: currentUser.rooms
-        });
-
-        Actions.main({ type: 'reset' });
-    })
-    .catch(err => {
-        console.log('Error on connection', err);
     });
 };
