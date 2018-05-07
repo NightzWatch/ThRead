@@ -7,14 +7,15 @@ import {
     registerFirstNameChanged,
     registerLastNameChanged,
     registerPasswordChanged,
-    secondPasswordChanged
+    secondPasswordChanged,
+    registerPhoneChanged
 } from '../actions/index';
 
 class RegisterForm extends Component {
     onSubmitPress() {
-        const { first_name, last_name, email, password, second_password } = this.props;
+        const { phone_number, first_name, last_name, email, password, second_password } = this.props;
 
-        this.props.register({ first_name, last_name, email, password, second_password });
+        this.props.register({ phone_number, first_name, last_name, email, password, second_password });
     }
 
     onEmailChange(text) {
@@ -35,6 +36,10 @@ class RegisterForm extends Component {
 
     onSecondPasswordChange(text) {
         this.props.secondPasswordChanged(text);
+    }
+
+    onPhoneChange(text) {
+        this.props.registerPhoneChanged(text);
     }
 
     renderRegisterButton() {
@@ -74,6 +79,14 @@ class RegisterForm extends Component {
                             />
                         </Item>
                         <Item stackedLabel last>
+                            <Label>Phone Number</Label>
+                            <Input
+                                keyboardType="numeric"
+                                onChangeText={this.onPhoneChange.bind(this)}
+                                value={this.props.phone_number}
+                            />
+                        </Item>
+                        <Item stackedLabel last>
                             <Label>Email</Label>
                             <Input
                                 onChangeText={this.onEmailChange.bind(this)}
@@ -105,9 +118,9 @@ class RegisterForm extends Component {
 }
 
 const mapStateToProps = ({ register }) => {
-    const { first_name, last_name, email, password, second_password, loading } = register;
+    const { first_name, last_name, email, password, second_password, phone_number, loading } = register;
 
-    return { first_name, last_name, email, password, second_password, loading };
+    return { first_name, last_name, email, password, second_password, phone_number, loading };
 };
 
 export default connect(mapStateToProps, {
@@ -116,5 +129,6 @@ export default connect(mapStateToProps, {
     registerFirstNameChanged,
     registerLastNameChanged,
     registerPasswordChanged,
-    secondPasswordChanged
+    secondPasswordChanged,
+    registerPhoneChanged
 })(RegisterForm);

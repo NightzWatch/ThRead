@@ -7,10 +7,13 @@ import RegisterForm from './components/RegisterForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import Chat from './components/Chat';
 import ThreadList from './components/Threads';
-import AddThreadButton from './components/AddThreadButton';
+import CreateThreadButton from './components/CreateThreadButton';
 import CreateTreadForm from './components/CreateTreadForm';
 import Contacts from './components/Contacts';
+import ContactTabs from './components/ContactTabs';
 import Profile from './components/Profile';
+import AddContactButton from './components/AddContactButton';
+import AddContactForm from './components/AddContactForm';
 
 class RouterComponent extends Component {
     render() {
@@ -48,14 +51,15 @@ class RouterComponent extends Component {
                                 <Scene
                                     key="contacts"
                                     title="Contacts"
-                                    component={Contacts}
+                                    component={ContactTabs}
+                                    renderRightButton={() => <AddContactButton />}
                                     icon={() => <Icon name="people" />}
                                 />
                                 <Scene
                                     key="threads"
                                     title="ThRead"
                                     component={ThreadList}
-                                    renderRightButton={() => <AddThreadButton />}
+                                    renderRightButton={() => <CreateThreadButton />}
                                     icon={() => <Icon name="logo-octocat" />}
                                     initial
                                 />
@@ -70,6 +74,11 @@ class RouterComponent extends Component {
                                 key="createThread"
                                 title="Create"
                                 component={CreateTreadForm}
+                            />
+                            <Scene
+                                key="addContact"
+                                title="Send Request"
+                                component={AddContactForm}
                             />
                         </Modal>
                     </Scene>

@@ -1,61 +1,78 @@
 import React, { Component }  from 'react';
+import { Keyboard } from 'react-native';
 import { GiftedChat, Actions, SystemMessage, Send } from 'react-native-gifted-chat';
 import { View, Button, Icon } from 'native-base';
 import { connect } from 'react-redux';
 
 class Chat extends Component {
 	state = {
-		messages: [],
+		messages: []
 	}
 
 	constructor(props) {
 		super(props);
 
+		this.fetchOlderMessages();
+
 		props.chatUser.subscribeToRoom({
 			roomId: props.roomID,
 			hooks: {
 				onNewMessage: message => {
-					const isGif = this.checkMessageIsGif(message.text);
-					const messageText = isGif ? '' : message.text;
-
-					const messages = [{
-						_id: message.id,
-						text: messageText,
-						createdAt: new Date(message.createdAt),
-						user: {
-							_id: message.sender.id,
-							name: message.sender.name,
-							avatar: message.sender.avatarURL,
-						}
-					}];
-
-					if (isGif) {
-						messages[0].image = message.text;
-					}
-
-					this.setState(previousState => ({
-						messages: GiftedChat.append(previousState.messages, messages),
-					}));
+					this.addMessage(message);
 				}
 			},
-			messageLimit: 100
+			messageLimit: 0
 		});
 	}
 
-	// TODO: ADD FUNCTIONALITY TO FETCH OLD MESSAGES
-	fetchOlderMessages(lastMessageID) {
-		this.props.chatUser.fetchMessages({
+	addMessage(message) {
+		const isGif = this.checkMessageIsGif(message.text);
+		const messageText = isGif ? '' : message.text;
+
+		const messages = [{
+			_id: message.id,
+			text: messageText,
+			createdAt: new Date(message.createdAt),
+			user: {
+				_id: message.sender.id,
+				name: message.sender.name,
+				avatar: message.sender.avatarURL,
+			}
+		}];
+
+		if (isGif) {
+			messages[0].image = message.text;
+		}
+
+		this.setState(previousState => ({
+			messages: GiftedChat.append(previousState.messages, messages),
+		}));
+	}
+
+	onFetchOlderMessages() {
+		const oldestMessageIdReceived = Math.min(...this.state.messages.map(m => m.id));
+
+		this.fetchOlderMessages(oldestMessageIdReceived);
+	}
+
+	fetchOlderMessages(oldestMessageID = false) {
+		const payload = {
 			roomId: this.props.roomID,
 			direction: 'older',
-			limit: 10,
-			initialId: lastMessageID
-		})
-		.then(messages => {
-			console.log('messages', messages);
-		})
-		.catch(err => {
-			console.log(`Error fetching messages: ${err}`);
-		});
+			limit: 15
+		};
+
+		if (oldestMessageID) {
+			payload.initialId = oldestMessageID;
+		}
+
+		this.props.chatUser.fetchMessages(payload)
+			.then(messages => {
+				messages.forEach(this.addMessage.bind(this));
+			})
+			.catch(err => {
+				console.log(`Error fetching messages: ${err}`);
+			});
 	}
 
 	checkMessageIsGif(text) {
@@ -90,6 +107,8 @@ class Chat extends Component {
 			text = this.getCatGif();
 		}
 
+		Keyboard.dismiss();
+
 		this.props.chatUser.sendMessage({
 			text: text,
 			roomId: this.props.roomID
@@ -115,6 +134,7 @@ class Chat extends Component {
 		);
 	}
 
+	// TODO: ADD CALLBACKS PROPERTIES TO LOAD OLD MESSAGES
 	render() {
 		return (
 			<GiftedChat
@@ -123,7 +143,7 @@ class Chat extends Component {
 				user={{
 					_id: this.props.user.uid,
 				}}
-				renderSend={this.renderSend.bind(this)}
+				renderSend={this.renderSend.bind(this)}	
 			/>
 		);
 	}

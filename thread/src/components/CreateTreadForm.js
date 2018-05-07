@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner } from 'native-base';
+import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { 
@@ -9,7 +9,8 @@ import {
 class CreateTreadForm extends Component {
 	state = {
 		room_name: '',
-		create_button_loading: false
+		create_button_loading: false,
+		added_contacts: []
 	}
 
 	onRoomNameChange(text) {
@@ -19,8 +20,6 @@ class CreateTreadForm extends Component {
 	}
 
 	createThread() {
-		console.log('ROOM NAME: ', this.state.room_name);
-
 		if (!this.state.room_name) {
 			return Toast.show({
 				text: 'ThRead name cannot be empty!',
@@ -34,7 +33,7 @@ class CreateTreadForm extends Component {
 		this.props.chatUser.createRoom({
 			name: this.state.room_name,
 			private: true,
-			addUserIds: []
+			addUserIds: this.state.added_contacts
 		}).then(room => {
 			console.log(`Created room called ${room.name}`);
 			this.props.chatRoomCreated(room);
@@ -43,7 +42,7 @@ class CreateTreadForm extends Component {
 		.catch(err => {
 			console.log(`Error creating room ${err}`)
 			this.setState({ create_button_loading: false });
-		})
+		});
 	}
 
 	renderCreateButton() {
@@ -56,9 +55,55 @@ class CreateTreadForm extends Component {
 		}
 
 		return (
-			<Button full style={{ marginTop: 50 }} onPress={this.createThread.bind(this)}>
+			<Button full style={{ marginTop: 50 }} onPress={() => this.createThread()}>
 				<Text>Create ThRead</Text>
 			</Button>
+		);
+	}
+
+	onCheckboxPress(item) {
+		const added_index = this.state.added_contacts.indexOf(item.id);
+
+		if (added_index === -1) {
+			this.setState({
+				added_contacts: [
+					...this.state.added_contacts,
+					item.id
+				]
+			});
+		} else {
+			const cloneArray = [...this.state.added_contacts];
+			cloneArray.splice(added_index, 1);
+			this.setState({
+				added_contacts: cloneArray
+			});
+		}
+	}
+
+	renderContacts() {
+		if (this.props.loading) {
+			return <Spinner color="blue" />;
+		}
+
+		const listItems = this.props.contact_list.map((d) => {
+			const isChecked = this.state.added_contacts.indexOf(d.id) !== -1;
+
+			return (
+				<ListItem key={d.id}>
+					<CheckBox checked={isChecked} onPress={() => {
+						this.onCheckboxPress(d);
+					}} />
+					<Body>
+						<Text>{d.first_name} {d.last_name}</Text>
+					</Body>
+				</ListItem>
+			);
+		});
+
+		return (
+			<List>
+				{listItems}
+			</List>
 		);
 	}
 
@@ -72,6 +117,7 @@ class CreateTreadForm extends Component {
 							<Input onChangeText={this.onRoomNameChange.bind(this)} />
 						</Item>
 					</Form>
+					{this.renderContacts()}
 					{this.renderCreateButton()}
 				</Content>
 			</Container>
@@ -79,10 +125,11 @@ class CreateTreadForm extends Component {
 	}
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, contacts }) => {
 	const { chatUser } = auth;
+	const { contact_list, loading } = contacts;
 
-	return { chatUser };
+	return { chatUser, contact_list, loading };
 };
 
 export default connect(mapStateToProps, { chatRoomCreated })(CreateTreadForm);
