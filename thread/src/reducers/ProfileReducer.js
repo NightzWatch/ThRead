@@ -10,7 +10,9 @@ const INITIAL_STATE = {
     last_name: '',
     avatar: '',
     phone_number: '',
-    contacts: []
+    contacts: [],
+    contact_requests_received: [],
+    contact_requests_sent: []
 };
 
 export default (state = INITIAL_STATE, action) => {

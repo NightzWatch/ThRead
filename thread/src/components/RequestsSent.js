@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, H3, Button, Spinner } from 'native-base';
+import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, H3, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 
-class Contacts extends Component {
+class RequestsSent extends Component {
     renderList() {
         if (this.props.loading) {
             return (
@@ -17,7 +17,7 @@ class Contacts extends Component {
             );
         }
 
-        if (this.props.contacts.length === 0) {
+        if (this.props.contact_requests_sent.length === 0) {
             return (
                 <Content contentContainerStyle={{ 
                     flex: 1,
@@ -25,28 +25,20 @@ class Contacts extends Component {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    <Text>You have no one to send cat gifs :(</Text>
+                    <Text>No requests sent</Text>
                 </Content>
             );
         }
-
+        
         return (
             <Content>
                 <List
-                    dataArray={this.props.contact_list}
+                    dataArray={this.props.requests_sent_list}
                     renderRow={(item) =>
                         <ListItem>
                             <Body>
-                                <Text>{item.first_name} {item.last_name}</Text>
+                                <Text>Phone Number:  <Text note>{item.phone_number}</Text></Text>
                             </Body>
-                            <Right>
-                                <Button
-                                    transparent 
-                                    style={{ width: 100 }}
-                                >
-                                    <Text>Message</Text>
-                                </Button>
-                            </Right>
                         </ListItem>
                     }
                 >
@@ -64,10 +56,11 @@ class Contacts extends Component {
     }
 }
 
-const mapStateToProps = ({ profile, contacts }) => {
-    const { contact_list, loading } = contacts;
+const mapStateToProps = ({ profile, requestsSent }) => {
+    const { contact_requests_sent } = profile;
+    const { requests_sent_list, loading } = requestsSent;
 
-    return { contact_list, loading, contacts: profile.contacts };
+    return { contact_requests_sent, requests_sent_list, loading };
 };
 
-export default connect(mapStateToProps, {})(Contacts);
+export default connect(mapStateToProps, {})(RequestsSent);
