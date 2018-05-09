@@ -8,7 +8,9 @@ import emojiUtils from 'emoji-utils'
 
 class Chat extends Component {
 	state = {
-		messages: []
+		messages: [],
+		loadEarlier: false,
+		isLoadingEarlier: false
 	}
 
 	constructor(props) {
@@ -27,7 +29,7 @@ class Chat extends Component {
 		});
 	}
 
-	addMessage(message) {
+	addMessage(message, newMessage = true) {
 		const isGif = this.checkMessageIsGif(message.text);
 		const messageText = isGif ? '' : message.text;
 
@@ -46,13 +48,23 @@ class Chat extends Component {
 			messages[0].image = message.text;
 		}
 
-		this.setState(previousState => ({
-			messages: GiftedChat.append(previousState.messages, messages),
-		}));
+		if (newMessage) {
+			this.setState(previousState => ({
+				messages: GiftedChat.append(previousState.messages, messages),
+			}));
+		} else {
+			this.setState(previousState => ({
+				messages: GiftedChat.prepend(previousState.messages, messages),
+			}));
+		}
 	}
 
 	onFetchOlderMessages() {
-		const oldestMessageIdReceived = Math.min(...this.state.messages.map(m => m.id));
+		this.setState({
+			isLoadingEarlier: true
+		});
+
+		const oldestMessageIdReceived = Math.min(...this.state.messages.map(m => m._id));
 
 		this.fetchOlderMessages(oldestMessageIdReceived);
 	}
@@ -70,10 +82,25 @@ class Chat extends Component {
 
 		this.props.chatUser.fetchMessages(payload)
 			.then(messages => {
-				messages.forEach(this.addMessage.bind(this));
+				messages.forEach(message => {
+					if (oldestMessageID) {
+						this.addMessage(message, false);
+					} else {
+						this.addMessage(message, true);
+					}
+				});
+
+				this.setState({
+					loadEarlier: (messages.length === 15),
+					isLoadingEarlier: false
+				});
+				
 			})
 			.catch(err => {
 				console.log(`Error fetching messages: ${err}`);
+				this.setState({
+					isLoadingEarlier: false
+				});
 			});
 	}
 
@@ -154,8 +181,7 @@ class Chat extends Component {
 			<Message {...props} messageTextStyle={messageTextStyle} />
 		);
 	}
-
-	// TODO: ADD CALLBACKS PROPERTIES TO LOAD OLD MESSAGES
+	
 	render() {
 		return (
 			<GiftedChat
@@ -166,6 +192,10 @@ class Chat extends Component {
 				}}
 				renderSend={this.renderSend.bind(this)}	
 				renderMessage={this.renderMessage}
+				alwaysShowSend={true}
+				loadEarlier={this.state.loadEarlier}
+				onLoadEarlier={this.onFetchOlderMessages.bind(this)}
+				isLoadingEarlier={this.state.isLoadingEarlier}
 			/>
 		);
 	}
