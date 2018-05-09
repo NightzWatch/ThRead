@@ -5,7 +5,7 @@ import { Icon } from 'native-base';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
-import Chat from './components/Chat';
+import Chat from './components//Messenger/Chat';
 import ThreadList from './components/Threads';
 import CreateThreadButton from './components/CreateThreadButton';
 import CreateTreadForm from './components/CreateTreadForm';
@@ -19,7 +19,7 @@ class RouterComponent extends Component {
     render() {
         return (
             <Router>
-                <Scene key="root">
+                <Scene key="root" {...sceneConfig}>
                     <Scene
                         key="login"
                         title="Login"
@@ -89,3 +89,9 @@ class RouterComponent extends Component {
 }
 
 export default RouterComponent;
+
+const sceneConfig = {
+    cardStyle: {
+        backgroundColor: 'white'
+    }
+}
