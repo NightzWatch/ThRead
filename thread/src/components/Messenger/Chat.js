@@ -1,7 +1,7 @@
 import React, { Component }  from 'react';
-import { Keyboard, Platform } from 'react-native';
+import { Keyboard, Platform, StyleSheet } from 'react-native';
 import { GiftedChat, Actions, SystemMessage, Send } from 'react-native-gifted-chat';
-import { View, Button, Icon } from 'native-base';
+import { View, Button, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import Message from './Message';
 import emojiUtils from 'emoji-utils'
@@ -10,7 +10,8 @@ class Chat extends Component {
 	state = {
 		messages: [],
 		loadEarlier: false,
-		isLoadingEarlier: false
+		isLoadingEarlier: false,
+		typingText: null
 	}
 
 	constructor(props) {
@@ -23,8 +24,14 @@ class Chat extends Component {
 			hooks: {
 				onNewMessage: message => {
 					this.addMessage(message);
+				},
+				onUserStartedTyping: user => {
+					this.setState({ typingText: `${user.name} is typing` });
+				},
+				onUserStoppedTyping: user => {
+					this.setState({ typingText: null });
 				}
-			},
+		},
 			messageLimit: 0
 		});
 	}
@@ -128,6 +135,16 @@ class Chat extends Component {
 		return cat[kitten];
 	}
 
+	onUserTyping() {
+		this.props.chatUser.isTypingIn({ roomId: this.props.roomID })
+			.then(() => {
+				console.log('Success!')
+			})
+			.catch(err => {
+				console.log(`Error sending typing indicator: ${err}`)
+			});
+	}
+
 	onSend(messages = []) {
 		const message = messages[0];
 		let text = message.text.trim();
@@ -181,6 +198,20 @@ class Chat extends Component {
 			<Message {...props} messageTextStyle={messageTextStyle} />
 		);
 	}
+
+	renderFooter(props) {
+		if (this.state.typingText) {
+			return (
+				<View style={styles.footerContainer}>
+					<Text style={styles.footerText}>
+						{this.state.typingText}
+					</Text>
+				</View>
+			);
+		}
+
+		return null;
+	}
 	
 	render() {
 		return (
@@ -196,6 +227,8 @@ class Chat extends Component {
 				loadEarlier={this.state.loadEarlier}
 				onLoadEarlier={this.onFetchOlderMessages.bind(this)}
 				isLoadingEarlier={this.state.isLoadingEarlier}
+				renderFooter={this.renderFooter.bind(this)}
+				onInputTextChanged={this.onUserTyping.bind(this)}
 			/>
 		);
 	}
@@ -208,3 +241,17 @@ const mapStateToProps = ({ auth }) => {
 };
 
 export default connect(mapStateToProps, {})(Chat);
+
+
+const styles = StyleSheet.create({
+	footerContainer: {
+		marginTop: 5,
+		marginLeft: 10,
+		marginRight: 10,
+		marginBottom: 10
+	},
+	footerText: {
+		fontSize: 14,
+		color: '#aaa'
+	}
+});
