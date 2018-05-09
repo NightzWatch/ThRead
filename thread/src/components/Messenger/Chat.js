@@ -1,8 +1,10 @@
 import React, { Component }  from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 import { GiftedChat, Actions, SystemMessage, Send } from 'react-native-gifted-chat';
 import { View, Button, Icon } from 'native-base';
 import { connect } from 'react-redux';
+import Message from './Message';
+import emojiUtils from 'emoji-utils'
 
 class Chat extends Component {
 	state = {
@@ -134,6 +136,25 @@ class Chat extends Component {
 		);
 	}
 
+	renderMessage(props) {
+		const { currentMessage: { text: currText } } = props;
+	
+		let messageTextStyle;
+	
+		/** Make "pure emoji" messages much bigger than plain text. */
+		if (currText && emojiUtils.isPureEmojiString(currText)) {
+			messageTextStyle = {
+				fontSize: 28,
+				/** Emoji get clipped if lineHeight isn't increased; make it consistent across platforms. */
+				lineHeight: Platform.OS === 'android' ? 34 : 30,
+			};
+		}
+	
+		return (
+			<Message {...props} messageTextStyle={messageTextStyle} />
+		);
+	}
+
 	// TODO: ADD CALLBACKS PROPERTIES TO LOAD OLD MESSAGES
 	render() {
 		return (
@@ -141,9 +162,10 @@ class Chat extends Component {
 				messages={this.state.messages}
 				onSend={messages => this.onSend(messages)}
 				user={{
-					_id: this.props.user.uid,
+					_id: this.props.user.uid
 				}}
 				renderSend={this.renderSend.bind(this)}	
+				renderMessage={this.renderMessage}
 			/>
 		);
 	}
