@@ -9,8 +9,8 @@ import emojiUtils from 'emoji-utils'
 class Chat extends Component {
 	state = {
 		messages: [],
-		loadEarlier: false,
-		isLoadingEarlier: false,
+		loadEarlier: true,
+		isLoadingEarlier: true,
 		typingText: null
 	}
 
