@@ -4,7 +4,7 @@ import { GiftedChat, Actions, SystemMessage, Send } from 'react-native-gifted-ch
 import { View, Button, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import Message from './Message';
-import emojiUtils from 'emoji-utils'
+import emojiUtils from 'emoji-utils';
 
 class Chat extends Component {
 	state = {
@@ -135,14 +135,18 @@ class Chat extends Component {
 		return cat[kitten];
 	}
 
-	onUserTyping() {
-		this.props.chatUser.isTypingIn({ roomId: this.props.roomID })
-			.then(() => {
-				console.log('Success!')
-			})
-			.catch(err => {
-				console.log(`Error sending typing indicator: ${err}`)
-			});
+	onUserTyping(text) {
+		const shavedCat = text.trim();
+
+		if (shavedCat) {
+			this.props.chatUser.isTypingIn({ roomId: this.props.roomID })
+				.then(() => {
+					console.log('Success!')
+				})
+				.catch(err => {
+					console.log(`Error sending typing indicator: ${err}`)
+				});
+		}
 	}
 
 	onSend(messages = []) {
