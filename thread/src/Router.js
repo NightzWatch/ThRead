@@ -14,6 +14,8 @@ import ContactTabs from './components/ContactTabs';
 import Profile from './components/Profile';
 import AddContactButton from './components/AddContactButton';
 import AddContactForm from './components/AddContactForm';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsAndConditions from './components/TermsAndConditions';
 
 class RouterComponent extends Component {
     render() {
@@ -36,10 +38,15 @@ class RouterComponent extends Component {
                         title="Reset Password"
                         component={ResetPasswordForm}
                     />
-                    <Scene 
-                        key="chat"
-                        title="Chat"
-                        component={Chat}
+                    <Scene
+                        key="privacyPolicy"
+                        title="Privacy Policy"
+                        component={PrivacyPolicy}
+                    />
+                    <Scene
+                        key="termsAndConditions"
+                        title="Terms and Conditions"
+                        component={TermsAndConditions}
                     />
                     <Scene
                         key="main"
@@ -80,6 +87,11 @@ class RouterComponent extends Component {
                                 title="Send Request"
                                 component={AddContactForm}
                             />
+                            <Scene 
+                                key="chat"
+                                title="Chat"
+                                component={Chat}
+                            />
                         </Modal>
                     </Scene>
                 </Scene>
@@ -94,4 +106,4 @@ const sceneConfig = {
     cardStyle: {
         backgroundColor: 'white'
     }
-}
+};

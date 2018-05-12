@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import {
     register,
@@ -110,6 +111,15 @@ class RegisterForm extends Component {
                             />
                         </Item>
                     </Form>
+                    <Text style={{ marginTop: 15, padding: 5 }}>
+                        By pressing "Register" I agree that I have read:
+                    </Text>
+                    <Button transparent onPress={() => Actions.termsAndConditions()}>
+                        <Text>Terms and conditions</Text>
+                    </Button>
+                    <Button transparent onPress={() => Actions.privacyPolicy()}>
+                        <Text>Privacy Policy</Text>
+                    </Button>
                     {this.renderRegisterButton()}
                 </Content>
             </Container>
