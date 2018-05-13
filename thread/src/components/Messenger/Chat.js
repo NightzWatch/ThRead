@@ -135,8 +135,8 @@ class Chat extends Component {
 		return cat[kitten];
 	}
 
-	onUserTyping(text) {
-		const shavedCat = text.trim();
+	onUserTyping(cat) {
+		const shavedCat = cat.trim();
 
 		if (shavedCat) {
 			this.props.chatUser.isTypingIn({ roomId: this.props.roomID })
@@ -227,12 +227,13 @@ class Chat extends Component {
 				}}
 				renderSend={this.renderSend.bind(this)}	
 				renderMessage={this.renderMessage}
-				alwaysShowSend={true}
 				loadEarlier={this.state.loadEarlier}
 				onLoadEarlier={this.onFetchOlderMessages.bind(this)}
 				isLoadingEarlier={this.state.isLoadingEarlier}
 				renderFooter={this.renderFooter.bind(this)}
 				onInputTextChanged={this.onUserTyping.bind(this)}
+				alwaysShowSend={true}
+				isAnimated={true}
 			/>
 		);
 	}
