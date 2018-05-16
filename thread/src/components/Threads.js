@@ -1,29 +1,47 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Spinner, H3 } from 'native-base';
-
 import { connect } from 'react-redux';
+import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Spinner, H3 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import InfoButton from './Messenger/InfoButton';
+import CloseButton from './Messenger/CloseButton';
+import {
+    setChatRoom
+} from '../actions';
 
 class Threads extends Component {
-    renderThreadItem(item) {
+    onThreadPress(room) {
+        const { createdAt, createdByUserId, id, isPrivate, name, updatedAt, users } = room;
+        
+        this.props.setChatRoom({
+            createdAt, createdByUserId, id, isPrivate, name, updatedAt, users
+        });
+
+        Actions.thread({
+            title: name,
+            roomID: id,
+            users,
+            left: () => <CloseButton />,
+            right: () => <InfoButton />
+        });
+    }
+
+    renderThreadItem(room) {
+        const { id, name, updatedAt, users } = room;
+
         return (
-            <ListItem avatar onPress={() => Actions.chat({
-                title: item.name,
-                roomID: item.id
-            })}>
+            <ListItem avatar onPress={() => this.onThreadPress(room)}>
                 <Body>
-                    <Text>{item.name}</Text>
-                    <Text note>ID: {item.id}</Text>
+                    <Text>{name}</Text>
+                    <Text note>ID: {id}</Text>
                 </Body>
                 <Right>
-                    <Text note>{item.updatedAt}</Text>
+                    <Text note>{updatedAt}</Text>
                 </Right>
             </ListItem>
         );
     }
 
     renderThreadList() {
-        //const { rooms } = this.props.chatUser;
         const { rooms } = this.props;
 
         if (rooms.length === 0) {
@@ -67,4 +85,4 @@ const mapStateToProps = ({ auth, chatRooms }) => {
     return { user, chatUser, rooms };
 };
 
-export default connect(mapStateToProps, {})(Threads);
+export default connect(mapStateToProps, { setChatRoom })(Threads);
