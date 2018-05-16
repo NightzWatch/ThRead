@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "thread",
-    "description": "This project is really great.",
+    "description": "The secure chat app for all cat gif lovers and everyone else too",
     "slug": "thread",
     "privacy": "public",
     "sdkVersion": "25.0.0",
