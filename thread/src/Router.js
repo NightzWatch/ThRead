@@ -26,9 +26,9 @@ class RouterComponent extends Component {
                 <Scene key="root" {...sceneConfig}>
                     <Scene
                         key="login"
-                        title="Login"
                         component={LoginForm}
                         initial
+                          hideNavBar={true}
                     />
                     <Scene
                         key="register"
@@ -52,7 +52,7 @@ class RouterComponent extends Component {
                     />
                     <Scene
                         key="main"
-                        hideNavBar 
+                        hideNavBar
                         panHandlers={null}
                     >
                          <Modal>
@@ -93,18 +93,18 @@ class RouterComponent extends Component {
                                 key="thread"
                                 hideNavBar
                             >
-                                 <Scene 
+                                 <Scene
                                     key="chat"
                                     component={Chat}
                                     hideNavBar={false}
                                 />
-                                <Scene 
+                                <Scene
                                     key="info"
                                     title="Info"
                                     component={Info}
                                     hideNavBar={false}
                                 />
-                                <Scene 
+                                <Scene
                                     key="addMembersForm"
                                     title="Add Members"
                                     component={AddMembersForm}

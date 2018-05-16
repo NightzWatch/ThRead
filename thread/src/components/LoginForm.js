@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
 import { connect } from 'react-redux';
+import {  View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import  Logo  from './Logo';
 import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
 
 class LoginForm extends Component {
@@ -18,6 +20,13 @@ class LoginForm extends Component {
 
         this.props.loginUser({ email, password });
     }
+
+    logo(){
+      return(
+        <Logo />
+      );
+    }
+
 
     renderSignInButton() {
         if (this.props.loading) {
@@ -37,11 +46,15 @@ class LoginForm extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container style={{ backgroundColor: '#8bc34a' }}>
+
+          {this.logo()}
                 <Content>
+
                     <Form>
                         <Item stackedLabel>
                             <Label>Email</Label>
+
                             <Input
                                 onChangeText={this.onEmailChange.bind(this)}
                                 value={this.props.email}
@@ -57,6 +70,8 @@ class LoginForm extends Component {
                         </Item>
                     </Form>
 
+
+
                     {this.renderSignInButton()}
 
                     <Button bordered full style={{ marginTop: 15 }} onPress={() => Actions.register() }>
@@ -67,6 +82,7 @@ class LoginForm extends Component {
                     </Button>
                 </Content>
             </Container>
+
         );
     }
 }
