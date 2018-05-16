@@ -5,6 +5,7 @@ import { View, Button, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import Message from './Message';
 import emojiUtils from 'emoji-utils';
+import { addUserToRoom } from '../../actions';
 
 class Chat extends Component {
 	state = {
@@ -30,8 +31,11 @@ class Chat extends Component {
 				},
 				onUserStoppedTyping: user => {
 					this.setState({ typingText: null });
+				},
+				onUserJoined: user => {
+					this.props.addUserToRoom(user);
 				}
-		},
+			},
 			messageLimit: 0
 		});
 	}
@@ -152,7 +156,7 @@ class Chat extends Component {
 	onSend(messages = []) {
 		const message = messages[0];
 		let text = message.text.trim();
-
+		
 		if (!text) {
 			text = this.getCatGif();
 		}
@@ -245,7 +249,7 @@ const mapStateToProps = ({ auth }) => {
 	return { user, chatUser };
 };
 
-export default connect(mapStateToProps, {})(Chat);
+export default connect(mapStateToProps, { addUserToRoom })(Chat);
 
 
 const styles = StyleSheet.create({

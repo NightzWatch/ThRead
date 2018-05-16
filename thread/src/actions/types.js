@@ -63,3 +63,9 @@ export const REQUESTS_SENT_FETCHED = 'requests_sent_fetched';
 export const REQUESTS_RECEIVED_ADD = 'requests_received_add';
 export const REQUESTS_RECEIVED_RESET = 'requests_received_reset';
 export const REQUESTS_RECEIVED_FETCHED = 'requests_received_fetched';
+
+/**
+ * Chat Room Actions
+ */
+export const CHAT_ROOM_SET = 'chat_room_set';
+export const CHAT_ROOM_ADD_USER = 'chat_room_add_user';

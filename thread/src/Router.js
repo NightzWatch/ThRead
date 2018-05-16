@@ -16,6 +16,8 @@ import AddContactButton from './components/AddContactButton';
 import AddContactForm from './components/AddContactForm';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
+import Info from './components/Messenger/Info';
+import AddMembersForm from './components/Messenger/AddMembersForm';
 
 class RouterComponent extends Component {
     render() {
@@ -87,11 +89,28 @@ class RouterComponent extends Component {
                                 title="Send Request"
                                 component={AddContactForm}
                             />
-                            <Scene 
-                                key="chat"
-                                title="Chat"
-                                component={Chat}
-                            />
+                            <Scene
+                                key="thread"
+                                hideNavBar
+                            >
+                                 <Scene 
+                                    key="chat"
+                                    component={Chat}
+                                    hideNavBar={false}
+                                />
+                                <Scene 
+                                    key="info"
+                                    title="Info"
+                                    component={Info}
+                                    hideNavBar={false}
+                                />
+                                <Scene 
+                                    key="addMembersForm"
+                                    title="Add Members"
+                                    component={AddMembersForm}
+                                    hideNavBar={false}
+                                />
+                            </Scene>
                         </Modal>
                     </Scene>
                 </Scene>
