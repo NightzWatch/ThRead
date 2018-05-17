@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Spinner, H3 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import InfoButton from './Messenger/InfoButton';
-import CloseButton from './Messenger/CloseButton';
+import CommonButton from './common/CommonButton'
 import {
     setChatRoom
 } from '../actions';
@@ -42,8 +41,8 @@ class Threads extends Component {
             title: name,
             roomID: id,
             users,
-            left: () => <CloseButton />,
-            right: () => <InfoButton />
+            left:  () => <CommonButton onPress={() => Actions.pop()} name={'arrow-back'} />,
+            right: () => <CommonButton onPress={() => Actions.info()} name={"information-circle"} />
         });
     }
 
