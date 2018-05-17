@@ -5,16 +5,14 @@ import Contacts from './Contacts';
 import RequestsReceived from './RequestsReceived';
 import RequestsSent from './RequestsSent';
 
-const ContactTabs = () => {
-  return (
-  	<Container>
-  		<Tabs renderTabBar={()=> <ScrollableTab />}>
-  			<Tab heading="Contacts" children={<Contacts />} />
-  			<Tab heading="Requests Received" children={<RequestsReceived />} />
-  			<Tab heading="Requests Sent" children={<RequestsSent />} />
-  		</Tabs>
-    </Container>
-  );
-}
+const ContactTabs = () => (
+  <Container>
+    <Tabs renderTabBar={()=> <ScrollableTab />}>
+      <Tab heading="Contacts" children={<Contacts />} />
+      <Tab heading="Requests Received" children={<RequestsReceived />} />
+      <Tab heading="Requests Sent" children={<RequestsSent />} />
+    </Tabs>
+  </Container>
+);
 
 export default ContactTabs;

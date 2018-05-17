@@ -61,26 +61,22 @@ class RouterComponent extends Component {
                                     key="contacts"
                                     title="Contacts"
                                     component={ContactTabs}
-                                    renderRightButton={() => {
-                                      return(
-                                        <CommonButton
-                                          onPress={() => Actions.addContact()}
-                                          name={'add'} />
-                                      )}
-                                    }
+                                    renderRightButton={() => (
+                                      <CommonButton
+                                        onPress={() => Actions.addContact()}
+                                        name={'add'} />
+                                    )}
                                     icon={() => <Icon name="people" />}
                                 />
                                 <Scene
                                     key="threads"
                                     title="ThRead"
                                     component={ThreadList}
-                                    renderRightButton={() => {
-                                      return(
-                                        <CommonButton
-                                          onPress={() => Actions.createThread()}
-                                          name={'add'} />
-                                        )}
-                                      }
+                                    renderRightButton={() => (
+                                      <CommonButton
+                                        onPress={() => Actions.createThread()}
+                                        name={'add'} />
+                                    )}
                                     icon={() => <Icon name="logo-octocat" />}
                                     initial
                                 />
