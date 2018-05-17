@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Router, Scene, Stack, Modal, Tabs } from 'react-native-router-flux';
 import { Icon } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
 import CommonButton from './components/common/CommonButton'
 import LoginForm from './components/LoginForm';
