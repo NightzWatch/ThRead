@@ -9,9 +9,17 @@ import {
 } from '../actions';
 
 class Threads extends Component {
+
+    formatDate(dateTime) {
+      let [date, _] = dateTime.split('T')
+      let dateComponents = date.split('-')
+      
+      return dateComponents.reverse().join('/')
+    }
+
     onThreadPress(room) {
         const { createdAt, createdByUserId, id, isPrivate, name, updatedAt, users } = room;
-        
+
         this.props.setChatRoom({
             createdAt, createdByUserId, id, isPrivate, name, updatedAt, users
         });
@@ -35,7 +43,7 @@ class Threads extends Component {
                     <Text note>ID: {id}</Text>
                 </Body>
                 <Right>
-                    <Text note>{updatedAt}</Text>
+                    <Text note>{this.formatDate(updatedAt)}</Text>
                 </Right>
             </ListItem>
         );
