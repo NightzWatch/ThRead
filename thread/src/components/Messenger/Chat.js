@@ -70,7 +70,7 @@ class Chat extends Component {
 		}
 	}
 
-	onFetchOlderMessages() {
+	onFetchOlderMessages = () => {
 		this.setState({
 			isLoadingEarlier: true
 		});
@@ -105,7 +105,7 @@ class Chat extends Component {
 					loadEarlier: (messages.length === 15),
 					isLoadingEarlier: false
 				});
-				
+
 			})
 			.catch(err => {
 				console.log(`Error fetching messages: ${err}`);
@@ -139,7 +139,7 @@ class Chat extends Component {
 		return cat[kitten];
 	}
 
-	onUserTyping(cat) {
+	onUserTyping = (cat) => {
 		const shavedCat = cat.trim();
 
 		if (shavedCat) {
@@ -156,7 +156,7 @@ class Chat extends Component {
 	onSend(messages = []) {
 		const message = messages[0];
 		let text = message.text.trim();
-		
+
 		if (!text) {
 			text = this.getCatGif();
 		}
@@ -175,7 +175,7 @@ class Chat extends Component {
 		});
 	}
 
-	renderSend(props) {
+	renderSend = (props) => {
 		return (
 			<Send
 				{...props}
@@ -190,9 +190,9 @@ class Chat extends Component {
 
 	renderMessage(props) {
 		const { currentMessage: { text: currText } } = props;
-	
+
 		let messageTextStyle;
-	
+
 		/** Make "pure emoji" messages much bigger than plain text. */
 		if (currText && emojiUtils.isPureEmojiString(currText)) {
 			messageTextStyle = {
@@ -201,13 +201,13 @@ class Chat extends Component {
 				lineHeight: Platform.OS === 'android' ? 34 : 30,
 			};
 		}
-	
+
 		return (
 			<Message {...props} messageTextStyle={messageTextStyle} />
 		);
 	}
 
-	renderFooter(props) {
+	renderFooter = (props) => {
 		if (this.state.typingText) {
 			return (
 				<View style={styles.footerContainer}>
@@ -220,7 +220,7 @@ class Chat extends Component {
 
 		return null;
 	}
-	
+
 	render() {
 		return (
 			<GiftedChat
@@ -229,13 +229,13 @@ class Chat extends Component {
 				user={{
 					_id: this.props.user.uid
 				}}
-				renderSend={this.renderSend.bind(this)}	
+				renderSend={this.renderSend}
 				renderMessage={this.renderMessage}
 				loadEarlier={this.state.loadEarlier}
-				onLoadEarlier={this.onFetchOlderMessages.bind(this)}
+				onLoadEarlier={this.onFetchOlderMessages}
 				isLoadingEarlier={this.state.isLoadingEarlier}
-				renderFooter={this.renderFooter.bind(this)}
-				onInputTextChanged={this.onUserTyping.bind(this)}
+				renderFooter={this.renderFooter}
+				onInputTextChanged={this.onUserTyping}
 				alwaysShowSend={true}
 				isAnimated={true}
 			/>

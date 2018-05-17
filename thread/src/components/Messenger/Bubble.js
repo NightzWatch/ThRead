@@ -16,10 +16,10 @@ const { isSameUser, isSameDay } = utils;
 class Bubble extends Component {
     constructor(props) {
         super(props);
-        this.onLongPress = this.onLongPress.bind(this);
+        this.onLongPress = this.onLongPress;
     }
 
-    onLongPress() {
+    onLongPress = () => {
         if (this.props.onLongPress) {
             this.props.onLongPress(this.context);
         } else if (this.props.currentMessage.text) {
@@ -68,9 +68,9 @@ class Bubble extends Component {
             if (this.props.renderMessageImage) {
                 return this.props.renderMessageImage(messageImageProps);
             }
-            
+
             return (
-                <MessageImage 
+                <MessageImage
                     {...messageImageProps}
                     imageStyle={[styles.slackImage, messageImageProps.imageStyle]}
                 />
@@ -146,7 +146,7 @@ class Bubble extends Component {
         if (this.props.renderCustomView) {
             return this.props.renderCustomView(this.props);
         }
-        
+
         return null;
     }
 

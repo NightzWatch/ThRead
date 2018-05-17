@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { 
+import {
 	chatRoomCreated
 } from '../actions';
 
@@ -13,7 +13,7 @@ class CreateTreadForm extends Component {
 		added_contacts: []
 	}
 
-	onRoomNameChange(text) {
+	onRoomNameChange = (text) => {
 		this.setState({
 			room_name: text
 		});
@@ -114,7 +114,7 @@ class CreateTreadForm extends Component {
 					<Form>
 						<Item stackedLabel>
 							<Label>ThRead Name</Label>
-							<Input onChangeText={this.onRoomNameChange.bind(this)} />
+							<Input onChangeText={this.onRoomNameChange} />
 						</Item>
 					</Form>
 					{this.renderContacts()}
