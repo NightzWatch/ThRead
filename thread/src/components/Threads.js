@@ -10,11 +10,25 @@ import {
 
 class Threads extends Component {
 
-    formatDate(dateTime) {
-      let [date, _] = dateTime.split('T')
-      let dateComponents = date.split('-')
-      
-      return dateComponents.reverse().join('/')
+    formatDate(dateTime){
+      return (
+        dateTime
+          .split(/[T|-]/, 3)
+          .reverse()
+          .join('/')
+      );
+    }
+
+    formatTime(dateTime) {
+      return (
+        dateTime
+          .split(/T/)[1]
+          .slice(0, -1)
+      );
+    }
+
+    renderText(content) {
+      return <Text note children={content} />
     }
 
     onThreadPress(room) {
@@ -43,7 +57,8 @@ class Threads extends Component {
                     <Text note>ID: {id}</Text>
                 </Body>
                 <Right>
-                    <Text note>{this.formatDate(updatedAt)}</Text>
+                    { this.renderText(this.formatTime(updatedAt)) }
+                    { this.renderText(this.formatDate(updatedAt)) }
                 </Right>
             </ListItem>
         );
