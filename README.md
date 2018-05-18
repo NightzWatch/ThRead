@@ -15,3 +15,6 @@ Open Expo XDE.
 Click: `Open existing project...` 
 
 And choose thread inner folder
+
+## Useful tips
+`cmd + d` to open console on simulator
