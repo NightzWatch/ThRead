@@ -18,3 +18,4 @@ And choose thread inner folder
 
 ## Useful tips
 `cmd + d` to open console on simulator
+`cmd + r` to refresh screen
