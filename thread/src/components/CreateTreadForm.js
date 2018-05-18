@@ -10,7 +10,7 @@ class CreateTreadForm extends Component {
 		added_contacts: []
 	}
 
-	onRoomNameChange(text) {
+	onRoomNameChange = (text) => {
 		this.setState({
 			room_name: text
 		});
@@ -110,7 +110,7 @@ class CreateTreadForm extends Component {
 					<Form>
 						<Item stackedLabel>
 							<Label>ThRead Name</Label>
-							<Input onChangeText={this.onRoomNameChange.bind(this)} />
+							<Input onChangeText={this.onRoomNameChange} />
 						</Item>
 					</Form>
 					{this.renderContacts()}

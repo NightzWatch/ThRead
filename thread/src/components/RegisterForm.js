@@ -13,33 +13,33 @@ import {
 } from '../actions/index';
 
 class RegisterForm extends Component {
-    onSubmitPress() {
+    onSubmitPress = () => {
         const { phone_number, first_name, last_name, email, password, second_password } = this.props;
 
         this.props.register({ phone_number, first_name, last_name, email, password, second_password });
     }
 
-    onEmailChange(text) {
+    onEmailChange = (text) => {
         this.props.registerEmailChanged(text);
     }
 
-    onFirstNameChange(text) {
+    onFirstNameChange = (text) =>  {
         this.props.registerFirstNameChanged(text);
     }
 
-    onLastNameChange(text) {
+    onLastNameChange = (text) => {
         this.props.registerLastNameChanged(text);
     }
 
-    onPasswordChange(text) {
+    onPasswordChange = (text) => {
         this.props.registerPasswordChanged(text);
     }
 
-    onSecondPasswordChange(text) {
+    onSecondPasswordChange = (text) => {
         this.props.secondPasswordChanged(text);
     }
 
-    onPhoneChange(text) {
+    onPhoneChange = (text) => {
         this.props.registerPhoneChanged(text);
     }
 
@@ -54,7 +54,7 @@ class RegisterForm extends Component {
         }
 
         return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress.bind(this)}>
+            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
                 <Text>Register</Text>
             </Button>
         );
@@ -68,14 +68,14 @@ class RegisterForm extends Component {
                         <Item stackedLabel>
                             <Label>First Name</Label>
                             <Input
-                                onChangeText={this.onFirstNameChange.bind(this)}
+                                onChangeText={this.onFirstNameChange}
                                 value={this.props.first_name}
                             />
                         </Item>
                         <Item stackedLabel last>
                             <Label>Last Name</Label>
                             <Input
-                                onChangeText={this.onLastNameChange.bind(this)}
+                                onChangeText={this.onLastNameChange}
                                 value={this.props.last_name}
                             />
                         </Item>
@@ -83,14 +83,14 @@ class RegisterForm extends Component {
                             <Label>Phone Number</Label>
                             <Input
                                 keyboardType="numeric"
-                                onChangeText={this.onPhoneChange.bind(this)}
+                                onChangeText={this.onPhoneChange}
                                 value={this.props.phone_number}
                             />
                         </Item>
                         <Item stackedLabel last>
                             <Label>Email</Label>
                             <Input
-                                onChangeText={this.onEmailChange.bind(this)}
+                                onChangeText={this.onEmailChange}
                                 value={this.props.email}
                             />
                         </Item>
@@ -98,7 +98,7 @@ class RegisterForm extends Component {
                             <Label>Password</Label>
                             <Input
                                 secureTextEntry
-                                onChangeText={this.onPasswordChange.bind(this)}
+                                onChangeText={this.onPasswordChange}
                                 value={this.props.password}
                             />
                         </Item>

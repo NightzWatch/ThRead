@@ -18,10 +18,6 @@ class Profile extends Component {
                 <H3 style={{ marginTop: 10 }}>{this.props.first_name} {this.props.last_name}</H3>
                 <Text style={{ marginTop: 10 }}>{this.props.phone_number}</Text>
 
-                <Button primary full style={{ marginTop: 100 }}>
-                    <Text>Edit Profile</Text>
-                </Button>
-
                 <Button primary full style={{ marginTop: 25 }} onPress={() => this.props.logoutUser()}>
                     <Text>Logout</Text>
                 </Button>

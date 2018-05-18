@@ -8,13 +8,13 @@ class AddContactForm extends Component {
         phone_number: ''
     }
 
-    onPhoneNumberChange(text) {
+    onPhoneNumberChange = (text) => {
         this.setState({
             phone_number: text
         });
     }
 
-    requestContact() {
+    requestContact = () => {
         if (!this.state.phone_number) {
             return Toast.show({
                 text: 'Phone number cannot be empty',
@@ -43,11 +43,11 @@ class AddContactForm extends Component {
                             <Label>Phone number</Label>
                             <Input
                                 value={this.state.phone_number}
-                                onChangeText={this.onPhoneNumberChange.bind(this)}
+                                onChangeText={this.onPhoneNumberChange}
                             />
                         </Item>
                     </Form>
-                    <Button full style={{ marginTop: 50 }} onPress={this.requestContact.bind(this)}>
+                    <Button full style={{ marginTop: 50 }} onPress={this.requestContact}>
                         <Text>Send</Text>
                     </Button>
                 </Content>

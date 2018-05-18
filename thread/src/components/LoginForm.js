@@ -5,15 +5,15 @@ import { Actions } from 'react-native-router-flux';
 import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
 
 class LoginForm extends Component {
-    onEmailChange(text) {
+    onEmailChange = (text) => {
         this.props.loginEmailChanged(text);
     }
 
-    onPasswordChange(text) {
+    onPasswordChange = (text) => {
         this.props.loginPasswordChanged(text);
     }
 
-    onSubmitPress() {
+    onSubmitPress = () => {
         const { email, password } = this.props;
 
         this.props.loginUser({ email, password });
@@ -29,7 +29,7 @@ class LoginForm extends Component {
         }
 
         return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress.bind(this)}>
+            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
                 <Text>Login</Text>
             </Button>
         );
@@ -43,7 +43,7 @@ class LoginForm extends Component {
                         <Item stackedLabel>
                             <Label>Email</Label>
                             <Input
-                                onChangeText={this.onEmailChange.bind(this)}
+                                onChangeText={this.onEmailChange}
                                 value={this.props.email}
                             />
                         </Item>
@@ -51,7 +51,7 @@ class LoginForm extends Component {
                             <Label>Password</Label>
                             <Input
                                 secureTextEntry
-                                onChangeText={this.onPasswordChange.bind(this)}
+                                onChangeText={this.onPasswordChange}
                                 value={this.props.password}
                             />
                         </Item>
