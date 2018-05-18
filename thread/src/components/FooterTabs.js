@@ -13,8 +13,8 @@ const getRouteIcon = (name) => {
     }
 };
 
-const FooterTabs = (props) => {
-    const { index, routes } = props.navigationState;
+const FooterTabs = ({ navigationState }) => {
+    const { index, routes } = navigationState;
 
     return (
         <Footer>
