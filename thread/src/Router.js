@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { Router, Scene, Stack, Modal, Tabs } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
+import CommonButton from './components/common/CommonButton'
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import Chat from './components//Messenger/Chat';
 import ThreadList from './components/Threads';
-import CreateThreadButton from './components/CreateThreadButton';
 import CreateTreadForm from './components/CreateTreadForm';
 import Contacts from './components/Contacts';
 import ContactTabs from './components/ContactTabs';
 import Profile from './components/Profile';
-import AddContactButton from './components/AddContactButton';
 import AddContactForm from './components/AddContactForm';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
@@ -52,7 +52,7 @@ class RouterComponent extends Component {
                     />
                     <Scene
                         key="main"
-                        hideNavBar 
+                        hideNavBar
                         panHandlers={null}
                     >
                          <Modal>
@@ -61,13 +61,21 @@ class RouterComponent extends Component {
                                     key="contacts"
                                     title="Contacts"
                                     component={ContactTabs}
-                                    renderRightButton={() => <AddContactButton />}
+                                    renderRightButton={() => (
+                                      <CommonButton
+                                        onPress={() => Actions.addContact()}
+                                        name={'add'} />
+                                    )}
                                 />
                                 <Scene
                                     key="threads"
                                     title="ThRead"
                                     component={ThreadList}
-                                    renderRightButton={() => <CreateThreadButton />}
+                                    renderRightButton={() => (
+                                      <CommonButton
+                                        onPress={() => Actions.createThread()}
+                                        name={'add'} />
+                                    )}
                                     initial
                                 />
                                 <Scene
@@ -90,18 +98,18 @@ class RouterComponent extends Component {
                                 key="thread"
                                 hideNavBar
                             >
-                                 <Scene 
+                                 <Scene
                                     key="chat"
                                     component={Chat}
                                     hideNavBar={false}
                                 />
-                                <Scene 
+                                <Scene
                                     key="info"
                                     title="Info"
                                     component={Info}
                                     hideNavBar={false}
                                 />
-                                <Scene 
+                                <Scene
                                     key="addMembersForm"
                                     title="Add Members"
                                     component={AddMembersForm}
