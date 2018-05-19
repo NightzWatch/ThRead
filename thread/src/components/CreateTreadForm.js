@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import {
-	chatRoomCreated
-} from '../actions';
 
 class CreateTreadForm extends Component {
 	state = {
@@ -36,7 +33,6 @@ class CreateTreadForm extends Component {
 			addUserIds: this.state.added_contacts
 		}).then(room => {
 			console.log(`Created room called ${room.name}`);
-			this.props.chatRoomCreated(room);
 			Actions.pop();
 		})
 		.catch(err => {
@@ -132,4 +128,4 @@ const mapStateToProps = ({ auth, contacts }) => {
 	return { chatUser, contact_list, loading };
 };
 
-export default connect(mapStateToProps, { chatRoomCreated })(CreateTreadForm);
+export default connect(mapStateToProps, {})(CreateTreadForm);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Router, Scene, Stack, Modal, Tabs } from 'react-native-router-flux';
-import { Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 import CommonButton from './components/common/CommonButton'
@@ -18,6 +17,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
 import Info from './components/Messenger/Info';
 import AddMembersForm from './components/Messenger/AddMembersForm';
+import FooterTabs from './components/FooterTabs';
 
 class RouterComponent extends Component {
     render() {
@@ -56,7 +56,7 @@ class RouterComponent extends Component {
                         panHandlers={null}
                     >
                          <Modal>
-                            <Tabs key="tabbar">
+                            <Tabs key="tabbar" tabBarComponent={FooterTabs}>
                                 <Scene
                                     key="contacts"
                                     title="Contacts"
@@ -66,7 +66,6 @@ class RouterComponent extends Component {
                                         onPress={() => Actions.addContact()}
                                         name={'add'} />
                                     )}
-                                    icon={() => <Icon name="people" />}
                                 />
                                 <Scene
                                     key="threads"
@@ -77,14 +76,12 @@ class RouterComponent extends Component {
                                         onPress={() => Actions.createThread()}
                                         name={'add'} />
                                     )}
-                                    icon={() => <Icon name="logo-octocat" />}
                                     initial
                                 />
                                 <Scene
                                     key="profile"
                                     title="Profile"
                                     component={Profile}
-                                    icon={() => <Icon name="person" />}
                                 />
                             </Tabs>
                             <Scene
