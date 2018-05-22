@@ -7,7 +7,7 @@ var logoIMG = require('../../assets/threadlogo.png');
 class Logo extends Component{
   render(){
     return(
-      <View>
+      <View style={styles.logoStyle}>
           <Image source={logoIMG}/>
       </View>
     )
@@ -16,8 +16,8 @@ class Logo extends Component{
 
 let styles = StyleSheet.create({
   logoStyle: {
-      marginLeft:80,
-      marginTop: 120,
+      marginLeft:85,
+      marginTop: 140,
   },
 });
 

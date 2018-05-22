@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
 import { connect } from 'react-redux';
-import {  View } from 'react-native';
+import {  View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import  Logo  from './Logo';
 import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
@@ -49,11 +49,11 @@ class LoginForm extends Component {
             <Container style={{ backgroundColor: '#8bc34a' }}>
 
           {this.logo()}
-                <Content>
+                <Content style={styles.viewStyle}>
 
                     <Form>
                         <Item stackedLabel>
-                            <Label>Email</Label>
+                            <Label style={styles.textStyle}>Email</Label>
 
                             <Input
                                 onChangeText={this.onEmailChange.bind(this)}
@@ -86,6 +86,20 @@ class LoginForm extends Component {
         );
     }
 }
+
+let styles = StyleSheet.create({
+  textStyle: {
+    color: '#424242',
+    fontSize: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center'
+  },
+
+  viewStyle: {
+    flex: 1
+  }
+});
 
 const mapStateToProps = ({ auth }) => {
     const { email, password, loading } = auth;
