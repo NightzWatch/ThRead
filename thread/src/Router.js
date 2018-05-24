@@ -95,6 +95,16 @@ class RouterComponent extends Component {
                                 component={AddContactForm}
                             />
                             <Scene
+                                key="dmThread"
+                                hideNavBar
+                            >
+                                 <Scene
+                                    key="chat"
+                                    component={Chat}
+                                    hideNavBar={false}
+                                />
+                            </Scene>
+                            <Scene
                                 key="thread"
                                 hideNavBar
                             >

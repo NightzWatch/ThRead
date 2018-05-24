@@ -6,8 +6,8 @@ import {
 } from '../actions';
 
 class RequestsSent extends Component {
-    onAcceptPress(requestorID) {
-        acceptRequest(requestorID);
+    onAcceptPress = (requestorID) => {
+        acceptRequest(requestorID, this.props.chatUser);
     }
 
     renderList() {
@@ -24,7 +24,7 @@ class RequestsSent extends Component {
             );
         }
 
-        if (this.props.contact_requests_received.length === 0) {
+        if (this.props.requests_received_list.length === 0) {
             return (
                 <Content contentContainerStyle={{ 
                     flex: 1,
@@ -72,11 +72,11 @@ class RequestsSent extends Component {
     }
 }
 
-const mapStateToProps = ({ profile, requestsReceived }) => {
-    const { contact_requests_received } = profile;
+const mapStateToProps = ({ requestsReceived, auth }) => {
     const { requests_received_list, loading } = requestsReceived;
+    const { chatUser } = auth;
 
-    return { contact_requests_received, requests_received_list, loading };
+    return { requests_received_list, loading, chatUser };
 };
 
 export default connect(mapStateToProps, {})(RequestsSent);

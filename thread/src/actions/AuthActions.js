@@ -19,12 +19,15 @@ import {
     CONTACTS_ADD,
     CONTACTS_RESET,
     CONTACTS_FETCHED,
+    CONTACTS_DATA_FETCHED,
     REQUESTS_SENT_ADD,
     REQUESTS_SENT_RESET,
     REQUESTS_SENT_FETCHED,
+    REQUESTS_SENT_DATA_FETCHED,
     REQUESTS_RECEIVED_ADD,
     REQUESTS_RECEIVED_RESET,
-    REQUESTS_RECEIVED_FETCHED
+    REQUESTS_RECEIVED_FETCHED,
+    REQUESTS_RECEIVED_DATA_FETCHED
 } from './types';
 
 export const loginEmailChanged = (text) => {
@@ -76,7 +79,7 @@ const initChatkit = (dispatch, userID) => {
             url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea/token'
         })
     });
-    
+ 
     chatManager.connect({
         onAddedToRoom: room => {
             console.log(`Added to room ${room.name}`);
@@ -114,15 +117,14 @@ const fetchProfile = (dispatch, userID) => {
 
     const db = firebase.firestore();
 
+    /**
+     * UPDATE USER'S PROFILE
+     */
     db.collection('users')
         .doc(userID)
         .onSnapshot(doc => {
-
             const data = doc.data();
 
-            /**
-             * UPDATE USER'S PROFILE
-             */
             dispatch({
                 type: PROFILE_SET,
                 payload: {
@@ -130,82 +132,146 @@ const fetchProfile = (dispatch, userID) => {
                     doc_id: userID
                 }
             });
+        });
 
-            /**
-             * UPDATE USER'S CONTACTS
-             */
+    /**
+     * USER'S CONTACTS
+     */
+
+    db.collection('users')
+        .doc(userID)
+        .collection('contacts')
+        .onSnapshot(querySnapshot => {
             dispatch({ type: CONTACTS_RESET });
 
-            data.contacts.forEach(contactID => {
-                const contactRef = db.collection('users').doc(contactID);
-    
+            const { size } = querySnapshot;
+            let index = 0;
+
+            querySnapshot.forEach(contact_doc => {
+                const data = {id: contact_doc.id, ...contact_doc.data()};
+                const contactRef = db.collection('users').doc(data.id);
+
                 contactRef.get().then(contactDoc => {
                     const contactData = {
                         ...contactDoc.data(),
-                        id: contactID
+                        ...data
                     };
+
+                    index++;
 
                     dispatch({
                         type: CONTACTS_ADD,
                         payload: contactData
                     });
-                }).catch(function(error) {
-                    console.log("Error getting contact document:", error);
+
+                    if ((index + 1) === size) {
+                        dispatch({
+                            type: CONTACTS_DATA_FETCHED
+                        });
+                    }
                 });
             });
 
-            dispatch({ type: CONTACTS_FETCHED });
-
-            /**
-             * UPDATE USER'S REQUESTS SENT
-             */
+            dispatch({
+                type: CONTACTS_FETCHED,
+                payload: {
+                    size,
+                    loading: (size > 0)
+                }
+            });
+        });
+    
+    /**
+     * UPDATE USER'S REQUESTS SENT
+     */
+    db.collection('users')
+        .doc(userID)
+        .collection('contact_requests_sent')
+        .onSnapshot(querySnapshot => {
             dispatch({ type: REQUESTS_SENT_RESET });
 
-            data.contact_requests_sent.forEach(requestUserID => {
-                const requestUserRef = db.collection('users').doc(requestUserID);
-    
-                requestUserRef.get().then(requestUserDoc => {
-                    const requestUserData = {
-                        ...requestUserDoc.data(),
-                        id: requestUserID
+            const { size } = querySnapshot;
+            let index = 0;
+
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                const contactRef = data.user_ref;
+
+                contactRef.get().then(contactDoc => {
+                    const contactData = {
+                        ...contactDoc.data(),
+                        date_sent: data.date_created
                     };
+
+                    index++;
 
                     dispatch({
                         type: REQUESTS_SENT_ADD,
-                        payload: requestUserData
+                        payload: contactData
                     });
-                }).catch(function(error) {
-                    console.log("Error getting sent user document:", error);
-                });
+
+                    if ((index + 1) === size) {
+                        dispatch({
+                            type: REQUESTS_SENT_DATA_FETCHED
+                        });
+                    }
+
+                }).catch(error => console.log('error getting contact requests sent: ', error));
             });
 
-            dispatch({ type: REQUESTS_SENT_FETCHED });
+            dispatch({
+                type: REQUESTS_SENT_FETCHED,
+                payload: {
+                    size,
+                    loading: (size > 0)
+                }
+            });
+        });
 
-            /**
-             * UPDATE USER'S REQUESTS RECEIVED
-             */
+    /**
+     * UPDATE USER'S REQUESTS RECEIVED
+     */
+    db.collection('users')
+        .doc(userID)
+        .collection('contact_requests_received')
+        .onSnapshot(querySnapshot => {
             dispatch({ type: REQUESTS_RECEIVED_RESET });
 
-            data.contact_requests_received.forEach(requestUserID => {
-                const requestUserRef = db.collection('users').doc(requestUserID);
-    
-                requestUserRef.get().then(requestUserDoc => {
-                    const requestUserData = {
-                        ...requestUserDoc.data(),
-                        id: requestUserID
+            const { size } = querySnapshot;
+            let index = 0;
+
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                const contactRef = data.user_ref;
+
+                contactRef.get().then(contactDoc => {
+                    const contactData = {
+                        ...contactDoc.data(),
+                        date_received: data.date_created
                     };
+
+                    index++;
 
                     dispatch({
                         type: REQUESTS_RECEIVED_ADD,
-                        payload: requestUserData
+                        payload: contactData
                     });
-                }).catch(function(error) {
-                    console.log("Error getting received user document:", error);
-                });
+
+                    if ((index + 1) === size) {
+                        dispatch({
+                            type: REQUESTS_RECEIVED_DATA_FETCHED
+                        });
+                    }
+                }).catch(error => console.log('error getting contact requests received: ', error));
             });
 
-            dispatch({ type: REQUESTS_RECEIVED_FETCHED });
-
+            dispatch({
+                type: REQUESTS_RECEIVED_FETCHED,
+                payload: {
+                    size,
+                    loading: (size > 0)
+                }
+            });
         });
 };
 

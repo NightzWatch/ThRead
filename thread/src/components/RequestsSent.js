@@ -17,7 +17,7 @@ class RequestsSent extends Component {
             );
         }
 
-        if (this.props.contact_requests_sent.length === 0) {
+        if (this.props.requests_sent_list.length === 0) {
             return (
                 <Content contentContainerStyle={{ 
                     flex: 1,
@@ -34,7 +34,7 @@ class RequestsSent extends Component {
             <Content>
                 <List
                     dataArray={this.props.requests_sent_list}
-                    renderRow={(item) =>
+                    renderRow={item =>
                         <ListItem>
                             <Body>
                                 <Text>Phone Number:  <Text note>{item.phone_number}</Text></Text>
@@ -56,11 +56,10 @@ class RequestsSent extends Component {
     }
 }
 
-const mapStateToProps = ({ profile, requestsSent }) => {
-    const { contact_requests_sent } = profile;
+const mapStateToProps = ({ requestsSent }) => {
     const { requests_sent_list, loading } = requestsSent;
 
-    return { contact_requests_sent, requests_sent_list, loading };
+    return { requests_sent_list, loading };
 };
 
 export default connect(mapStateToProps, {})(RequestsSent);
