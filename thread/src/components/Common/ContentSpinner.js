@@ -3,7 +3,7 @@ import { Spinner } from 'native-base';
 import CentredContent from './CentredContent';
 
 const ContentSpinner = ({ color }) => (
-	<CentredContent>
+    <CentredContent>
         <Spinner color={color} />
     </CentredContent>
 );
