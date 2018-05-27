@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Spinner, H3 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { CommonButton } from './Common';
+import { CommonButton, CentredContent, ContentSpinner } from './Common';
 import {
     setChatRoom
 } from '../actions';
@@ -91,29 +91,15 @@ class Threads extends Component {
         const { rooms } = this.props;
 
         if (this.props.loading) {
-            return (
-                <Content contentContainerStyle={{ 
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Spinner color="blue" />
-                </Content>
-            );
+            return <ContentSpinner color="blue" />;
         }
 
         if (rooms.length === 0) {
             return (
-                <Content contentContainerStyle={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
+                <CentredContent>
                     <H3>No ThReads created.</H3>
                     <Text>Create ThRead to start sending cat gifs.</Text>
-                </Content>
+                </CentredContent>
             );
         };
 
