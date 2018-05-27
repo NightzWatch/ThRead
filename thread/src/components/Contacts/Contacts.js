@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, H3, Button, Spinner } from 'native-base';
+import { Container, Content, List, ListItem, Body, Right, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import CommonButton from './common/CommonButton';
-import { createChatRoom } from '../actions';
+import { CommonButton, CentredContent, ContentSpinner } from '../Common';
+import { createChatRoom } from '../../actions';
 
 class Contacts extends Component {
     
@@ -39,28 +39,14 @@ class Contacts extends Component {
 
     renderList() {
         if (this.props.loading) {
-            return (
-                <Content contentContainerStyle={{ 
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Spinner color="blue" />
-                </Content>
-            );
+            return <ContentSpinner color="blue" />;
         }
 
         if (this.props.contact_list.length === 0) {
             return (
-                <Content contentContainerStyle={{ 
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
+                <CentredContent>
                     <Text>You have no one to send cat gifs :(</Text>
-                </Content>
+                </CentredContent>
             );
         }
 
@@ -86,7 +72,7 @@ class Contacts extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 {this.renderList()}
             </Container>
         );

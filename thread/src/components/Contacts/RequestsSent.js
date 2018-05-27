@@ -1,32 +1,19 @@
 import React, { Component } from 'react';
-import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, H3, Spinner } from 'native-base';
 import { connect } from 'react-redux';
+import { Container, Content, List, ListItem, Body, Text } from 'native-base';
+import { CentredContent, ContentSpinner } from '../Common';
 
 class RequestsSent extends Component {
     renderList() {
         if (this.props.loading) {
-            return (
-                <Content contentContainerStyle={{ 
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Spinner color="blue" />
-                </Content>
-            );
+            return <ContentSpinner color="blue" />;
         }
 
         if (this.props.requests_sent_list.length === 0) {
             return (
-                <Content contentContainerStyle={{ 
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
+                <CentredContent>
                     <Text>No requests sent</Text>
-                </Content>
+                </CentredContent>
             );
         }
         
@@ -49,7 +36,7 @@ class RequestsSent extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 {this.renderList()}
             </Container>
         );
