@@ -91,7 +91,7 @@ class Threads extends Component {
         const { rooms } = this.props;
 
         if (this.props.loading) {
-            return <ContentSpinner color="blue" />;
+            return <ContentSpinner />;
         }
 
         if (rooms.length === 0) {

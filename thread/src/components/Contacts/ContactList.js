@@ -8,7 +8,7 @@ class ContactList extends Component {
 
     renderList() {
         if (this.props.loading) {
-            return <ContentSpinner color="blue" />;
+            return <ContentSpinner />;
         }
 
         if (this.props.contact_list.length === 0) {
@@ -44,7 +44,7 @@ class ContactList extends Component {
             </Container>
         );
     }
-    
+
 }
 
 const mapStateToProps = ({ contacts, auth }) => {

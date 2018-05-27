@@ -14,7 +14,7 @@ class RequestsSent extends Component {
 
     renderList() {
         if (this.props.loading) {
-            return <ContentSpinner color="blue" />;
+            return <ContentSpinner />;
         }
 
         if (this.props.requests_received_list.length === 0) {

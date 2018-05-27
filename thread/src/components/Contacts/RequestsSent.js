@@ -6,7 +6,7 @@ import { CentredContent, ContentSpinner } from '../Common';
 class RequestsSent extends Component {
     renderList() {
         if (this.props.loading) {
-            return <ContentSpinner color="blue" />;
+            return <ContentSpinner />;
         }
 
         if (this.props.requests_sent_list.length === 0) {
