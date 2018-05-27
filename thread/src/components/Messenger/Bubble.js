@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     wrapper: {
         marginRight: 60,
         minHeight: 20,
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
     },
     username: {
         fontWeight: 'bold',
