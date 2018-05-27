@@ -6,6 +6,7 @@ import CommonButton from './common/CommonButton';
 import { createChatRoom } from '../actions';
 
 class Contacts extends Component {
+    
     navigateToRoom(first_name, last_name, room_id) {
         Actions.dmThread({
             title: `${first_name}  ${last_name}`,
@@ -22,6 +23,18 @@ class Contacts extends Component {
                 this.navigateToRoom(first_name, last_name, room.id);
             });
         }
+    }
+
+    renderButton(id, first_name, last_name, room_id) {
+        return (
+            <Button
+                transparent 
+                style={{ width: 100 }}
+                onPress={() => this.onButtonPress(id, room_id, first_name, last_name)}
+            >
+                <Text>Message</Text>
+            </Button>
+        );
     }
 
     renderList() {
@@ -61,13 +74,7 @@ class Contacts extends Component {
                                 <Text>{first_name} {last_name}</Text>
                             </Body>
                             <Right>
-                                <Button
-                                    transparent 
-                                    style={{ width: 100 }}
-                                    onPress={() => this.onButtonPress(id, room_id, first_name, last_name)}
-                                >
-                                    <Text>Message</Text>
-                                </Button>
+                                {this.renderButton(id, first_name, last_name, room_id)}
                             </Right>
                         </ListItem>
                     }

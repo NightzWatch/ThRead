@@ -156,19 +156,19 @@ const fetchProfile = (dispatch, userID) => {
                         ...contactDoc.data(),
                         ...data
                     };
-
-                    index++;
-
+                    
                     dispatch({
                         type: CONTACTS_ADD,
                         payload: contactData
                     });
-
+                    
                     if ((index + 1) === size) {
                         dispatch({
                             type: CONTACTS_DATA_FETCHED
                         });
                     }
+
+                    index++;
                 });
             });
 
@@ -202,20 +202,19 @@ const fetchProfile = (dispatch, userID) => {
                         ...contactDoc.data(),
                         date_sent: data.date_created
                     };
-
-                    index++;
-
+                    
                     dispatch({
                         type: REQUESTS_SENT_ADD,
                         payload: contactData
                     });
-
+                    
                     if ((index + 1) === size) {
                         dispatch({
                             type: REQUESTS_SENT_DATA_FETCHED
                         });
                     }
 
+                    index++;
                 }).catch(error => console.log('error getting contact requests sent: ', error));
             });
 
@@ -250,8 +249,6 @@ const fetchProfile = (dispatch, userID) => {
                         date_received: data.date_created
                     };
 
-                    index++;
-
                     dispatch({
                         type: REQUESTS_RECEIVED_ADD,
                         payload: contactData
@@ -262,6 +259,8 @@ const fetchProfile = (dispatch, userID) => {
                             type: REQUESTS_RECEIVED_DATA_FETCHED
                         });
                     }
+
+                    index++;
                 }).catch(error => console.log('error getting contact requests received: ', error));
             });
 

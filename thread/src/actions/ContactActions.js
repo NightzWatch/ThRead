@@ -10,6 +10,8 @@ export const createChatRoom = (chatUser, friendUserID, callback) => {
         private: true,
         addUserIds: [currentUser.uid, friendUserID]
     }).then(room => {
+        callback(room);
+
         const currentUserRef = db.collection('users').doc(currentUser.uid);
         const friendRef = db.collection('users').doc(friendUserID);
         const batch = db.batch();
@@ -27,7 +29,7 @@ export const createChatRoom = (chatUser, friendUserID, callback) => {
 
         batch.commit()
             .then(() => {
-                callback(room);
+                console.log('Successfully created room for direct messaging');
             })
             .catch(error => {
                 console.log('Error performing batch updates on contacts to store room ID: ', error);
