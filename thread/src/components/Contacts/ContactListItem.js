@@ -5,6 +5,10 @@ import { CommonButton, CentredContent, ContentSpinner } from '../Common';
 import { createChatRoom } from '../../actions';
 
 class ContactListItem extends Component {
+
+    state = {
+        buttonPressed: false
+    }
     
     navigateToRoom(first_name, last_name, room_id) {
         Actions.dmThread({
@@ -12,32 +16,51 @@ class ContactListItem extends Component {
             roomID: room_id,
             left:  () => <CommonButton onPress={() => Actions.pop()} name={'arrow-back'} />
         });
+
+        return this;
     }
 
     onButtonPress = (id, room_id, first_name, last_name) => {
+        this.setState({ buttonPressed: true });
+
         if (room_id) {
-            this.navigateToRoom(first_name, last_name, room_id);
+            this.navigateToRoom(first_name, last_name, room_id)
+                .setState({ buttonPressed: false });
         } else {
             createChatRoom(this.props.chatUser, id, room => {
-                this.navigateToRoom(first_name, last_name, room.id);
+                this.navigateToRoom(first_name, last_name, room.id)
+                    .setState({ buttonPressed: false });
             });
         }
     }
 
-    renderButton(id, first_name, last_name, room_id) {
-        return (
-            <Button
-                transparent 
-                style={{ width: 100 }}
-                onPress={() => this.onButtonPress(id, room_id, first_name, last_name)}
-            >
-                <Text>Message</Text>
-            </Button>
-        );
+    getButtonProps() {
+        const { id, first_name, last_name, room_id } = this.props;
+        
+        if (this.state.buttonPressed) {
+            return {
+                transparent: true,
+                style: { width: 105 },
+                children: <Text>Loading...</Text>
+            };
+        }
+
+        return {
+            transparent: true,
+            style: { width: 100 },
+            onPress: () => this.onButtonPress(id, room_id, first_name, last_name),
+            children: <Text>Message</Text>
+        };
+    }
+
+    renderButton() {
+        const buttonProps = this.getButtonProps();
+
+        return <Button {...buttonProps} />;
     }
 
     render() {
-        const { id, first_name, last_name, room_id } = this.props;
+        const { first_name, last_name } = this.props;
 
         return (
             <ListItem>
@@ -45,12 +68,12 @@ class ContactListItem extends Component {
                     <Text>{first_name} {last_name}</Text>
                 </Body>
                 <Right>
-                    {this.renderButton(id, first_name, last_name, room_id)}
+                    {this.renderButton()}
                 </Right>
             </ListItem>
         );
     }
-    
+
 }
 
 export default ContactListItem;
