@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Spinner, H3 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import CommonButton from './common/CommonButton'
+import { CommonButton } from './common';
 import {
     setChatRoom
 } from '../actions';

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
+import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner, Icon } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import FormItem from './RegistrationFormItem';
 import { connect } from 'react-redux';
 import {
     register,
@@ -13,6 +14,7 @@ import {
 } from '../actions/index';
 
 class RegisterForm extends Component {
+
     onSubmitPress = () => {
         const { phone_number, first_name, last_name, email, password, second_password } = this.props;
 
@@ -65,51 +67,44 @@ class RegisterForm extends Component {
             <Container style={{ backgroundColor: '#fff' }}>
                 <Content>
                     <Form>
-                        <Item stackedLabel>
-                            <Label>First Name</Label>
-                            <Input
-                                onChangeText={this.onFirstNameChange}
-                                value={this.props.first_name}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Last Name</Label>
-                            <Input
-                                onChangeText={this.onLastNameChange}
-                                value={this.props.last_name}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Phone Number</Label>
-                            <Input
-                                keyboardType="numeric"
-                                onChangeText={this.onPhoneChange}
-                                value={this.props.phone_number}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Email</Label>
-                            <Input
-                                onChangeText={this.onEmailChange}
-                                value={this.props.email}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Password</Label>
-                            <Input
-                                secureTextEntry
-                                onChangeText={this.onPasswordChange}
-                                value={this.props.password}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Re-enter Password</Label>
-                            <Input
-                                secureTextEntry
-                                onChangeText={this.onSecondPasswordChange.bind(this)}
-                                value={this.props.second_password}
-                            />
-                        </Item>
+                        <FormItem
+                            label={'First Name'}
+                            tooltip={'This is the message that we will show'}
+                            value={this.props.first_name}
+                            onChangeText={ this.onFirstNameChange }
+                        />
+                        <FormItem
+                            label={'Last Name'}
+                            tooltip={'This is the message that we will show'}
+                            value={this.props.last_name}
+                            onChangeText={ this.onLastNameChange }
+                        />
+                        <FormItem
+                            label={'Phone Number'}
+                            tooltip={'This is the message that we will show'}
+                            value={this.props.phone_number}
+                            onChangeText={ this.onPhoneChange }
+                        />
+                        <FormItem
+                            label={'Email'}
+                            tooltip={'This is the message that we will show'}
+                            value={this.props.email}
+                            onChangeText={ this.onEmailChange }
+                        />
+                        <FormItem
+                            label={'Password'}
+                            tooltip={'This is the message that we will show. This is the message that we will show. This is the message that we will show. This is the message that we will show.'}
+                            value={this.props.password}
+                            onChangeText={ this.onPasswordChange }
+                            secure={true}
+                        />
+                        <FormItem
+                            label={'And Password Again'}
+                            tooltip={'This is the message that we will show'}
+                            value={this.props.second_password}
+                            onChangeText={ this.onSecondPasswordChange }
+                            secure={true}
+                        />
                     </Form>
                     <Text style={{ marginTop: 15, padding: 5 }}>
                         By pressing "Register" I agree that I have read:

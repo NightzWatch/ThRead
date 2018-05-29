@@ -7,4 +7,4 @@ const CommonButton = ({onPress, name}) => (
   </Button>
 );
 
-export default CommonButton
+export { CommonButton }

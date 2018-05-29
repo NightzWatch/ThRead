@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Router, Scene, Stack, Modal, Tabs } from 'react-native-router-flux';
 import { Actions } from 'react-native-router-flux';
 
-import CommonButton from './components/common/CommonButton'
+import { CommonButton } from './components/common'
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
