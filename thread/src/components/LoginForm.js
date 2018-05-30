@@ -31,14 +31,14 @@ class LoginForm extends Component {
     renderSignInButton() {
         if (this.props.loading) {
             return (
-                <Button disabled full style={{ marginTop: 25 }}>
+                <Button rounded warning style={{ marginTop: 25 }}>
                     <Spinner size="small" color="#fff" />
                 </Button>
             );
         }
 
         return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress.bind(this)}>
+            <Button rounded style={styles.buttonStyle} onPress={this.onSubmitPress.bind(this)}>
                 <Text>Login</Text>
             </Button>
         );
@@ -51,30 +51,37 @@ class LoginForm extends Component {
           {this.logo()}
                 <Content style={styles.viewStyle}>
 
-                    <Form>
-                        <Item stackedLabel>
-                            <Label style={styles.textStyle}>Email</Label>
+                        <Form>
+                              <Text style={styles.TextStyle}> Email </Text>
+                                <Item style={styles.inputStyle}>
+                                    <Content>
+                                      <Item>
+                                        <Input style={{color:'#424242'}}
+                                        onChangeText={this.onEmailChange.bind(this)}
+                                        value={this.props.email}
+                                          />
+                                      </Item>
+                                    </Content>
+                                </Item>
 
-                            <Input
-                                onChangeText={this.onEmailChange.bind(this)}
-                                value={this.props.email}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Password</Label>
-                            <Input
-                                secureTextEntry
-                                onChangeText={this.onPasswordChange.bind(this)}
-                                value={this.props.password}
-                            />
-                        </Item>
-                    </Form>
-
+                          <Text style={styles.TextStyle}> Password </Text>
+                            <Item style={styles.inputStyle}>
+                                <Content>
+                                  <Item>
+                                    <Input style={{color:'#424242'}}
+                                    secureTextEntry
+                                    onChangeText={this.onPasswordChange.bind(this)}
+                                    value={this.props.password}
+                                      />
+                                  </Item>
+                              </Content>
+                            </Item>
+                        </Form>
 
 
                     {this.renderSignInButton()}
 
-                    <Button bordered full style={{ marginTop: 15 }} onPress={() => Actions.register() }>
+                    <Button rounded warning style={styles.buttonStyle} onPress={() => Actions.register() }>
                         <Text>Register</Text>
                     </Button>
                     <Button transparent full small style={{ marginTop: 15 }} onPress={() => Actions.resetPassword() }>
@@ -88,16 +95,32 @@ class LoginForm extends Component {
 }
 
 let styles = StyleSheet.create({
-  textStyle: {
-    color: '#424242',
-    fontSize: 13,
+
+  TextStyle: {
+      color: '#fff',
+      fontSize: 13,
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      marginTop: 20,
+      fontWeight: 'bold'
+  },
+
+  inputStyle:{
+    width: 340
+  },
+
+  buttonStyle: {
+    marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center'
+    width: 330,
+    marginLeft: 20
   },
 
   viewStyle: {
-    flex: 1
+    flex: 1,
+    marginTop: 20
   }
 });
 
