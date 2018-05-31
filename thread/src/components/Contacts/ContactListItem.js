@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { ListItem, Body, Right, Text, Button } from 'native-base';
 import { CommonButton, CentredContent, ContentSpinner } from '../Common';
@@ -76,4 +77,10 @@ class ContactListItem extends Component {
 
 }
 
-export default ContactListItem;
+const mapStateToProps = ({ auth }) => {
+    const { chatUser } = auth;
+
+    return { chatUser };
+};
+
+export default connect(mapStateToProps, {})(ContactListItem);
