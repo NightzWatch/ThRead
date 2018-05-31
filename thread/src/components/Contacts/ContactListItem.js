@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import axios from 'axios';
 import { ListItem, Body, Right, Text, Button } from 'native-base';
@@ -103,4 +104,10 @@ class ContactListItem extends Component {
 
 }
 
-export default ContactListItem;
+const mapStateToProps = ({ auth }) => {
+    const { chatUser } = auth;
+
+    return { chatUser };
+};
+
+export default connect(mapStateToProps, {})(ContactListItem);
