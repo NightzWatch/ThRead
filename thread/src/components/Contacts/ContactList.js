@@ -29,6 +29,7 @@ class ContactList extends Component {
                             first_name={first_name}
                             last_name={last_name}
                             room_id={room_id}
+                            chatUser={this.props.chatUser}
                         />
                     }
                 >

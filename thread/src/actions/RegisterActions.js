@@ -11,6 +11,7 @@ import {
     REGISTER_PASSWORD_CHANGED,
     REGISTER_SECOND_PASSWORD_CHANGED,
     REGISTER_USER,
+    REGISTER_SUCCESS,
     REGISTER_FAIL
 } from './types';
 
@@ -123,19 +124,19 @@ const createUserProfile = (dispatch, { first_name, last_name, email, phone_numbe
 };
 
 const createChatUser = (dispatch, { id, first_name, last_name }, user) => {
-    axios.post('https://gfkz4aqwmk.execute-api.us-east-2.amazonaws.com/prod/user?action=create-user', {
-        id, first_name, last_name
+    axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/chatkitCreateUser', {
+        user: { id, first_name, last_name }
     })
     .then(result => {
         registerSuccess(dispatch, user);
     })
     .catch(error => {
-        console.log('error', error);
         registerFail(dispatch, error)
     });
 }
 
 const registerSuccess = (dispatch, user) => {
+    dispatch({ type: REGISTER_SUCCESS, payload: user });
     publicInitChatkit(dispatch, user.uid);
 };
 

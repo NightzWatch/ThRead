@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
 import { connect } from 'react-redux';
+import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
+import { LoadingButton } from '../Common';
 import { Actions } from 'react-native-router-flux';
 
 class AddMembersForm extends Component {
@@ -9,7 +10,7 @@ class AddMembersForm extends Component {
 		added_contacts: []
     }
     
-    onAddButtonPress() {
+    onAddButtonPress = () => {
         this.setState({
             button_loading: true
         });
@@ -36,22 +37,6 @@ class AddMembersForm extends Component {
             buttonText: ''
         });
     }
-
-	renderAddButton() {
-		if (this.state.button_loading) {
-			return (
-				<Button disabled full style={{ marginTop: 50 }}>
-					<Spinner size="small" color="#fff" />
-				</Button>
-			);
-		}
-
-		return (
-			<Button full style={{ marginTop: 50 }} onPress={() => this.onAddButtonPress()}>
-				<Text>Add New Members</Text>
-			</Button>
-		);
-	}
 
 	onCheckboxPress(item) {
         const added_index = this.state.added_contacts.indexOf(item.id);
@@ -129,7 +114,12 @@ class AddMembersForm extends Component {
 			<Container>
 				<Content>
 					{this.renderContacts()}
-					{this.renderAddButton()}
+					<LoadingButton
+						loading={this.state.button_loading}
+                        style={{ marginTop: 50 }}
+                        onPress={this.onAddButtonPress}
+                        text="Add New Members"
+					/>
 				</Content>
 			</Container>
 		);

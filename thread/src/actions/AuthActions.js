@@ -50,7 +50,8 @@ export const loginUser = ({email, password}) => {
 
         dispatch({ type: LOGIN_USER });
         
-        firebase.auth().signInWithEmailAndPassword(email, password)
+        // firebase.auth().signInWithEmailAndPassword(email, password)
+        firebase.auth().signInWithEmailAndPassword('test@jordan.com', 'password123')
             .then(user => loginUserSuccess(dispatch, user))
             .catch(error => loginUserFail(dispatch, error));
     };
@@ -70,13 +71,13 @@ const loginUserSuccess = (dispatch, user) => {
 };
 
 
-const initChatkit = (dispatch, userID) => {
+const initChatkit = (dispatch, userId) => {
     const chatManager = new ChatManager({
+        userId,
         instanceLocator: 'v1:us1:ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea',
-        userId: userID,
         tokenProvider: new TokenProvider({
-            // TODO: CREATE LAMBDA FUNCTION TO AUTHENTICATE USER
-            url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea/token'
+            url: 'https://us-central1-reactnative-auth-66287.cloudfunctions.net/chatkitAuthToken',
+            queryParams: { userId }
         })
     });
  
@@ -101,7 +102,7 @@ const initChatkit = (dispatch, userID) => {
             payload: currentUser.rooms
         });
 
-        fetchProfile(dispatch, userID);
+        fetchProfile(dispatch, userId);
 
         Actions.main({ type: 'reset' });
     })
@@ -275,8 +276,6 @@ const fetchProfile = (dispatch, userID) => {
 };
 
 const loginUserFail = (dispatch, { code, message }) => {
-
-    // TODO: THIS NEEDS TO BE IN A SEPARATE FUNCTION
     let errorMessage = message;
 
     switch (code) {
@@ -290,7 +289,6 @@ const loginUserFail = (dispatch, { code, message }) => {
             errorMessage = 'The email address is badly formatted.';
             break;
     }
-    // REFACTOR TOP BLOCK
 
     dispatch({
         type: LOGIN_USER_FAIL

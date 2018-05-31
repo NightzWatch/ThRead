@@ -20,6 +20,7 @@ export const REGISTER_EMAIL_CHANGED = 'register_email_changed';
 export const REGISTER_PASSWORD_CHANGED = 'register_password_changed';
 export const REGISTER_SECOND_PASSWORD_CHANGED = 'register_second_password_changed';
 export const REGISTER_USER = 'register_user';
+export const REGISTER_SUCCESS = 'register_success';
 export const REGISTER_FAIL = 'register_fail';
 
 /**
