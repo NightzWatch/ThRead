@@ -3,6 +3,7 @@ import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
+import { LoadingButton } from './Common';
 
 class LoginForm extends Component {
     onEmailChange = (text) => {
@@ -17,22 +18,6 @@ class LoginForm extends Component {
         const { email, password } = this.props;
 
         this.props.loginUser({ email, password });
-    }
-
-    renderSignInButton() {
-        if (this.props.loading) {
-            return (
-                <Button disabled full style={{ marginTop: 25 }}>
-                    <Spinner size="small" color="#fff" />
-                </Button>
-            );
-        }
-
-        return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
-                <Text>Login</Text>
-            </Button>
-        );
     }
 
     render() {
@@ -56,9 +41,12 @@ class LoginForm extends Component {
                             />
                         </Item>
                     </Form>
-
-                    {this.renderSignInButton()}
-
+                    <LoadingButton
+                        loading={this.props.loading}
+                        style={{ marginTop: 25 }}
+                        onPress={this.onSubmitPress}
+                        text="Login"
+                    />
                     <Button bordered full style={{ marginTop: 15 }} onPress={() => Actions.register() }>
                         <Text>Register</Text>
                     </Button>

@@ -13,6 +13,7 @@ import reducers from './src/reducers';
 require('firebase/firestore');
 
 class App extends Component {
+
 	constructor() {
 		super();
 
@@ -39,6 +40,7 @@ class App extends Component {
 			</Provider>
 		);
 	}
+
 }
 
 export default App;

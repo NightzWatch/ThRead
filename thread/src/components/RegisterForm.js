@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { LoadingButton } from './Common';
 import {
     register,
     registerEmailChanged,
@@ -41,23 +42,6 @@ class RegisterForm extends Component {
 
     onPhoneChange = (text) => {
         this.props.registerPhoneChanged(text);
-    }
-
-    renderRegisterButton() {
-        if (this.props.loading) {
-            return (
-                <Button full disabled style={{ marginTop: 25 }}>
-                    <Spinner size="small" color="#fff" />
-                    <Text>Registering</Text>
-                </Button>
-            );
-        }
-
-        return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
-                <Text>Register</Text>
-            </Button>
-        );
     }
 
     render() {
@@ -120,7 +104,12 @@ class RegisterForm extends Component {
                     <Button transparent onPress={() => Actions.privacyPolicy()}>
                         <Text>Privacy Policy</Text>
                     </Button>
-                    {this.renderRegisterButton()}
+                    <LoadingButton
+                        loading={this.props.loading}
+                        style={{ marginTop: 25 }}
+                        onPress={this.onSubmitPress}
+                        text="Register"
+                    />
                 </Content>
             </Container>
         );

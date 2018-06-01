@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
 import { connect } from 'react-redux';
+import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
+import { LoadingButton } from './Common';
 import { Actions } from 'react-native-router-flux';
 
 class CreateTreadForm extends Component {
@@ -16,7 +17,7 @@ class CreateTreadForm extends Component {
 		});
 	}
 
-	createThread() {
+	createThread = () => {
 		if (!this.state.room_name) {
 			return Toast.show({
 				text: 'ThRead name cannot be empty!',
@@ -39,22 +40,6 @@ class CreateTreadForm extends Component {
 			console.log(`Error creating room ${err}`)
 			this.setState({ create_button_loading: false });
 		});
-	}
-
-	renderCreateButton() {
-		if (this.state.create_button_loading) {
-			return (
-				<Button disabled full style={{ marginTop: 50 }}>
-					<Spinner size="small" color="#fff" />
-				</Button>
-			);
-		}
-
-		return (
-			<Button full style={{ marginTop: 50 }} onPress={() => this.createThread()}>
-				<Text>Create ThRead</Text>
-			</Button>
-		);
 	}
 
 	onCheckboxPress(item) {
@@ -114,7 +99,12 @@ class CreateTreadForm extends Component {
 						</Item>
 					</Form>
 					{this.renderContacts()}
-					{this.renderCreateButton()}
+					<LoadingButton
+						loading={this.state.create_button_loading}
+                        style={{ marginTop: 50 }}
+                        onPress={this.createThread}
+                        text="Create ThRead"
+					/>
 				</Content>
 			</Container>
 		);
