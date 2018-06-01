@@ -21,30 +21,25 @@ class ContactListItem extends Component {
         return this;
     }
 
-    createChatRoom(chatUser, friendUserID, first_name, last_name) {
-        chatUser.createRoom({
-            name: chatUser.id + friendUserID,
-            private: true,
-            addUserIds: [chatUser.id, friendUserID]
-        }).then(room => {
+    async createChatRoom(chatUser, friendUserID, first_name, last_name) {
+        try {
+            const room = await chatUser.createRoom({
+                name: chatUser.id + friendUserID,
+                private: true,
+                addUserIds: [chatUser.id, friendUserID]
+            });
+    
             this.navigateToRoom(first_name, last_name, room.id)
                 .setState({ buttonPressed: false });
 
-            axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/firestoreCreateChatRecord', {
+            await axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/firestoreCreateChatRecord', {
                 userId: chatUser.id,
                 friendUserID,
                 roomId: room.id
-            })
-            .then(response => {
-            })
-            .catch(error => {
-                console.log(`Error storing direct messaging room id ${error}`);
             });
-
-        })
-        .catch(error => {
+        } catch (error) {
             console.log(`Error creating direct messaging room ${error}`);
-        });
+        }
     }
 
     onButtonPress = (id, room_id, first_name, last_name) => {
