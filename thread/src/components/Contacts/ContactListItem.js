@@ -4,8 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import axios from 'axios';
 import { ListItem, Body, Right, Text, Button } from 'native-base';
 import { CommonButton, CentredContent, ContentSpinner } from '../Common';
-// import { createChatRoom } from '../../actions';
-// TODO: FINISH THIS LAST ONE
+
 class ContactListItem extends Component {
 
     state = {
@@ -23,18 +22,16 @@ class ContactListItem extends Component {
     }
 
     createChatRoom(chatUser, friendUserID, first_name, last_name) {
-        console.log(chatUser);
-
         chatUser.createRoom({
-            name: chatUser.uid + friendUserID,
+            name: chatUser.id + friendUserID,
             private: true,
-            addUserIds: [chatUser.uid, friendUserID]
+            addUserIds: [chatUser.id, friendUserID]
         }).then(room => {
             this.navigateToRoom(first_name, last_name, room.id)
                 .setState({ buttonPressed: false });
 
             axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/firestoreCreateChatRecord', {
-                userId: chatUser.uid,
+                userId: chatUser.id,
                 friendUserID,
                 roomId: room.id
             })
@@ -57,7 +54,6 @@ class ContactListItem extends Component {
             this.navigateToRoom(first_name, last_name, room_id)
                 .setState({ buttonPressed: false });
         } else {
-            console.log(this.props);
             this.createChatRoom(this.props.chatUser, id, first_name, last_name);
         }
     }
