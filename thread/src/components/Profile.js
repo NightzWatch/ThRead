@@ -27,7 +27,7 @@ class Profile extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 {this.renderPage()}
             </Container>
         );
