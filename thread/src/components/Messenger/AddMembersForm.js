@@ -116,9 +116,9 @@ class AddMembersForm extends Component {
 					{this.renderContacts()}
 					<LoadingButton
 						loading={this.state.button_loading}
-                        style={{ marginTop: 50 }}
-                        onPress={this.onAddButtonPress}
-                        text="Add New Members"
+						style={{ marginTop: 50 }}
+						onPress={this.onAddButtonPress}
+						text="Add New Members"
 					/>
 				</Content>
 			</Container>
