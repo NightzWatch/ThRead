@@ -46,7 +46,7 @@ class ContactList extends Component {
 
 }
 
-const mapStateToProps = ({ contacts, auth }) => {
+const mapStateToProps = ({ contacts }) => {
     const { contact_list, loading } = contacts;
 
     return { contact_list, loading };
