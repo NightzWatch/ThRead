@@ -101,9 +101,9 @@ class CreateTreadForm extends Component {
 					{this.renderContacts()}
 					<LoadingButton
 						loading={this.state.create_button_loading}
-                        style={{ marginTop: 50 }}
-                        onPress={this.createThread}
-                        text="Create ThRead"
+						style={{ marginTop: 50 }}
+						onPress={this.createThread}
+						text="Create ThRead"
 					/>
 				</Content>
 			</Container>
