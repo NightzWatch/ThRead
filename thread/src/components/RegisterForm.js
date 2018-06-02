@@ -46,7 +46,7 @@ class RegisterForm extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 <Content>
                     <Form>
                         <Item stackedLabel>
