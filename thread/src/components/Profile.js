@@ -9,7 +9,7 @@ import {
 class Profile extends Component {
     renderPage() {
         if (this.props.loading) {
-            return <ContentSpinner />
+            return <ContentSpinner />;
         }
 
         return (
