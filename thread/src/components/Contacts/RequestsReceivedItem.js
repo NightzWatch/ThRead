@@ -60,9 +60,9 @@ class RequestsReceivedItem extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { chatUser, user } = auth;
+    const { user } = auth;
 
-    return { chatUser, user };
+    return { user };
 };
 
 export default connect(mapStateToProps, {})(RequestsReceivedItem);

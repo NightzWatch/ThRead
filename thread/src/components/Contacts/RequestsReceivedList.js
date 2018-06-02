@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { Container, Content, List, Text } from 'native-base';
 import { CentredContent, ContentSpinner } from '../Common';
 import ListItem from './RequestsReceivedItem';
