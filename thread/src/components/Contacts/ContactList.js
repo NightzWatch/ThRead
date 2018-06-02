@@ -48,9 +48,8 @@ class ContactList extends Component {
 
 const mapStateToProps = ({ contacts, auth }) => {
     const { contact_list, loading } = contacts;
-    const { chatUser } = auth;
 
-    return { contact_list, loading, chatUser };
+    return { contact_list, loading };
 };
 
 export default connect(mapStateToProps, {})(ContactList);
