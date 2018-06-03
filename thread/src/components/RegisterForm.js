@@ -12,23 +12,6 @@ class RegisterForm extends Component {
         this.props.register({ phone_number, first_name, last_name, email, password, second_password });
     }
 
-    renderRegisterButton() {
-        if (this.props.loading) {
-            return (
-                <Button full disabled style={{ marginTop: 25 }}>
-                    <Spinner size="small" color="#fff" />
-                    <Text>Registering</Text>
-                </Button>
-            );
-        }
-
-        return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
-                <Text>Register</Text>
-            </Button>
-        );
-    }
-
     render() {
         return (
             <Container>
