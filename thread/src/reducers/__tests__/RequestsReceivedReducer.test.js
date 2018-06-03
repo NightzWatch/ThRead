@@ -65,13 +65,13 @@ it('handles actions of the type REQUESTS_RECEIVED_DATA_FETCHED', () => {
     };
 
     const newState = requestsReceivedReducer({
-        contact_list: [request_received_record],
+        requests_received_list: [request_received_record],
         loading: true,
         size: 1
     }, action);
 
     expect(newState).toEqual({
-        contact_list: [request_received_record],
+        requests_received_list: [request_received_record],
         loading: false,
         size: 1
     });
