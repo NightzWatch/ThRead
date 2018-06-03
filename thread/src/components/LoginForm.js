@@ -2,18 +2,11 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
+import * as actions from '../actions';
 import { LoadingButton } from './Common';
 
 class LoginForm extends Component {
-    onEmailChange = (text) => {
-        this.props.loginEmailChanged(text);
-    }
-
-    onPasswordChange = (text) => {
-        this.props.loginPasswordChanged(text);
-    }
-
+    
     onSubmitPress = () => {
         const { email, password } = this.props;
 
@@ -28,7 +21,7 @@ class LoginForm extends Component {
                         <Item stackedLabel>
                             <Label>Email</Label>
                             <Input
-                                onChangeText={this.onEmailChange}
+                                onChangeText={this.props.loginEmailChanged}
                                 value={this.props.email}
                             />
                         </Item>
@@ -36,7 +29,7 @@ class LoginForm extends Component {
                             <Label>Password</Label>
                             <Input
                                 secureTextEntry
-                                onChangeText={this.onPasswordChange}
+                                onChangeText={this.props.loginPasswordChanged}
                                 value={this.props.password}
                             />
                         </Item>
@@ -65,6 +58,4 @@ const mapStateToProps = ({ auth }) => {
     return { email, password, loading };
 };
 
-export default connect(mapStateToProps, {
-    loginEmailChanged, loginPasswordChanged, loginUser
-})(LoginForm);
+export default connect(mapStateToProps, actions)(LoginForm);
