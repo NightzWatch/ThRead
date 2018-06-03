@@ -3,15 +3,7 @@ import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { LoadingButton } from './Common';
-import {
-    register,
-    registerEmailChanged,
-    registerFirstNameChanged,
-    registerLastNameChanged,
-    registerPasswordChanged,
-    secondPasswordChanged,
-    registerPhoneChanged
-} from '../actions/index';
+import * as actions from '../actions/index';
 
 class RegisterForm extends Component {
     onSubmitPress = () => {
@@ -20,28 +12,21 @@ class RegisterForm extends Component {
         this.props.register({ phone_number, first_name, last_name, email, password, second_password });
     }
 
-    onEmailChange = (text) => {
-        this.props.registerEmailChanged(text);
-    }
+    renderRegisterButton() {
+        if (this.props.loading) {
+            return (
+                <Button full disabled style={{ marginTop: 25 }}>
+                    <Spinner size="small" color="#fff" />
+                    <Text>Registering</Text>
+                </Button>
+            );
+        }
 
-    onFirstNameChange = (text) =>  {
-        this.props.registerFirstNameChanged(text);
-    }
-
-    onLastNameChange = (text) => {
-        this.props.registerLastNameChanged(text);
-    }
-
-    onPasswordChange = (text) => {
-        this.props.registerPasswordChanged(text);
-    }
-
-    onSecondPasswordChange = (text) => {
-        this.props.secondPasswordChanged(text);
-    }
-
-    onPhoneChange = (text) => {
-        this.props.registerPhoneChanged(text);
+        return (
+            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
+                <Text>Register</Text>
+            </Button>
+        );
     }
 
     render() {
@@ -52,14 +37,14 @@ class RegisterForm extends Component {
                         <Item stackedLabel>
                             <Label>First Name</Label>
                             <Input
-                                onChangeText={this.onFirstNameChange}
+                                onChangeText={this.props.registerFirstNameChanged}
                                 value={this.props.first_name}
                             />
                         </Item>
                         <Item stackedLabel last>
                             <Label>Last Name</Label>
                             <Input
-                                onChangeText={this.onLastNameChange}
+                                onChangeText={this.props.registerLastNameChanged}
                                 value={this.props.last_name}
                             />
                         </Item>
@@ -67,14 +52,14 @@ class RegisterForm extends Component {
                             <Label>Phone Number</Label>
                             <Input
                                 keyboardType="numeric"
-                                onChangeText={this.onPhoneChange}
+                                onChangeText={this.props.registerPhoneChanged}
                                 value={this.props.phone_number}
                             />
                         </Item>
                         <Item stackedLabel last>
                             <Label>Email</Label>
                             <Input
-                                onChangeText={this.onEmailChange}
+                                onChangeText={this.props.registerEmailChanged}
                                 value={this.props.email}
                             />
                         </Item>
@@ -82,7 +67,7 @@ class RegisterForm extends Component {
                             <Label>Password</Label>
                             <Input
                                 secureTextEntry
-                                onChangeText={this.onPasswordChange}
+                                onChangeText={this.props.registerPasswordChanged}
                                 value={this.props.password}
                             />
                         </Item>
@@ -90,7 +75,7 @@ class RegisterForm extends Component {
                             <Label>Re-enter Password</Label>
                             <Input
                                 secureTextEntry
-                                onChangeText={this.onSecondPasswordChange.bind(this)}
+                                onChangeText={this.props.secondPasswordChanged}
                                 value={this.props.second_password}
                             />
                         </Item>
@@ -122,12 +107,4 @@ const mapStateToProps = ({ register }) => {
     return { first_name, last_name, email, password, second_password, phone_number, loading };
 };
 
-export default connect(mapStateToProps, {
-    register,
-    registerEmailChanged,
-    registerFirstNameChanged,
-    registerLastNameChanged,
-    registerPasswordChanged,
-    secondPasswordChanged,
-    registerPhoneChanged
-})(RegisterForm);
+export default connect(mapStateToProps, actions)(RegisterForm);

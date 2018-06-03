@@ -5,21 +5,16 @@ import {
     CONTACTS_FETCHED,
     CONTACTS_DATA_FETCHED
 } from '../../actions/types';
-import { Item } from 'native-base';
 
-let contact;
-
-beforeEach(() => {
-    contact = {
-        id: 'AipCxefrUlQfzS2PGHYeDyJEAYE3',
-        avatar: '',
-        date_created: new Date('Sun May 27 2018 13:51:32 GMT+0100'),
-        email: 'because_I@m_batman.com',
-        first_name: 'Bruce',
-        last_name: 'Wayne',
-        phone_number: '0201287321'
-    };
-});
+let contact = {
+    id: 'AipCxefrUlQfzS2PGHYeDyJEAYE3',
+    avatar: '',
+    date_created: new Date('Sun May 27 2018 13:51:32 GMT+0100'),
+    email: 'because_I@m_batman.com',
+    first_name: 'Bruce',
+    last_name: 'Wayne',
+    phone_number: '0201287321'
+};
 
 it('handles actions of the type CONTACTS_ADD', () => {
     const action = {
@@ -29,9 +24,7 @@ it('handles actions of the type CONTACTS_ADD', () => {
 
     const newState = contactsReducer(undefined, action);
 
-    expect(newState.contact_list).toEqual([
-        contact
-    ]);
+    expect(newState.contact_list).toEqual([contact]);
 });
 
 it('handles actions of the type CONTACTS_RESET', () => {
@@ -42,8 +35,7 @@ it('handles actions of the type CONTACTS_RESET', () => {
         loading: false,
         size: 1
     }, action);
-
-
+    
     expect(newState).toEqual({
         contact_list: [],
         loading: true,
