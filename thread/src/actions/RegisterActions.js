@@ -19,53 +19,41 @@ import {
     publicInitChatkit
 } from './';
 
-export const registerPhoneChanged = (text) => {
-    return {
-        type: REGISTER_PHONE_CHANGED,
-        payload: text
-    };
-};
+export const registerPhoneChanged = (text) => ({
+    type: REGISTER_PHONE_CHANGED,
+    payload: text
+});
 
-export const registerEmailChanged = (text) => {
-    return {
-        type: REGISTER_EMAIL_CHANGED,
-        payload: text
-    };
-};
+export const registerEmailChanged = (text) => ({
+    type: REGISTER_EMAIL_CHANGED,
+    payload: text
+});
 
-export const registerFirstNameChanged = (text) => {
-    return {
-        type: REGISTER_FIRST_NAME_CHANGED,
-        payload: text
-    };
-};
+export const registerFirstNameChanged = (text) => ({
+    type: REGISTER_FIRST_NAME_CHANGED,
+    payload: text
+});
 
-export const registerLastNameChanged = (text) => {
-    return {
-        type: REGISTER_LAST_NAME_CHANGED,
-        payload: text
-    };
-};
+export const registerLastNameChanged = (text) => ({
+    type: REGISTER_LAST_NAME_CHANGED,
+    payload: text
+});
 
-export const registerPasswordChanged = (text) => {
-    return {
-        type: REGISTER_PASSWORD_CHANGED,
-        payload: text
-    };
-};
+export const registerPasswordChanged = (text) => ({
+    type: REGISTER_PASSWORD_CHANGED,
+    payload: text
+});
 
-export const secondPasswordChanged = (text) => {
-    return {
-        type: REGISTER_SECOND_PASSWORD_CHANGED,
-        payload: text
-    };
-};
+export const secondPasswordChanged = (text) => ({
+    type: REGISTER_SECOND_PASSWORD_CHANGED,
+    payload: text
+});
 
 export const register = ({ phone_number, first_name, last_name, email, password, second_password }) => {
     return (dispatch) => {
         Keyboard.dismiss();
         dispatch({ type: REGISTER_USER });
-        
+
         if (!first_name) {
             registerFail(dispatch, { message: 'First name is missing.' });
 

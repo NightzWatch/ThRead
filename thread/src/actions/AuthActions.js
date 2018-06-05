@@ -30,19 +30,15 @@ import {
     REQUESTS_RECEIVED_DATA_FETCHED
 } from './types';
 
-export const loginEmailChanged = (text) => {
-    return {
-        type: EMAIL_CHANGED,
-        payload: text
-    };
-};
+export const loginEmailChanged = (text) => ({
+    type: EMAIL_CHANGED,
+    payload: text
+});
 
-export const loginPasswordChanged = (text) => {
-    return {
-        type: PASSWORD_CHANGED,
-        payload: text
-    };
-};
+export const loginPasswordChanged = (text) => ({
+    type: PASSWORD_CHANGED,
+    payload: text
+});
 
 export const loginUser = ({email, password}) => {
     return (dispatch) => {
