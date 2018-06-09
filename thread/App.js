@@ -40,8 +40,8 @@ class App extends Component {
 
     startAsync = async () => {
         try {
-            const email = await SecureStore.getItemAsync('email');
-            const password = await SecureStore.getItemAsync('password');
+            const email = await SecureStore.getItemAsync('email') || '';
+            const password = await SecureStore.getItemAsync('password') || '';
             this.setState({ email, password });
         } catch (error) {
             return Promise.reject(error);

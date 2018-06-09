@@ -41,7 +41,7 @@ export const loginPasswordChanged = (text) => ({
     payload: text
 });
 
-export const loginUser = ({email, password}) => {
+export const loginUser = ({ email, password }) => {
     return (dispatch) => {
         Keyboard.dismiss();
 
