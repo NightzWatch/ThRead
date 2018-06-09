@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import ReduxThunk from 'redux-thunk';
 import { Root } from 'native-base';
+import { AppLoading, SecureStore } from 'expo';
+import ReduxThunk from 'redux-thunk';
 import Router from './src/Router';
 import firebase from 'firebase';
 import reducers from './src/reducers';
@@ -13,6 +14,12 @@ import reducers from './src/reducers';
 require('firebase/firestore');
 
 class App extends Component {
+
+	state = {
+		isReady: false,
+		email: '',
+		password: ''
+	}
 
 	constructor() {
 		super();
@@ -28,9 +35,37 @@ class App extends Component {
 		
 		firebase.initializeApp(config);
 	}
+
+	startAsync = async () => {
+		try {
+			const email = await SecureStore.getItemAsync('email');
+			const password = await SecureStore.getItemAsync('password');
+			this.setState({ email, password });
+		} catch (error) {
+			return Promise.reject(error);
+		}
+
+		return Promise.resolve(true);
+	}
   
 	render() {
-		const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+		if (!this.state.isReady) {
+			return (
+			  	<AppLoading
+					startAsync={this.startAsync}
+					onFinish={() => this.setState({ isReady: true })}
+					onError={console.warn}
+			  	/>
+			);
+		}
+
+		const { email, password } = this.state;
+		const autoLogIn = email && password ? true : false;
+		const store = createStore(
+			reducers,
+			{ auth: { email, password, autoLogIn } },
+			applyMiddleware(ReduxThunk)
+		);
 
 		return (
 			<Provider store={store}>

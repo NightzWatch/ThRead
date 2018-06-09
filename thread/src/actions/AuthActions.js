@@ -1,8 +1,9 @@
 import { ChatManager, TokenProvider } from '@pusher/chatkit';
 import { Keyboard } from 'react-native';
 import { Toast } from 'native-base';
-import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
+import { SecureStore } from 'expo';
+import firebase from 'firebase';
 import {
     EMAIL_CHANGED,
     PASSWORD_CHANGED,
@@ -47,24 +48,35 @@ export const loginUser = ({email, password}) => {
         dispatch({ type: LOGIN_USER });
         
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(user => loginUserSuccess(dispatch, user))
+            .then(user => loginUserSuccess(dispatch, user, email, password))
             .catch(error => loginUserFail(dispatch, error));
     };
 };
 
-export const publicInitChatkit = (dispatch, userID) => {
+export const publicInitChatkit = (dispatch, userID, email, password) => {
     initChatkit(dispatch, userID);
+    storeUserAuthDetails(email, password);
 };
 
-const loginUserSuccess = (dispatch, user) => {
+const loginUserSuccess = (dispatch, user, email, password) => {
     dispatch({
         type: LOGIN_USER_SUCCESS,
         payload: user
     });
 
-    initChatkit(dispatch, user.uid);
+    storeUserAuthDetails(email, password);
+
+    initChatkit(dispatch, user.uid, email, password);
 };
 
+const storeUserAuthDetails = async (email, password) => {
+    try {
+        await SecureStore.setItemAsync('email', email);
+        await SecureStore.setItemAsync('password', password);        
+    } catch (error) {
+        console.warn(error);
+    }
+};
 
 const initChatkit = (dispatch, userId) => {
     const chatManager = new ChatManager({
@@ -304,10 +316,17 @@ export const logoutUser = () => {
     };
 };
 
-const logoutUserSuccess = (dispatch) => {
+const logoutUserSuccess = async (dispatch) => {
     dispatch({
         type: LOGOUT_USER_SUCCESS
     });
+
+    try {
+        await SecureStore.deleteItemAsync('email');
+        await SecureStore.deleteItemAsync('password');
+    } catch (error) {
+        console.warn(error);
+    }
 
     Actions.login({ type: 'reset' });
 };
