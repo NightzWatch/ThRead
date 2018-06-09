@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { Root } from 'native-base';
+import { Root, StyleProvider } from 'native-base';
 import { AppLoading, SecureStore } from 'expo';
 import ReduxThunk from 'redux-thunk';
 import Router from './src/Router';
 import firebase from 'firebase';
 import reducers from './src/reducers';
+import getTheme from './native-base-theme/components';
+import platformStyles from './native-base-theme/variables/platform';
 
 /**
  * Firebase quirk for firestore
@@ -69,9 +71,11 @@ class App extends Component {
 
 		return (
 			<Provider store={store}>
-				<Root>
-					<Router />
-				</Root>
+				<StyleProvider style={getTheme(platformStyles)}>
+					<Root>
+						<Router />
+					</Root>
+				</StyleProvider>
 			</Provider>
 		);
 	}
