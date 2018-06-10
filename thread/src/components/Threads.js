@@ -63,10 +63,25 @@ class Threads extends Component {
         );
     }
 
+    orderRooms(rooms) {
+        rooms.sort((a,b) => {
+            var date1 = new Date(a.updatedAt);
+            var date2 = new Date(b.updatedAt);
+
+            if (date1 === date2) {
+                return 0;
+            }
+
+            return date1 < date2 ? 1 : -1;
+        });
+
+        return rooms;
+    }
+
     renderThreadList() {
         const { rooms } = this.props;
-
-        if (rooms.length === 0) {
+        orderedRooms = this.orderRooms(rooms);
+        if (orderedRooms.length === 0) {
             return (
                 <Content contentContainerStyle={{
                     flex: 1,
@@ -83,7 +98,7 @@ class Threads extends Component {
         return (
             <Content>
                 <List
-                    dataArray={rooms}
+                    dataArray={orderedRooms}
                     renderRow={item => this.renderThreadItem(item)}
                 >
                 </List>
