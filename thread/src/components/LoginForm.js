@@ -5,6 +5,47 @@ import {  View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import  Logo  from './Logo';
 import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
+import styled from "styled-components";
+
+
+const StyledView = styled.View`
+  background-color: #8bc34a;
+  padding:5px;
+  height:100%;
+`;
+
+const InputWrapper = styled.View`
+  padding: 10px;
+  width: 100%;
+  height: 250px;
+  padding-top:50px;
+`;
+
+const InputStyle = styled(Input)`
+  width:340px;
+  color: #424242;
+  padding:10px;
+  background-color:white;
+  margin-bottom:20px;
+  text-align:center;
+
+`;
+
+const TextStyle = styled(Text)`
+
+  font-size:15px;
+  text-align:center;
+  margin-bottom:10px;
+  color:white;
+`;
+
+const buttonWrapper = styled.View`
+  padding: 10px;
+  width: 100%;
+  height: 250px;
+`;
+
+
 
 class LoginForm extends Component {
     onEmailChange(text) {
@@ -27,7 +68,6 @@ class LoginForm extends Component {
       );
     }
 
-
     renderSignInButton() {
         if (this.props.loading) {
             return (
@@ -46,9 +86,30 @@ class LoginForm extends Component {
 
     render() {
         return (
+
             <Container style={{ backgroundColor: '#8bc34a' }}>
 
-          {this.logo()}
+            <StyledView>
+                {this.logo()}
+
+                <InputWrapper>
+
+                  <TextStyle>Username</TextStyle>
+
+                    <InputStyle placeholder="Username"></InputStyle>
+
+                    <TextStyle>Password</TextStyle>
+
+                    <InputStyle secureTextEntry placeholder="Password"></InputStyle>
+
+                </InputWrapper>
+
+                <InputWrapper>
+                  {this.renderSignInButton()}
+                </InputWrapper>
+            </StyledView>
+
+                {this.logo()}
                 <Content style={styles.viewStyle}>
 
                         <Form>
@@ -114,8 +175,7 @@ let styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 330,
-    marginLeft: 20
+    width: 330
   },
 
   viewStyle: {
