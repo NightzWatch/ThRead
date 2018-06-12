@@ -2,7 +2,7 @@ import { ChatManager, TokenProvider } from '@pusher/chatkit';
 import { Keyboard } from 'react-native';
 import { Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { SecureStore } from 'expo';
+import { SecureStore, Permissions, Notifications } from 'expo';
 import firebase from 'firebase';
 import {
     EMAIL_CHANGED,
@@ -64,6 +64,8 @@ const loginUserSuccess = (dispatch, user, email, password) => {
         payload: user
     });
 
+    storeDevicePushTokenId();
+
     storeUserAuthDetails(email, password);
 
     initChatkit(dispatch, user.uid, email, password);
@@ -76,6 +78,68 @@ const storeUserAuthDetails = async (email, password) => {
     } catch (error) {
         console.warn(error);
     }
+};
+
+const deviceAllowedNotifications = async () => {
+    const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+    );
+    
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+        /*
+            Android remote notification permissions are granted during the app
+            install, so this will only ask on iOS
+        */
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+    }
+
+    return finalStatus === 'granted';
+};
+
+const storeDevicePushTokenId = async () => {
+    // console.log('allowed token: ', deviceAllowedNotifications());
+    // if (!deviceAllowedNotifications()) {
+    //     return;
+    // }
+
+    const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+    );
+    
+    let finalStatus = existingStatus;
+
+    console.log('existingStatus: ', existingStatus);
+
+    if (existingStatus !== 'granted') {
+        /*
+            Android remote notification permissions are granted during the app
+            install, so this will only ask on iOS
+        */
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+    }
+
+    console.log('finalStatus', finalStatus);
+
+    if (finalStatus !== 'granted') {
+        return;
+    }
+
+    /* Get the token that uniquely identifies this device */
+    let token = await Notifications.getExpoPushTokenAsync();
+
+    const { currentUser } = firebase.auth();
+    const db = firebase.firestore();
+    const docRef = db.doc(`users/${currentUser.uid}`);
+
+    console.log('token: ', token);
+
+    docRef.set({ token }, { merge: true })
+    .then(response => console.log('YES IT SAVED'))
+    .catch(error => console.warn(error));
 };
 
 const initChatkit = (dispatch, userId) => {
