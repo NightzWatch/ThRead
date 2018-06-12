@@ -54,7 +54,7 @@ class RegisterForm extends Component {
         }
 
         return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
+            <Button rounded style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
                 <Text>Register</Text>
             </Button>
         );
@@ -62,7 +62,7 @@ class RegisterForm extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container style={{ backgroundColor: '#8bc34a' }}>
                 <Content>
                     <Form>
                         <Item stackedLabel>
