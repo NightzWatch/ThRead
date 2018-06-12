@@ -32,6 +32,8 @@ const TermsButtonStyle = styled(Text)`
   font-size:14px;
   text-align:center;
   color:blue;
+  text-decoration:underline;
+  margin-top:10px;
 `;
 
 class RegisterForm extends Component {
@@ -76,7 +78,7 @@ class RegisterForm extends Component {
         }
 
         return (
-            <Button rounded style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
+            <Button rounded style={styles.buttonStyle} onPress={this.onSubmitPress}>
                 <Text>Register</Text>
             </Button>
         );
@@ -142,21 +144,30 @@ class RegisterForm extends Component {
                             />
                         </Item>
                     </Form>
-                  <TermsTextStyle>
-                    By pressing "Register" I agree that I have read:
-                  </TermsTextStyle>
-                    <Button style={{alignItems: 'center', justifyContent:'center'}} transparent onPress={() => Actions.termsAndConditions()}>
-                          <TermsButtonStyle>Terms and conditions </TermsButtonStyle>
-                    </Button>
-                    <Button transparent onPress={() => Actions.privacyPolicy()}>
-                          <TermsButtonStyle>Privacy Policy  </TermsButtonStyle>
-                    </Button>
-                    {this.renderRegisterButton()}
+                    <TermsTextStyle>By pressing "Register" I agree that I have read:</TermsTextStyle>
+
+                        <TermsButtonStyle onPress={() => Actions.termsAndConditions()}>Terms and conditions </TermsButtonStyle>
+
+                        <TermsButtonStyle onPress={() => Actions.privacyPolicy()}>Privacy Policy  </TermsButtonStyle>
+
+                      {this.renderRegisterButton()}
                 </Content>
             </Container>
         );
     }
 }
+
+
+let styles = StyleSheet.create({
+
+    buttonStyle: {
+       marginTop: 25,
+       alignItems: 'center',
+       justifyContent: 'center',
+       marginLeft: 15,
+       width: 340
+    }
+})
 
 
 const mapStateToProps = ({ register }) => {
