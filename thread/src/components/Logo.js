@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text } from 'native-base';
+import styled from "styled-components";
+
+
+const StyledView = styled.View`
+
+  padding-left:80px;
+  padding-top:140px;
+  width:100%;
+
+`;
+
 
 var logoIMG = require('../../assets/threadlogo.png');
 
 class Logo extends Component{
   render(){
     return(
-      <View style={styles.logoStyle}>
+      <StyledView>
           <Image source={logoIMG}/>
-      </View>
+      </StyledView>
     )
   }
 }
 
-let styles = StyleSheet.create({
-  logoStyle: {
-      marginLeft:85,
-      marginTop: 140,
-  },
-});
+
 
 export default Logo;

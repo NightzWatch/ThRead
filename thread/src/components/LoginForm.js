@@ -15,7 +15,7 @@ const StyledView = styled.View`
 `;
 
 const InputWrapper = styled.View`
-  padding: 10px;
+
   width: 100%;
   height: 250px;
   padding-top:50px;
@@ -35,8 +35,10 @@ const TextStyle = styled(Text)`
 
   font-size:15px;
   text-align:center;
+  font-weight:700;
   margin-bottom:10px;
   color:white;
+  margin-left:-15px;
 `;
 
 const buttonWrapper = styled.View`
@@ -62,11 +64,6 @@ class LoginForm extends Component {
         this.props.loginUser({ email, password });
     }
 
-    logo(){
-      return(
-        <Logo />
-      );
-    }
 
     renderSignInButton() {
         if (this.props.loading) {
@@ -88,46 +85,29 @@ class LoginForm extends Component {
         return (
 
             <Container style={{ backgroundColor: '#8bc34a' }}>
-
-            <StyledView>
-                {this.logo()}
-
-                <InputWrapper>
-
-                  <TextStyle>Username</TextStyle>
-
-                    <InputStyle placeholder="Username"></InputStyle>
-
-                    <TextStyle>Password</TextStyle>
-
-                    <InputStyle secureTextEntry placeholder="Password"></InputStyle>
-
-                </InputWrapper>
-
-                <InputWrapper>
-                  {this.renderSignInButton()}
-                </InputWrapper>
-            </StyledView>
-
-                {this.logo()}
-                <Content style={styles.viewStyle}>
+              <StyledView>
+                  <Logo />
+                  <InputWrapper>
+                      <TextStyle>Username</TextStyle>
 
                         <Form>
-                              <Text style={styles.TextStyle}> Email </Text>
-                                <Item style={styles.inputStyle}>
-                                    <Content>
-                                      <Item>
-                                        <Input style={{color:'#424242'}}
-                                        onChangeText={this.onEmailChange.bind(this)}
-                                        value={this.props.email}
-                                          />
-                                      </Item>
-                                    </Content>
-                                </Item>
-
-                          <Text style={styles.TextStyle}> Password </Text>
                             <Item style={styles.inputStyle}>
                                 <Content>
+                                  <Item>
+                                    <Input style={{color:'#424242'}}
+                                    onChangeText={this.onEmailChange.bind(this)}
+                                    value={this.props.email}
+                                      />
+                                  </Item>
+                                </Content>
+                            </Item>
+                        </Form>
+
+                        <TextStyle>Password</TextStyle>
+
+                          <Form>
+                              <Item style={styles.inputStyle}>
+                                  <Content>
                                   <Item>
                                     <Input style={{color:'#424242'}}
                                     secureTextEntry
@@ -135,20 +115,20 @@ class LoginForm extends Component {
                                     value={this.props.password}
                                       />
                                   </Item>
-                              </Content>
-                            </Item>
-                        </Form>
+                                  </Content>
+                              </Item>
+                          </Form>
 
+                        {this.renderSignInButton()}
 
-                    {this.renderSignInButton()}
-
-                    <Button rounded warning style={styles.buttonStyle} onPress={() => Actions.register() }>
-                        <Text>Register</Text>
-                    </Button>
-                    <Button transparent full small style={{ marginTop: 15 }} onPress={() => Actions.resetPassword() }>
-                        <Text>Forgot password?</Text>
-                    </Button>
-                </Content>
+                        <Button rounded info style={styles.buttonStyle} onPress={() => Actions.register() }>
+                            <Text>Register</Text>
+                        </Button>
+                        <Button transparent full small style={{ marginTop: 15 }} onPress={() => Actions.resetPassword() }>
+                            <Text>Forgot password?</Text>
+                        </Button>
+                  </InputWrapper>
+              </StyledView>
             </Container>
 
         );
@@ -162,20 +142,23 @@ let styles = StyleSheet.create({
       fontSize: 13,
       alignItems: 'center',
       justifyContent: 'center',
-      textAlign: 'center',
+
       marginTop: 20,
       fontWeight: 'bold'
   },
 
   inputStyle:{
-    width: 340
+    width: 340,
+    marginBottom: 30,
+
   },
 
   buttonStyle: {
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 330
+    marginLeft: 10,
+    width: 340
   },
 
   viewStyle: {
