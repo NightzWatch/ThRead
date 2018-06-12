@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
+import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner, Icon } from 'native-base';
+import {StyleSheet} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import {
@@ -11,6 +12,27 @@ import {
     secondPasswordChanged,
     registerPhoneChanged
 } from '../actions/index';
+import styled from "styled-components";
+
+const TextStyle = styled(Text)`
+   font-size:13px;
+   text-align:center;
+   font-weight:700;
+   color:white;
+   margin-top:10px;
+ `;
+
+const TermsTextStyle = styled(Text)`
+  font-size:14px;
+  text-align:center;
+  color:white;
+`;
+
+const TermsButtonStyle = styled(Text)`
+  font-size:14px;
+  text-align:center;
+  color:blue;
+`;
 
 class RegisterForm extends Component {
     onSubmitPress = () => {
@@ -64,61 +86,70 @@ class RegisterForm extends Component {
         return (
             <Container style={{ backgroundColor: '#8bc34a' }}>
                 <Content>
-                    <Form>
+                    <Form style={{padding:20, marginLeft: -20}}>
                         <Item stackedLabel>
-                            <Label>First Name</Label>
+
+                            <TextStyle>First Name</TextStyle>
                             <Input
+                                placeholder=''
+                                style={{fontSize:13}}
                                 onChangeText={this.onFirstNameChange}
                                 value={this.props.first_name}
                             />
+
                         </Item>
-                        <Item stackedLabel last>
-                            <Label>Last Name</Label>
+                        <Item style={{marginTop:20}} stackedLabel>
+                          <TextStyle>Last Name</TextStyle>
                             <Input
+                                style={{fontSize:13}}
                                 onChangeText={this.onLastNameChange}
                                 value={this.props.last_name}
                             />
                         </Item>
-                        <Item stackedLabel last>
-                            <Label>Phone Number</Label>
-                            <Input
+                        <Item style={{marginTop:20}} stackedLabel>
+                          <TextStyle>Phone Number</TextStyle>
+                          <Input
+                                style={{fontSize:13}}
                                 keyboardType="numeric"
                                 onChangeText={this.onPhoneChange}
                                 value={this.props.phone_number}
                             />
                         </Item>
-                        <Item stackedLabel last>
-                            <Label>Email</Label>
-                            <Input
+                        <Item style={{marginTop:20}} stackedLabel>
+                          <TextStyle>Email</TextStyle>
+                          <Input
+                                style={{fontSize:13}}
                                 onChangeText={this.onEmailChange}
                                 value={this.props.email}
                             />
                         </Item>
-                        <Item stackedLabel last>
-                            <Label>Password</Label>
+                        <Item style={{marginTop:20}} stackedLabel>
+                            <TextStyle>Password</TextStyle>
                             <Input
+                                style={{fontSize:13}}
                                 secureTextEntry
                                 onChangeText={this.onPasswordChange}
                                 value={this.props.password}
                             />
                         </Item>
-                        <Item stackedLabel last>
-                            <Label>Re-enter Password</Label>
+                        <Item style={{marginTop:20}} stackedLabel>
+                            <TextStyle>Confirm Password</TextStyle>
                             <Input
+                                style={{fontSize:13}}
                                 secureTextEntry
                                 onChangeText={this.onSecondPasswordChange.bind(this)}
                                 value={this.props.second_password}
                             />
                         </Item>
                     </Form>
-                    <Text style={{ marginTop: 15, padding: 5 }}>
-                        By pressing "Register" I agree that I have read:
-                    </Text>
-                    <Button transparent onPress={() => Actions.termsAndConditions()}>
-                        <Text>Terms and conditions</Text>
+                  <TermsTextStyle>
+                    By pressing "Register" I agree that I have read:
+                  </TermsTextStyle>
+                    <Button style={{alignItems: 'center', justifyContent:'center'}} transparent onPress={() => Actions.termsAndConditions()}>
+                          <TermsButtonStyle>Terms and conditions </TermsButtonStyle>
                     </Button>
                     <Button transparent onPress={() => Actions.privacyPolicy()}>
-                        <Text>Privacy Policy</Text>
+                          <TermsButtonStyle>Privacy Policy  </TermsButtonStyle>
                     </Button>
                     {this.renderRegisterButton()}
                 </Content>
@@ -126,6 +157,7 @@ class RegisterForm extends Component {
         );
     }
 }
+
 
 const mapStateToProps = ({ register }) => {
     const { first_name, last_name, email, password, second_password, phone_number, loading } = register;
