@@ -104,7 +104,7 @@ class LoginForm extends Component {
                             <Item style={styles.inputStyle}>
                                 <Content>
                                   <Item>
-                                    <Input style={{fontSize:14,color:'#fff'}}
+                                    <Input style={{fontSize:15,color:'#fff'}}
                                     onChangeText={this.onEmailChange.bind(this)}
                                     value={this.props.email}
                                       />
@@ -119,7 +119,7 @@ class LoginForm extends Component {
                               <Item style={styles.inputStyle}>
                                   <Content>
                                   <Item>
-                                    <Input style={{fontSize:14,color:'#fff'}}
+                                    <Input style={{fontSize:15,color:'#fff'}}
                                     secureTextEntry
                                     onChangeText={this.onPasswordChange.bind(this)}
                                     value={this.props.password}
