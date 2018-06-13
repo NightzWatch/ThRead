@@ -164,7 +164,7 @@ let styles = StyleSheet.create({
        marginTop: 25,
        alignItems: 'center',
        justifyContent: 'center',
-       marginLeft: 15,
+       marginLeft: 20,
        width: 340
     }
 })

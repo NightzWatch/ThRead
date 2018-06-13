@@ -32,7 +32,7 @@ class RouterComponent extends Component {
                     />
                     <Scene
                         key="register"
-                        
+                        title="Register for ThRead"
                         component={RegisterForm}
                     />
                     <Scene
