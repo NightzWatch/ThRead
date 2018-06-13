@@ -54,6 +54,7 @@ const ForgotStyle = styled(Text)`
     color:white;
     text-decoration:underline;
     text-decoration-color: #fff;
+    margin-top:30px;
 `;
 
 
