@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import {StyleSheet} from 'react-native';
 
 class AddMembersForm extends Component {
 	state = {
 		button_loading: false,
 		added_contacts: []
     }
-    
+
     onAddButtonPress() {
         this.setState({
             button_loading: true
@@ -47,7 +48,7 @@ class AddMembersForm extends Component {
 		}
 
 		return (
-			<Button full style={{ marginTop: 50 }} onPress={() => this.onAddButtonPress()}>
+			<Button rounded style={styles.buttonStyle} onPress={() => this.onAddButtonPress()}>
 				<Text>Add New Members</Text>
 			</Button>
 		);
@@ -81,7 +82,7 @@ class AddMembersForm extends Component {
 
         return null;
     }
-    
+
     isUserMember(userID) {
         var weFoundSomeoneThatLikesCats = this.search(userID, this.props.users);
 
@@ -96,13 +97,13 @@ class AddMembersForm extends Component {
 
 	renderContacts() {
 		if (this.props.loading) {
-			return <Spinner color="blue" />;
+			return <Spinner color="black" />;
 		}
 
 		const listItems = this.props.contact_list.map((d) => {
             const isMember = this.isUserMember(d.id);
             const isChecked = isMember ? true : this.state.added_contacts.indexOf(d.id) !== -1;
-            const color = isMember ? 'green' : '';
+            const color = isMember ? 'blue' : '';
 
 			return (
 				<ListItem key={d.id}>
@@ -127,7 +128,7 @@ class AddMembersForm extends Component {
 	render() {
 		return (
 			<Container style={{ backgroundColor: '#fff' }}>
-				<Content>
+				<Content style={{padding:20, marginLeft: -20}}>
 					{this.renderContacts()}
 					{this.renderAddButton()}
 				</Content>
@@ -135,6 +136,17 @@ class AddMembersForm extends Component {
 		);
 	}
 }
+
+let styles = StyleSheet.create({
+
+      buttonStyle: {
+         marginTop: 25,
+         alignItems: 'center',
+         justifyContent: 'center',
+         marginLeft: 20,
+         width: 340
+      }
+  })
 
 const mapStateToProps = ({ auth, contacts }) => {
 	const { chatUser } = auth;
