@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Icon, Button, Text, Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
+import {StyleSheet} from 'react-native';
 import { sendRequest } from '../actions';
+import styled from 'styled-components';
+
+const TextStyle = styled(Text)`
+    font-size:13px;
+    text-align:center;
+    font-weight:700;
+    color:white;
+    margin-top:10px;
+  `;
 
 class AddContactForm extends Component {
     state = {
@@ -36,18 +46,19 @@ class AddContactForm extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container style={{ backgroundColor: '#8bc34a' }}>
                 <Content>
-                    <Form>
+                    <Form style={{padding:20, marginLeft: -20}}>
                         <Item stackedLabel>
-                            <Label>Phone number</Label>
+                            <TextStyle>Phone number</TextStyle>
                             <Input
+                               style={{color:'white',fontSize:13}}
                                 value={this.state.phone_number}
                                 onChangeText={this.onPhoneNumberChange}
                             />
                         </Item>
                     </Form>
-                    <Button full style={{ marginTop: 50 }} onPress={this.requestContact}>
+                    <Button rounded style={styles.buttonStyle} onPress={this.requestContact}>
                         <Text>Send</Text>
                     </Button>
                 </Content>
@@ -55,5 +66,16 @@ class AddContactForm extends Component {
         );
     }
 }
+
+let styles = StyleSheet.create({
+
+     buttonStyle: {
+        marginTop: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 20,
+        width: 340
+     }
+ })
 
 export default AddContactForm;
