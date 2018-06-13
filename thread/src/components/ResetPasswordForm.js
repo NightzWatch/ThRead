@@ -72,8 +72,9 @@ class ForgotPasswordForm extends Component {
                                 value={this.props.second_email}
                             />
                         </Item>
+                            {this.renderSubmitButton()}
                     </Form>
-                    {this.renderSubmitButton()}
+
                 </Content>
             </Container>
         );
