@@ -47,6 +47,15 @@ const buttonWrapper = styled.View`
   height: 250px;
 `;
 
+const ForgotStyle = styled(Text)`
+    font-size:15px;
+    text-align:center;
+    font-weight:700;
+    color:white;
+    text-decoration:underline;
+    text-decoration-color: #fff;
+`;
+
 
 
 class LoginForm extends Component {
@@ -125,7 +134,7 @@ class LoginForm extends Component {
                             <Text>Register</Text>
                         </Button>
                         <Button transparent full small style={{ marginTop: 15 }} onPress={() => Actions.resetPassword() }>
-                            <Text>Forgot password?</Text>
+                            <ForgotStyle>Forgot password? Click here!</ForgotStyle>
                         </Button>
                   </InputWrapper>
               </StyledView>
