@@ -70,6 +70,8 @@ class RouterComponent extends Component {
                                 <Scene
                                     key="threads"
                                     title="ThRead"
+                                    navigationBarStyle={{backgroundColor:'#8bc34a'}}
+                                    titleStyle={{color:'white'}}
                                     component={ThreadList}
                                     renderRightButton={() => (
                                       <CommonButton

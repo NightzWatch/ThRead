@@ -17,8 +17,8 @@ const FooterTabs = ({ navigationState }) => {
     const { index, routes } = navigationState;
 
     return (
-        <Footer>
-            <FooterTab>
+        <Footer style={{height: 27}}>
+            <FooterTab style={{backgroundColor: '#8bc34a'}}>
                 {routes.map(({ key }, routeIndex) => {
                     const iconName = getRouteIcon(key);
                     const active = index === routeIndex;
