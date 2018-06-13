@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import {StyleSheet} from 'react-native';
 import {
     register,
     registerEmailChanged,
@@ -54,7 +55,7 @@ class RegisterForm extends Component {
         }
 
         return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
+            <Button full style={styles.buttonStyle} onPress={this.onSubmitPress}>
                 <Text>Register</Text>
             </Button>
         );
@@ -126,6 +127,18 @@ class RegisterForm extends Component {
         );
     }
 }
+
+let styles = StyleSheet.create({
+
+     buttonStyle: {
+        marginTop: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 20,
+        width: 340
+     }
+ })
+
 
 const mapStateToProps = ({ register }) => {
     const { first_name, last_name, email, password, second_password, phone_number, loading } = register;

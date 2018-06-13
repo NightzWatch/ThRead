@@ -22,23 +22,25 @@ import FooterTabs from './components/FooterTabs';
 class RouterComponent extends Component {
     render() {
         return (
-            <Router>
+            <Router navigationBarStyle={{backgroundColor:'white'}} titleStyle={{color:'#8bc34a'}}>
                 <Scene key="root" {...sceneConfig}>
                     <Scene
                         key="login"
                         title="Login"
                         component={LoginForm}
                         initial
+
                     />
                     <Scene
                         key="register"
-                        title="Register"
+                        title="Register for ThRead"
                         component={RegisterForm}
                     />
                     <Scene
                         key="resetPassword"
                         title="Reset Password"
                         component={ResetPasswordForm}
+
                     />
                     <Scene
                         key="privacyPolicy"
