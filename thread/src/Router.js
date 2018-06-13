@@ -58,6 +58,8 @@ class RouterComponent extends Component {
                          <Modal>
                             <Tabs key="tabbar" tabBarComponent={FooterTabs}>
                                 <Scene
+                                navigationBarStyle={{backgroundColor:'#8bc34a'}}
+                                  titleStyle={{color:'white'}}
                                     key="contacts"
                                     title="Contacts"
                                     component={ContactTabs}
@@ -104,6 +106,8 @@ class RouterComponent extends Component {
                                     hideNavBar={false}
                                 />
                                 <Scene
+                                    navigationBarStyle={{backgroundColor:'#8bc34a'}}
+                                    titleStyle={{color:'white'}}
                                     key="info"
                                     title="Info"
                                     component={Info}

@@ -8,9 +8,9 @@ import RequestsSent from './RequestsSent';
 const ContactTabs = () => (
   <Container>
     <Tabs renderTabBar={()=> <ScrollableTab />}>
-      <Tab heading="Contacts" children={<Contacts />} />
-      <Tab heading="Requests Received" children={<RequestsReceived />} />
-      <Tab heading="Requests Sent" children={<RequestsSent />} />
+      <Tab activeTabStyle={{backgroundColor:'#8bc34a'}} activeTextStyle={{color:'white'}} tabStyle={{backgroundColor:'#8bc34a'}} textStyle={{color: 'white'}} heading="Contacts" children={<Contacts />} />
+      <Tab activeTabStyle={{backgroundColor:'#8bc34a'}} activeTextStyle={{color:'white'}} tabStyle={{backgroundColor:'#8bc34a'}} textStyle={{color: 'white'}} heading="Requests Received" children={<RequestsReceived />} />
+      <Tab activeTabStyle={{backgroundColor:'#8bc34a'}} activeTextStyle={{color:'white'}} tabStyle={{backgroundColor:'#8bc34a'}} textStyle={{color: 'white'}} heading="Requests Sent" children={<RequestsSent />} />
     </Tabs>
   </Container>
 );

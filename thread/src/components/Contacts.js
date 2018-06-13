@@ -6,7 +6,7 @@ class Contacts extends Component {
     renderList() {
         if (this.props.loading) {
             return (
-                <Content contentContainerStyle={{ 
+                <Content contentContainerStyle={{
                     flex: 1,
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -19,7 +19,7 @@ class Contacts extends Component {
 
         if (this.props.contacts.length === 0) {
             return (
-                <Content contentContainerStyle={{ 
+                <Content contentContainerStyle={{
                     flex: 1,
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -31,7 +31,7 @@ class Contacts extends Component {
         }
 
         return (
-            <Content>
+            <Content style={{ padding:10, marginLeft:-8}}>
                 <List
                     dataArray={this.props.contact_list}
                     renderRow={(item) =>
@@ -41,7 +41,7 @@ class Contacts extends Component {
                             </Body>
                             <Right>
                                 <Button
-                                    transparent 
+                                    transparent
                                     style={{ width: 100 }}
                                 >
                                     <Text>Message</Text>
