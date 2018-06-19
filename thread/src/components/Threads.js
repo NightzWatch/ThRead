@@ -7,9 +7,77 @@ import {
     setChatRoom
 } from '../actions';
 
+import { Notifications } from 'expo';
+
 class Threads extends Component {
 
-    formatDate(dateTime){
+    constructor(props) {
+        super(props);
+
+        console.log('JORDAN I HAVE BEEN INSTANTIATED');
+    }
+
+    componentDidMount() {
+        // Handle notifications that are received or selected while the app
+        // is open. If the app was closed and then opened by tapping the
+        // notification (rather than just tapping the app icon to open it),
+        // this function will fire on the next tick after the app starts
+        // with the notification data.
+        this.notificationSubscription = Notifications.addListener(this.handleNotification);
+    }
+
+    handleNotification = notification => {
+        if (notification.origin === 'selected') {
+            
+            const { type, roomID, isGroup } = notification.data; // DO SOMETHING WITH TYPE 
+
+            console.log('notification: ', notification);
+            // console.log('screen: ', screen);
+
+            const room = this.props.rooms.find(room => room.id === roomID);
+            const { name } = room;
+
+            console.log('ROOM NAME: ', name);
+            console.log('ROOM ID: ', roomID);
+
+            /**
+             BUGS:
+                i. if the user is already on a screen, reset all the screens then navigate - DONE
+            */
+
+            // getRoomProperties
+
+            Actions.reset('main');
+            this.onThreadPress(room, name, isGroup);
+
+            /*
+                DATA NEEDED FOR SCREEN:
+
+                - roomID,
+                - title/room_name
+                - isGroup
+             */
+
+            // FIND ROOM BASED ON ITS ID
+
+
+
+            // Actions[screen]({
+            //     roomID,
+            //     title: name,
+            //     left:  () => <CommonButton onPress={() => Actions.pop()} name={'arrow-back'} />,
+            //     right: () => <CommonButton onPress={() => Actions.info()} name={"information-circle"} />
+            // });
+        }
+
+        return notification;
+    }
+
+    componentWillUnmount() {
+        this.notificationSubscription.remove();
+    }
+
+    formatDate(dateTime) {
         return (
             dateTime
             .split(/[T|-]/, 3)
@@ -31,12 +99,12 @@ class Threads extends Component {
     }
 
     onThreadPress(room, room_name, isGroup) {
-        const { createdAt, createdByUserId, id, isPrivate, name, updatedAt, users } = room;
+        const { createdAt, createdByUserId, id, isPrivate, updatedAt, users } = room;
         const action = isGroup ? 'thread' : 'dmThread';
         const rightComponent = isGroup ? <CommonButton onPress={() => Actions.info()} name={"information-circle"} /> : null;
 
         this.props.setChatRoom({
-            createdAt, createdByUserId, id, isPrivate, name: room_name, updatedAt, users
+            createdAt, createdByUserId, id, isPrivate, name: room_name, updatedAt, users, isGroup
         });
 
         Actions[action]({
@@ -70,7 +138,7 @@ class Threads extends Component {
     }
     
     renderThreadItem(room) {
-        const { id, name, updatedAt, users } = room;
+        const { id, name, updatedAt } = room;
         const { room_name, isGroup } = this.getRoomProperties(name);
 
         return (

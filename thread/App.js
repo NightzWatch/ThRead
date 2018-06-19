@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { Root, StyleProvider } from 'native-base';
-import { AppLoading, SecureStore } from 'expo';
+import { AppLoading, SecureStore, Notifications } from 'expo';
 import ReduxThunk from 'redux-thunk';
 import Router from './src/Router';
 import firebase from 'firebase';
@@ -37,6 +37,22 @@ class App extends Component {
         
         firebase.initializeApp(config);
     }
+
+    // componentDidMount() {
+    //     // Handle notifications that are received or selected while the app
+    //     // is open. If the app was closed and then opened by tapping the
+    //     // notification (rather than just tapping the app icon to open it),
+    //     // this function will fire on the next tick after the app starts
+    //     // with the notification data.
+    //     this._notificationSubscription = Notifications.addListener(this.handleNotification);
+    // }
+
+    // handleNotification = notification => {
+    //     console.log('notification: ', notification);
+    //     const { screen } = notification.data;
+
+    //     console.log('screen: ', screen);
+    // }
 
     startAsync = async () => {
         try {

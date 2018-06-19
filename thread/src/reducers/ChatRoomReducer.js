@@ -8,6 +8,7 @@ const INITIAL_STATE = {
     createdByUserId: '',
     id: '',
     isPrivate: true,
+    isGroup: true,
     name: '',
     updatedAt: '',
     users: []

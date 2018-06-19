@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Message from './Message';
 import emojiUtils from 'emoji-utils';
 import { addUserToRoom } from '../../actions';
+import axios from 'axios';
 
 class Chat extends Component {
 	state = {
@@ -27,7 +28,7 @@ class Chat extends Component {
 					this.addMessage(message);
 				},
 				onUserStartedTyping: user => {
-					this.setState({ typingText: `${user.name} is typing` });
+					this.setState({ typingText: `${this.props.first_name} ${this.props.last_name} is typing` });
 				},
 				onUserStoppedTyping: user => {
 					this.setState({ typingText: null });
@@ -40,8 +41,12 @@ class Chat extends Component {
 		});
 	}
 
+	componentWillUnmount() {
+		this.props.chatUser.roomSubscriptions[this.props.roomID].cancel();
+	}
+
 	addMessage(message, newMessage = true) {
-		const isGif = this.checkMessageIsGif(message.text);
+		const isGif = this.checkTextIsMediaLink(message.text);
 		const messageText = isGif ? '' : message.text;
 
 		const messages = [{
@@ -49,7 +54,7 @@ class Chat extends Component {
 			text: messageText,
 			createdAt: new Date(message.createdAt),
 			user: {
-				_id: message.sender.id,
+				_id: message.sender.id, // WE CAN SEARCH THE CONTACTS IF WE KNOW THIS PERSON, TO GET NAME, ELSE LEAVE IT AS IT IS
 				name: message.sender.name,
 				avatar: message.sender.avatarURL,
 			}
@@ -115,7 +120,7 @@ class Chat extends Component {
 			});
 	}
 
-	checkMessageIsGif(text) {
+	checkTextIsMediaLink(text) {
 		const allowedContentTypes = ['.gif', '.png', '.jpg', '.jpeg'];
 
 		return allowedContentTypes.indexOf(text.slice(-4)) !== -1;
@@ -139,28 +144,26 @@ class Chat extends Component {
 		return cat[kitten];
 	}
 
-	onUserTyping = (cat) => {
+	onUserTyping = async cat => {
 		const shavedCat = cat.trim();
 
 		if (shavedCat) {
-			this.props.chatUser.isTypingIn({ roomId: this.props.roomID })
-				.then(() => {
-					console.log('Success!')
-				})
-				.catch(err => {
-					console.log(`Error sending typing indicator: ${err}`)
-				});
+			try {
+				await this.props.chatUser.isTypingIn({ roomId: this.props.roomID });
+			} catch (error) {
+				console.log(`Error sending typing indicator: ${error}`)
+			}
 		}
 	}
 
 	onSend(messages = []) {
 		const message = messages[0];
 		let text = message.text.trim();
-
+		
 		if (!text) {
 			text = this.getCatGif();
 		}
-
+		
 		Keyboard.dismiss();
 
 		this.props.chatUser.sendMessage({
@@ -168,7 +171,123 @@ class Chat extends Component {
 			roomId: this.props.roomID
 		})
 		.then(messageId => {
-			console.log(`Added message to ${this.props.title}`);
+			console.log(`Added message to ${this.props.title}, with the ID of ${messageId}`);
+			// LETS SEND A NOTIFICATION
+			console.log('users in this chat room: ', this.props.users.length);
+
+			const { users, first_name, last_name, chatName, roomID, isGroup } = this.props;
+			const userIds = users.map(user => user.id);
+			const title = isGroup ? `${first_name} ${last_name} @ ${chatName}` : `${first_name} ${last_name}`;
+			const isGif = this.checkTextIsMediaLink(text);
+			const messageBody = isGif ? '🐱 GIF' : text; // THIS IS TEMP, TBH WE SHOULD REALLY DO THIS ON THE SERVER
+
+			console.log('is group chat: ', isGroup);
+			console.log('users IDS in this chat room: ', userIds);
+			console.log('text: ', text);
+
+			axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/messengerMessageNotification', {
+				userIds, text: messageBody, title, roomID, isGroup
+			})
+			.then(response => {
+				console.log(response);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+
+			/**
+			 {
+				"avatarURL": undefined,
+				"createdAt": "2018-05-01T16:14:39Z",
+				"customData": undefined,
+				"id": "vc8Yi9IKYEf4WySPbhEVfza8Yg23",
+				"name": "vc8Yi9IKYEf4WySPbhEVfza8Yg23",
+				"presenceStore": e {
+				"get": [Function anonymous],
+				"getSync": [Function anonymous],
+				"initialize": [Function anonymous],
+				"pendingGets": Array [],
+				"pendingSets": Array [],
+				"pop": [Function anonymous],
+				"set": [Function anonymous],
+				"snapshot": [Function anonymous],
+				"store": Object {
+					"0mjDrXZnkAOKtP9kOUyvfVsHPKJ2": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "0mjDrXZnkAOKtP9kOUyvfVsHPKJ2",
+					},
+					"AipCxefrUlQfzS2PGHYeDyJEAYE3": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "AipCxefrUlQfzS2PGHYeDyJEAYE3",
+					},
+					"C7z98cAX3pNx0DDqno5bohY2fOE3": Object {
+					"lastSeenAt": "2018-06-10T14:07:08Z",
+					"state": "offline",
+					"userId": "C7z98cAX3pNx0DDqno5bohY2fOE3",
+					},
+					"CbYORA0rcKftREBTFuR40d3Bo393": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "CbYORA0rcKftREBTFuR40d3Bo393",
+					},
+					"EyTjZdlbGpRn3qmCrKAv48wxXCd2": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "EyTjZdlbGpRn3qmCrKAv48wxXCd2",
+					},
+					"SasW1TNWQARnMu3lPHRexsR4CJJ2": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "SasW1TNWQARnMu3lPHRexsR4CJJ2",
+					},
+					"XonnrPW4HBTJ7bKkfA3qqiuOi6N2": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "XonnrPW4HBTJ7bKkfA3qqiuOi6N2",
+					},
+					"pXUKS2I7waadhI9SEnkezMiAz0R2": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "pXUKS2I7waadhI9SEnkezMiAz0R2",
+					},
+					"sLyvUwzo1cUrz1ZgVXAQdSU5JjE3": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "sLyvUwzo1cUrz1ZgVXAQdSU5JjE3",
+					},
+					"tAQhu2sBiQRHn8668UfwlTKF21D3": Object {
+					"lastSeenAt": "2018-06-12T20:06:28Z",
+					"state": "offline",
+					"userId": "tAQhu2sBiQRHn8668UfwlTKF21D3",
+					},
+					"v01Ikq8OZtWtzaUs6tbnrHQN7fy2": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "v01Ikq8OZtWtzaUs6tbnrHQN7fy2",
+					},
+					"vUUOsynx0LU8cgooPuiWy55OCOr1": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "vUUOsynx0LU8cgooPuiWy55OCOr1",
+					},
+					"vc8Yi9IKYEf4WySPbhEVfza8Yg23": Object {
+					"lastSeenAt": null,
+					"state": "online",
+					"userId": "vc8Yi9IKYEf4WySPbhEVfza8Yg23",
+					},
+					"waYHYuTlLTcgCn9O2LOu4Q1Kt0o1": Object {
+					"lastSeenAt": null,
+					"state": "unknown",
+					"userId": "waYHYuTlLTcgCn9O2LOu4Q1Kt0o1",
+					},
+				},
+				"update": [Function anonymous],
+				},
+				"updatedAt": "2018-05-01T16:14:39Z",
+			}
+			 */
 		})
 		.catch(err => {
 			console.log(`Error adding message to ${this.props.title}: ${err}`)
@@ -243,10 +362,12 @@ class Chat extends Component {
 	}
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, chatRoom, profile }) => {
 	const { user, chatUser } = auth;
+	const { id, users, name, isGroup } = chatRoom;
+	const { first_name, last_name } = profile;
 
-	return { user, chatUser };
+	return { user, users, chatUser, first_name, last_name, chatId: id, chatName: name, isGroup };
 };
 
 export default connect(mapStateToProps, { addUserToRoom })(Chat);

@@ -65,6 +65,7 @@ class RouterComponent extends Component {
                                         onPress={() => Actions.addContact()}
                                         name={'add'} />
                                     )}
+                                    path={'/contacts'}
                                 />
                                 <Scene
                                     key="threads"
@@ -97,7 +98,7 @@ class RouterComponent extends Component {
                                 key="dmThread"
                                 hideNavBar
                             >
-                                 <Scene
+                                <Scene
                                     key="chat"
                                     component={Chat}
                                     hideNavBar={false}
