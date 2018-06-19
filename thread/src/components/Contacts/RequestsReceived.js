@@ -1,39 +1,27 @@
 import React, { Component } from 'react';
-import { Container, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, H3, Button, Spinner } from 'native-base';
 import { connect } from 'react-redux';
+import { Container, Content, List, ListItem, Body, Right, Text, Button } from 'native-base';
+import { CentredContent, ContentSpinner } from '../Common';
 import {
     acceptRequest
-} from '../actions';
+} from '../../actions';
 
 class RequestsSent extends Component {
-    onAcceptPress(requestorID) {
-        acceptRequest(requestorID);
+
+    onAcceptPress = (requestorID) => {
+        acceptRequest(requestorID, this.props.chatUser);
     }
 
     renderList() {
         if (this.props.loading) {
-            return (
-                <Content contentContainerStyle={{ 
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Spinner color="blue" />
-                </Content>
-            );
+            return <ContentSpinner />;
         }
 
-        if (this.props.contact_requests_received.length === 0) {
+        if (this.props.requests_received_list.length === 0) {
             return (
-                <Content contentContainerStyle={{ 
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
+                <CentredContent>
                     <Text>No requests received</Text>
-                </Content>
+                </CentredContent>
             );
         }
         
@@ -65,18 +53,18 @@ class RequestsSent extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 {this.renderList()}
             </Container>
         );
     }
 }
 
-const mapStateToProps = ({ profile, requestsReceived }) => {
-    const { contact_requests_received } = profile;
+const mapStateToProps = ({ requestsReceived, auth }) => {
     const { requests_received_list, loading } = requestsReceived;
+    const { chatUser } = auth;
 
-    return { contact_requests_received, requests_received_list, loading };
+    return { requests_received_list, loading, chatUser };
 };
 
 export default connect(mapStateToProps, {})(RequestsSent);

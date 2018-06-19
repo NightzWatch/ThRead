@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Form, Item, Input, Label, Icon, Button, Text, Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { sendRequest } from '../actions';
+import { sendRequest } from '../../actions';
 
 class AddContactForm extends Component {
     state = {
@@ -36,7 +36,7 @@ class AddContactForm extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 <Content>
                     <Form>
                         <Item stackedLabel>

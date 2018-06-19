@@ -126,7 +126,7 @@ class AddMembersForm extends Component {
 
 	render() {
 		return (
-			<Container style={{ backgroundColor: '#fff' }}>
+			<Container>
 				<Content>
 					{this.renderContacts()}
 					{this.renderAddButton()}

@@ -1,91 +1,146 @@
 import firebase from 'firebase';
-import { Actions } from 'react-native-router-flux';
+
+// TODO: MOVE ALL THIS CODE BELOW TO THE SERVER (CREATE GOOGLE CLOUD FUNCTIONS)
+export const createChatRoom = (chatUser, friendUserID, callback) => {
+    const { currentUser } = firebase.auth();
+    const db = firebase.firestore();
+
+    chatUser.createRoom({
+        name: currentUser.uid + friendUserID,
+        private: true,
+        addUserIds: [currentUser.uid, friendUserID]
+    }).then(room => {
+        callback(room);
+
+        const currentUserRef = db.collection('users').doc(currentUser.uid);
+        const friendRef = db.collection('users').doc(friendUserID);
+        const batch = db.batch();
+
+        const currentUserContactRef = currentUserRef
+            .collection('contacts')
+            .doc(friendUserID);
+        
+        const friendContactRef = friendRef
+            .collection('contacts')
+            .doc(currentUser.uid);
+        
+        batch.update(currentUserContactRef, { room_id: room.id });
+        batch.update(friendContactRef, { room_id: room.id });
+
+        batch.commit()
+            .then(() => {
+                console.log('Successfully created room for direct messaging');
+            })
+            .catch(error => {
+                console.log('Error performing batch updates on contacts to store room ID: ', error);
+            });
+    })
+    .catch(err => {
+        console.log(`Error creating direct messaging room ${err}`);
+    });
+};
 
 export const sendRequest = (phone_number) => {
     const db = firebase.firestore();
     const usersRef = db.collection('users');
     const userRef = usersRef.where('phone_number', '==', phone_number);
+
     const { currentUser } = firebase.auth();
     const currentUserRef = db.collection('users').doc(currentUser.uid);
 
-    userRef.get().then(querySnapshot => {       
+    userRef.get().then(querySnapshot => {
+        const batch = db.batch();
         const requestedUserDoc = querySnapshot.docs[0];
         const requestedUserData = requestedUserDoc.data();
         const requestedUserRef = requestedUserDoc.ref;
 
-        if (requestedUserData.contact_requests_received.indexOf(currentUser.uid) === -1) {
-            requestedUserRef.set({
-                contact_requests_received: [...requestedUserData.contact_requests_received, currentUser.uid]
-            }, { merge: true });
-        }
-
-        currentUserRef.get().then(userDoc => {
-            const userData = userDoc.data();
-
-            if (userData.contact_requests_sent.indexOf(requestedUserDoc.id) === -1) {
-                currentUserRef.set({
-                    contact_requests_sent: [...userData.contact_requests_sent, requestedUserDoc.id]
-                }, { merge: true });
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
+        const currentUserRequestsSentRef = currentUserRef
+            .collection('contact_requests_sent')
+            .doc(requestedUserDoc.id);
         
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
+        const requestorRequestsReceivedRef = requestedUserRef
+            .collection('contact_requests_received')
+            .doc(currentUser.uid);
+
+        batch.set(currentUserRequestsSentRef, {
+            user_id: requestedUserDoc.id,
+            user_ref: requestedUserRef,
+            date_created: new Date()
+        });
+
+        batch.set(requestorRequestsReceivedRef, {
+            user_id: currentUser.uid,
+            user_ref: currentUserRef,
+            date_created: new Date()
+        });
+
+        batch.commit()
+            .then(() => {
+                console.log('Current user has successfully sent request');
+            })
+            .catch(error => {
+                console.log('Error performing batch updates on contact request: ', error);
+            });
+    }).catch(error => {
+        console.log('Error getting requested user document: ', error);
     });
 };
 
 export const acceptRequest = (requestorID) => {
-    const db = firebase.firestore();
     const { currentUser } = firebase.auth();
-
+    const db = firebase.firestore();
+    const batch = db.batch();
     const currentUserRef = db.collection('users').doc(currentUser.uid);
     const requestorRef = db.collection('users').doc(requestorID);
+    
+    const currentUserContactsRef = currentUserRef
+        .collection('contacts')
+        .doc(requestorID);
+    
+    const requestorContactsRef = requestorRef
+        .collection('contacts')
+        .doc(currentUser.uid);
+    
+    const currentUserRequestsReceivedRef = currentUserRef
+        .collection('contact_requests_received')
+        .doc(requestorID);
+    
+    const requestorRequestsReceivedRef = requestorRef
+        .collection('contact_requests_received')
+        .doc(currentUser.uid);
+    
+    const currentUserRequestsSentRef = currentUserRef
+        .collection('contact_requests_sent')
+        .doc(requestorID);
+    
+    const requestorRequestsSentRef = requestorRef
+        .collection('contact_requests_sent')
+        .doc(currentUser.uid);
 
-    requestorRef.get().then(userDoc => {
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            const userArrayIndex = userData.contact_requests_sent.indexOf(currentUser.uid);
-
-            if (userArrayIndex !== -1) {
-                userData.contact_requests_received.splice(userArrayIndex, 1);
-                userData.contact_requests_sent.splice(userArrayIndex, 1);
-
-                requestorRef.set({
-                    contact_requests_sent: userData.contact_requests_sent,
-                    contact_requests_received: userData.contact_requests_received,
-                    contacts: [...userData.contacts, currentUser.uid]
-                }, { merge: true });
-            }
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
+    batch.set(currentUserContactsRef, {
+        user_id: requestorID,
+        doc_ref: requestorRef,
+        room_id: '',
+        date_created: new Date()
+    });
+    
+    batch.set(requestorContactsRef, {
+        user_id: currentUser.uid,
+        doc_ref: currentUserRef,
+        room_id: '',
+        date_created: new Date()
     });
 
-    currentUserRef.get().then(userDoc => {
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            const userArrayIndex = userData.contact_requests_received.indexOf(requestorID);
+    batch.delete(currentUserRequestsReceivedRef);
+    batch.delete(requestorRequestsReceivedRef);
+    batch.delete(currentUserRequestsSentRef);
+    batch.delete(requestorRequestsSentRef);
 
-            if (userArrayIndex !== -1) {
-                userData.contact_requests_received.splice(userArrayIndex, 1);
-                userData.contact_requests_sent.splice(userArrayIndex, 1);
-
-                currentUserRef.set({
-                    contact_requests_sent: userData.contact_requests_sent,
-                    contact_requests_received: userData.contact_requests_received,
-                    contacts: [...userData.contacts, requestorID]
-                }, { merge: true });
-            }
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
-    });
+    batch.commit()
+        .then(() => {
+            console.log('Current user has successfully accepted request');
+        })
+        .catch(error => {
+            console.log('Error performing batch updates on accepting request: ', error);
+        });
 };
