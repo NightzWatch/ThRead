@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Header, Content, Button, Text, Tabs, Tab, ScrollableTab } from 'native-base';
 
 import ContactList from './ContactList';
-import RequestsReceived from './RequestsReceived';
+import RequestsReceived from './RequestsReceivedList';
 import RequestsSent from './RequestsSent';
 
 const ContactsTabs = () => (

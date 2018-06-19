@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
 import { connect } from 'react-redux';
+import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
+import { LoadingButton } from '../Common';
 import { Actions } from 'react-native-router-flux';
 
 class AddMembersForm extends Component {
-	state = {
-		button_loading: false,
-		added_contacts: []
+    state = {
+        button_loading: false,
+        added_contacts: []
     }
     
-    onAddButtonPress() {
+    onAddButtonPress = () => {
         this.setState({
             button_loading: true
         });
@@ -37,39 +38,23 @@ class AddMembersForm extends Component {
         });
     }
 
-	renderAddButton() {
-		if (this.state.button_loading) {
-			return (
-				<Button disabled full style={{ marginTop: 50 }}>
-					<Spinner size="small" color="#fff" />
-				</Button>
-			);
-		}
-
-		return (
-			<Button full style={{ marginTop: 50 }} onPress={() => this.onAddButtonPress()}>
-				<Text>Add New Members</Text>
-			</Button>
-		);
-	}
-
-	onCheckboxPress(item) {
+    onCheckboxPress(item) {
         const added_index = this.state.added_contacts.indexOf(item.id);
 
-		if (added_index === -1) {
-			this.setState({
-				added_contacts: [
-					...this.state.added_contacts,
-					item.id
-				]
-			});
-		} else {
-			const cloneArray = [...this.state.added_contacts];
-			cloneArray.splice(added_index, 1);
-			this.setState({
-				added_contacts: cloneArray
-			});
-		}
+        if (added_index === -1) {
+            this.setState({
+                added_contacts: [
+                    ...this.state.added_contacts,
+                    item.id
+                ]
+            });
+        } else {
+            const cloneArray = [...this.state.added_contacts];
+            cloneArray.splice(added_index, 1);
+            this.setState({
+                added_contacts: cloneArray
+            });
+        }
     }
 
     search(keyValue, array){
@@ -94,53 +79,58 @@ class AddMembersForm extends Component {
         }
     }
 
-	renderContacts() {
-		if (this.props.loading) {
-			return <Spinner color="blue" />;
-		}
+    renderContacts() {
+        if (this.props.loading) {
+            return <Spinner color="blue" />;
+        }
 
-		const listItems = this.props.contact_list.map((d) => {
+        const listItems = this.props.contact_list.map((d) => {
             const isMember = this.isUserMember(d.id);
             const isChecked = isMember ? true : this.state.added_contacts.indexOf(d.id) !== -1;
             const color = isMember ? 'green' : '';
 
-			return (
-				<ListItem key={d.id}>
-					<CheckBox checked={isChecked} disabled={isMember} color={color} onPress={() => {
-						this.onCheckboxPress(d);
-					}} />
-					<Body>
-						<Text>{d.first_name} {d.last_name}</Text>
+            return (
+                <ListItem key={d.id}>
+                    <CheckBox checked={isChecked} disabled={isMember} color={color} onPress={() => {
+                        this.onCheckboxPress(d);
+                    }} />
+                    <Body>
+                        <Text>{d.first_name} {d.last_name}</Text>
                         {this.renderNote(isMember)}
-					</Body>
-				</ListItem>
-			);
-		});
+                    </Body>
+                </ListItem>
+            );
+        });
 
-		return (
-			<List>
-				{listItems}
-			</List>
-		);
-	}
+        return (
+            <List>
+                {listItems}
+            </List>
+        );
+    }
 
-	render() {
-		return (
-			<Container>
-				<Content>
-					{this.renderContacts()}
-					{this.renderAddButton()}
-				</Content>
-			</Container>
-		);
-	}
+    render() {
+        return (
+            <Container>
+                <Content>
+                    {this.renderContacts()}
+                    <LoadingButton
+                        loading={this.state.button_loading}
+                        style={{ marginTop: 50 }}
+                        onPress={this.onAddButtonPress}
+                        text="Add New Members"
+                    />
+                </Content>
+            </Container>
+        );
+    }
 }
 
 const mapStateToProps = ({ auth, contacts }) => {
-	const { chatUser } = auth;
-	const { contact_list, loading } = contacts;
+    const { chatUser } = auth;
+    const { contact_list, loading } = contacts;
 
-	return { chatUser, contact_list, loading };
+    return { chatUser, contact_list, loading };
 };
 
 export default connect(mapStateToProps, {})(AddMembersForm);

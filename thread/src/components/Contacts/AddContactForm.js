@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Label, Icon, Button, Text, Toast } from 'native-base';
+import { connect } from 'react-redux';
+import axios from 'axios';
+import { Container, Header, Content, Form, Item, Input, Label, Icon, Button, Text, Toast, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { sendRequest } from '../../actions';
+import { LoadingButton } from '../Common';
 
 class AddContactForm extends Component {
     state = {
-        phone_number: ''
+        phone_number: '',
+        requesting: false
+    }
+
+    showToast = (text) => {
+        Toast.show({
+            text,
+            position: 'bottom',
+            buttonText: ''
+        });
     }
 
     onPhoneNumberChange = (text) => {
@@ -16,21 +27,22 @@ class AddContactForm extends Component {
 
     requestContact = () => {
         if (!this.state.phone_number) {
-            return Toast.show({
-                text: 'Phone number cannot be empty',
-                position: 'bottom',
-                buttonText: ''
-            });
+            return this.showToast('Phone number cannot be empty');
         }
 
-        sendRequest(this.state.phone_number);
+        this.setState({ requesting: true });
 
-        Actions.pop();
-
-        return Toast.show({
-            text: 'Request sent!',
-            position: 'bottom',
-            buttonText: ''
+        axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/firestoreSendRequest', {
+            userId: this.props.user.uid,
+            phoneNumber: this.state.phone_number
+        })
+        .then(response => {
+            Actions.pop();
+            this.showToast('Request sent!');
+        })
+        .catch(error => {
+            this.showToast('Error has occurred');
+            this.setState({ requesting: false });
         });
     }
 
@@ -47,13 +59,22 @@ class AddContactForm extends Component {
                             />
                         </Item>
                     </Form>
-                    <Button full style={{ marginTop: 50 }} onPress={this.requestContact}>
-                        <Text>Send</Text>
-                    </Button>
+                    <LoadingButton
+                        loading={this.state.requesting}
+                        style={{ marginTop: 50 }}
+                        onPress={this.requestContact}
+                        text="Send"
+                    />
                 </Content>
             </Container>
         );
     }
 }
 
-export default AddContactForm;
+const mapStateToProps = ({ auth }) => {
+    const { user } = auth;
+
+    return { user };
+};
+
+export default connect(mapStateToProps, {})(AddContactForm);

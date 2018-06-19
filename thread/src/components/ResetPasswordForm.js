@@ -1,31 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Content, Form, Item, Label, Input, Button, Text, Spinner } from 'native-base';
+import { LoadingButton } from './Common';
 import * as actions from '../actions/index';
 
 class ForgotPasswordForm extends Component {
 
-    onSubmitPress() {
+    onSubmitPress = () => {
         const { first_email, second_email } = this.props;
 
         this.props.resetPassword({ first_email, second_email });
-    }
-
-    renderSubmitButton() {
-        if (this.props.loading) {
-            return (
-                <Button full disabled style={{ marginTop: 25 }}>
-                    <Spinner size="small" color="#fff" />
-                    <Text>Resetting Password</Text>
-                </Button>
-            );
-        }
-
-        return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress.bind(this)}>
-                <Text>Reset password</Text>
-            </Button>
-        );
     }
 
     render() {
@@ -48,7 +32,12 @@ class ForgotPasswordForm extends Component {
                             />
                         </Item>
                     </Form>
-                    {this.renderSubmitButton()}
+                    <LoadingButton
+                        loading={this.props.loading}
+                        style={{ marginTop: 25 }}
+                        onPress={this.onSubmitPress}
+                        text="Reset password"
+                    />
                 </Content>
             </Container>
         );
