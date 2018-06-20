@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {StyleSheet} from 'react-native';
+import { LoadingButton, CommonField } from './Common';
 import { Container, Content, Form, Item, Label, Input, Button, Text, Spinner } from 'native-base';
-import {
-    firstEmailChanged,
-    secondEmailChanged,
-    resetPassword
-} from '../actions/index';
 import styled from 'styled-components';
+import * as actions from '../actions/index';
+
 
 const TextStyle = styled(Text)`
     font-size:13px;
@@ -18,63 +16,42 @@ const TextStyle = styled(Text)`
 
   `;
 
-
 class ForgotPasswordForm extends Component {
-    onFirstEmailChanged(text) {
-        this.props.firstEmailChanged(text);
-    }
 
-    onSecondEmailChanged(text) {
-        this.props.secondEmailChanged(text);
-    }
-
-    onSubmitPress() {
+    onSubmitPress = () => {
         const { first_email, second_email } = this.props;
 
         this.props.resetPassword({ first_email, second_email });
     }
 
-    renderSubmitButton() {
-        if (this.props.loading) {
-            return (
-                <Button full disabled style={{ marginTop: 25 }}>
-                    <Spinner size="small" color="#fff" />
-                    <Text>Resetting Password</Text>
-                </Button>
-            );
-        }
-
-        return (
-            <Button rounded style={styles.buttonStyle} onPress={this.onSubmitPress.bind(this)}>
-                <Text>Reset password</Text>
-            </Button>
-        );
-    }
 
     render() {
         return(
-            <Container style={{ backgroundColor:'#8bc34a' }}>
+            <Container style={{backgroundColor:'#8bc34a'}}>
                 <Content>
                     <Form style={{padding:20, marginLeft: -20}}>
-                        <Item style={{marginTop:40}} stackedLabel>
-                            <TextStyle>Email address</TextStyle>
-                            <Input
-                                style={{fontSize:13, color:'white'}}
-                                onChangeText={this.onFirstEmailChanged.bind(this)}
-                                value={this.props.first_email}
-                            />
-                        </Item>
-                        <Item style={{marginTop:40}}  stackedLabel>
-                            <TextStyle>Re-enter email address </TextStyle>
-                            <Input
-                                 style={{ fontSize:13, color:'white'}}
-                                onChangeText={this.onSecondEmailChanged.bind(this)}
-                                value={this.props.second_email}
-                            />
-                        </Item>
-                            {this.renderSubmitButton()}
-                    </Form>
+                        <CommonField
+                          onChangeText={this.props.firstEmailChanged}
+                          value={this.props.first_email}
+                          style={{marginTop:30}}
+                          label={'Email Address'}
+                        />
 
+                        <CommonField
+                          onChangeText={this.props.secondEmailChanged}
+                          value={this.props.second_email}
+                          style={{marginTop:30}}
+                          label={'Re-enter email Address'}
+                        />
+                    </Form>
+                    <LoadingButton
+                        loading={this.props.loading}
+                        style={styles.buttonStyle}
+                        onPress={this.onSubmitPress}
+                        text="Reset password"
+                        rounded
+                        full
+                    />
                 </Content>
             </Container>
         );
@@ -99,6 +76,4 @@ const mapStateToProps = ({ resetPassword }) => {
     return { first_email, second_email, loading };
 };
 
-export default connect(mapStateToProps, {
-    firstEmailChanged, secondEmailChanged, resetPassword
-})(ForgotPasswordForm);
+export default connect(mapStateToProps, actions)(ForgotPasswordForm);

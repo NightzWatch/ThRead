@@ -2,17 +2,16 @@ import React, { Component } from 'react';
 import { Router, Scene, Stack, Modal, Tabs } from 'react-native-router-flux';
 import { Actions } from 'react-native-router-flux';
 
-import CommonButton from './components/common/CommonButton'
+import { CommonButton } from './components/Common';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import Chat from './components//Messenger/Chat';
 import ThreadList from './components/Threads';
 import CreateTreadForm from './components/CreateTreadForm';
-import Contacts from './components/Contacts';
-import ContactTabs from './components/ContactTabs';
+import ContactTabs from './components/Contacts/Tabs';
+import AddContactForm from './components/Contacts/AddContactForm';
 import Profile from './components/Profile';
-import AddContactForm from './components/AddContactForm';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
 import Info from './components/Messenger/Info';
@@ -96,6 +95,16 @@ class RouterComponent extends Component {
                                 title="Send Request"
                                 component={AddContactForm}
                             />
+                            <Scene
+                                key="dmThread"
+                                hideNavBar
+                            >
+                                 <Scene
+                                    key="chat"
+                                    component={Chat}
+                                    hideNavBar={false}
+                                />
+                            </Scene>
                             <Scene
                                 key="thread"
                                 hideNavBar

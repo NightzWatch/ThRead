@@ -11,6 +11,7 @@ import {
     REGISTER_PASSWORD_CHANGED,
     REGISTER_SECOND_PASSWORD_CHANGED,
     REGISTER_USER,
+    REGISTER_SUCCESS,
     REGISTER_FAIL
 } from './types';
 
@@ -18,53 +19,41 @@ import {
     publicInitChatkit
 } from './';
 
-export const registerPhoneChanged = (text) => {
-    return {
-        type: REGISTER_PHONE_CHANGED,
-        payload: text
-    };
-};
+export const registerPhoneChanged = (text) => ({
+    type: REGISTER_PHONE_CHANGED,
+    payload: text
+});
 
-export const registerEmailChanged = (text) => {
-    return {
-        type: REGISTER_EMAIL_CHANGED,
-        payload: text
-    };
-};
+export const registerEmailChanged = (text) => ({
+    type: REGISTER_EMAIL_CHANGED,
+    payload: text
+});
 
-export const registerFirstNameChanged = (text) => {
-    return {
-        type: REGISTER_FIRST_NAME_CHANGED,
-        payload: text
-    };
-};
+export const registerFirstNameChanged = (text) => ({
+    type: REGISTER_FIRST_NAME_CHANGED,
+    payload: text
+});
 
-export const registerLastNameChanged = (text) => {
-    return {
-        type: REGISTER_LAST_NAME_CHANGED,
-        payload: text
-    };
-};
+export const registerLastNameChanged = (text) => ({
+    type: REGISTER_LAST_NAME_CHANGED,
+    payload: text
+});
 
-export const registerPasswordChanged = (text) => {
-    return {
-        type: REGISTER_PASSWORD_CHANGED,
-        payload: text
-    };
-};
+export const registerPasswordChanged = (text) => ({
+    type: REGISTER_PASSWORD_CHANGED,
+    payload: text
+});
 
-export const secondPasswordChanged = (text) => {
-    return {
-        type: REGISTER_SECOND_PASSWORD_CHANGED,
-        payload: text
-    };
-};
+export const secondPasswordChanged = (text) => ({
+    type: REGISTER_SECOND_PASSWORD_CHANGED,
+    payload: text
+});
 
 export const register = ({ phone_number, first_name, last_name, email, password, second_password }) => {
     return (dispatch) => {
         Keyboard.dismiss();
         dispatch({ type: REGISTER_USER });
-        
+
         if (!first_name) {
             registerFail(dispatch, { message: 'First name is missing.' });
 
@@ -123,19 +112,19 @@ const createUserProfile = (dispatch, { first_name, last_name, email, phone_numbe
 };
 
 const createChatUser = (dispatch, { id, first_name, last_name }, user) => {
-    axios.post('https://gfkz4aqwmk.execute-api.us-east-2.amazonaws.com/prod/user?action=create-user', {
-        id, first_name, last_name
+    axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/chatkitCreateUser', {
+        user: { id, first_name, last_name }
     })
     .then(result => {
         registerSuccess(dispatch, user);
     })
     .catch(error => {
-        console.log('error', error);
         registerFail(dispatch, error)
     });
 }
 
 const registerSuccess = (dispatch, user) => {
+    dispatch({ type: REGISTER_SUCCESS, payload: user });
     publicInitChatkit(dispatch, user.uid);
 };
 
