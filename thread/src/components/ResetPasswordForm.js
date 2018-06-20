@@ -1,20 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {StyleSheet} from 'react-native';
-import { LoadingButton, CommonField } from './Common';
+import { LoadingButton, CommonField, CommonContainer } from './Common';
 import { Container, Content, Form, Item, Label, Input, Button, Text, Spinner } from 'native-base';
-import styled from 'styled-components';
 import * as actions from '../actions/index';
 
-
-const TextStyle = styled(Text)`
-    font-size:13px;
-    text-align:center;
-    font-weight:700;
-    color:white;
-
-
-  `;
 
 class ForgotPasswordForm extends Component {
 
@@ -27,7 +17,7 @@ class ForgotPasswordForm extends Component {
 
     render() {
         return(
-            <Container style={{backgroundColor:'#8bc34a'}}>
+            <CommonContainer>
                 <Content>
                     <Form style={{padding:20, marginLeft: -20}}>
                         <CommonField
@@ -53,7 +43,7 @@ class ForgotPasswordForm extends Component {
                         full
                     />
                 </Content>
-            </Container>
+            </CommonContainer>
         );
     }
 }
