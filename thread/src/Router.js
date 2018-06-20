@@ -71,6 +71,11 @@ class RouterComponent extends Component {
                                     key="threads"
                                     title="ThRead"
                                     component={ThreadList}
+                                    renderLeftButton={() => (
+                                      <CommonButton
+                                        onPress={() => Actions.createThread()}
+                                        name={'add'} />
+                                    )}
                                     renderRightButton={() => (
                                       <CommonButton
                                         onPress={() => Actions.createThread()}
