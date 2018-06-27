@@ -28,16 +28,18 @@ class RouterComponent extends Component {
                         title="Login"
                         component={LoginForm}
                         initial
+
                     />
                     <Scene
                         key="register"
-                        title="Register"
+                        title="Register for ThRead"
                         component={RegisterForm}
                     />
                     <Scene
                         key="resetPassword"
                         title="Reset Password"
                         component={ResetPasswordForm}
+
                     />
                     <Scene
                         key="privacyPolicy"

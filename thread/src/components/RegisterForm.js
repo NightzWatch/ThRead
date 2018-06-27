@@ -4,6 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { LoadingButton } from './Common';
 import * as actions from '../actions/index';
+import {StyleSheet} from 'react-native';
 
 class RegisterForm extends Component {
     onSubmitPress = () => {
@@ -83,6 +84,18 @@ class RegisterForm extends Component {
         );
     }
 }
+
+let styles = StyleSheet.create({
+
+     buttonStyle: {
+        marginTop: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 20,
+        width: 340
+     }
+ })
+
 
 const mapStateToProps = ({ register }) => {
     const { first_name, last_name, email, password, second_password, phone_number, loading } = register;
