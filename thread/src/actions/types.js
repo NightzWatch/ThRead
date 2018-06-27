@@ -73,3 +73,4 @@ export const REQUESTS_RECEIVED_DATA_FETCHED = 'requests_received_data_fetched';
  */
 export const CHAT_ROOM_SET = 'chat_room_set';
 export const CHAT_ROOM_ADD_USER = 'chat_room_add_user';
+export const CHAT_ROOM_CLEAR = 'chat_room_clear';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Spinner, H3 } from 'native-base';
+import { Container, Content, List, ListItem, Body, Right, Text, H3 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { CommonButton, CentredContent, ContentSpinner } from './Common';
 import {
@@ -8,6 +8,7 @@ import {
 } from '../actions';
 
 import { Notifications } from 'expo';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 class Threads extends Component {
 
@@ -17,19 +18,27 @@ class Threads extends Component {
         console.log('JORDAN I HAVE BEEN INSTANTIATED');
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         // Handle notifications that are received or selected while the app
         // is open. If the app was closed and then opened by tapping the
         // notification (rather than just tapping the app icon to open it),
         // this function will fire on the next tick after the app starts
         // with the notification data.
         this.notificationSubscription = Notifications.addListener(this.handleNotification);
+
+
+        /**
+         * On iOS, when the notifications badge is set to zero, all the notifications are cleared
+         */
+        await Notifications.setBadgeNumberAsync(0);
     }
 
     handleNotification = notification => {
+        console.log('PRE NOTIFICATION: ', notification);
+        const { type, roomID, isGroup, message, title } = notification.data; // DO SOMETHING WITH TYPE 
+        
         if (notification.origin === 'selected') {
             
-            const { type, roomID, isGroup } = notification.data; // DO SOMETHING WITH TYPE 
 
             console.log('notification: ', notification);
             // console.log('screen: ', screen);
@@ -68,6 +77,21 @@ class Threads extends Component {
             //     left:  () => <CommonButton onPress={() => Actions.pop()} name={'arrow-back'} />,
             //     right: () => <CommonButton onPress={() => Actions.info()} name={"information-circle"} />
             // });
+        } else if (notification.origin === 'received' && this.props.chatRoom.id !== roomID) {
+            // const { message, title } = notification.data;
+
+            // Alert.alert(
+            //     title,
+            //     message,
+            //     [{ text: 'THIS IS A BAD NOTIFICATION' }]
+            // );
+
+            showMessage({
+                message: title,
+                description: message,
+                type: "success",
+                duration: 2000
+            });
         }
 
         return notification;
@@ -191,12 +215,12 @@ class Threads extends Component {
     }
 }
 
-const mapStateToProps = ({ auth, chatRooms, contacts }) => {
+const mapStateToProps = ({ auth, chatRooms, chatRoom, contacts }) => {
     const { user, chatUser } = auth;
     const { rooms } = chatRooms;
     const { contact_list, loading } = contacts;
 
-    return { user, chatUser, rooms, contact_list, loading };
+    return { user, chatUser, chatRoom, rooms, contact_list, loading };
 };
 
 export default connect(mapStateToProps, { setChatRoom })(Threads);

@@ -1,11 +1,11 @@
 import React, { Component }  from 'react';
 import { Keyboard, Platform, StyleSheet } from 'react-native';
-import { GiftedChat, Actions, SystemMessage, Send } from 'react-native-gifted-chat';
-import { View, Button, Icon, Text } from 'native-base';
+import { GiftedChat, Send } from 'react-native-gifted-chat';
+import { View, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import Message from './Message';
 import emojiUtils from 'emoji-utils';
-import { addUserToRoom } from '../../actions';
+import  * as actions from '../../actions';
 import axios from 'axios';
 
 class Chat extends Component {
@@ -43,6 +43,7 @@ class Chat extends Component {
 
 	componentWillUnmount() {
 		this.props.chatUser.roomSubscriptions[this.props.roomID].cancel();
+		this.props.clearChatRoom();
 	}
 
 	addMessage(message, newMessage = true) {
@@ -180,10 +181,33 @@ class Chat extends Component {
 			const title = isGroup ? `${first_name} ${last_name} @ ${chatName}` : `${first_name} ${last_name}`;
 			const isGif = this.checkTextIsMediaLink(text);
 			const messageBody = isGif ? '🐱 GIF' : text; // THIS IS TEMP, TBH WE SHOULD REALLY DO THIS ON THE SERVER
+			const index = userIds.indexOf(this.props.user.uid);
+
+			if (index > -1) {
+				userIds.splice(index, 1);
+			}
+
+			/*
+				TODO:
+					- CLEAR ALL NOTIFICATIONS
+					- CLEAN UP CODE
+			*/
 
 			console.log('is group chat: ', isGroup);
 			console.log('users IDS in this chat room: ', userIds);
 			console.log('text: ', text);
+
+			/*
+
+			users IDS in this chat room:  Array [
+			"C7z98cAX3pNx0DDqno5bohY2fOE3",
+			"CbYORA0rcKftREBTFuR40d3Bo393",
+			"SasW1TNWQARnMu3lPHRexsR4CJJ2",
+			"tAQhu2sBiQRHn8668UfwlTKF21D3",
+			"vc8Yi9IKYEf4WySPbhEVfza8Yg23",
+			]
+
+			*/
 
 			axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/messengerMessageNotification', {
 				userIds, text: messageBody, title, roomID, isGroup
@@ -370,7 +394,7 @@ const mapStateToProps = ({ auth, chatRoom, profile }) => {
 	return { user, users, chatUser, first_name, last_name, chatId: id, chatName: name, isGroup };
 };
 
-export default connect(mapStateToProps, { addUserToRoom })(Chat);
+export default connect(mapStateToProps, actions)(Chat);
 
 
 const styles = StyleSheet.create({

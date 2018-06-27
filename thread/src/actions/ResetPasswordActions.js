@@ -19,24 +19,22 @@ export const secondEmailChanged = (text) => ({
     payload: text
 });
 
-export const resetPassword = ({ first_email, second_email }) => {
-    return (dispatch) => {
-        Keyboard.dismiss();
-        dispatch({ type: RESET_PASSWORD });
+export const resetPassword = ({ first_email, second_email }) => dispatch => {
+    Keyboard.dismiss();
+    dispatch({ type: RESET_PASSWORD });
 
-        if (first_email !== second_email) {
-            resetPasswordFail(dispatch, { message: 'Emails do not match.' });
+    if (first_email !== second_email) {
+        resetPasswordFail(dispatch, { message: 'Emails do not match.' });
 
-            return false;
-        }
-    
-        firebase.auth().sendPasswordResetEmail(first_email)
-            .then(() => resetPasswordSuccess(dispatch))
-            .catch(error => resetPasswordFail(dispatch, error));
-    };
+        return false;
+    }
+
+    firebase.auth().sendPasswordResetEmail(first_email)
+        .then(() => resetPasswordSuccess(dispatch))
+        .catch(error => resetPasswordFail(dispatch, error));
 };
 
-const resetPasswordSuccess = (dispatch) => {
+const resetPasswordSuccess = dispatch => {
     dispatch({ type: RESET_PASSWORD_SUCCESS });
 
     Toast.show({

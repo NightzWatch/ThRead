@@ -22,6 +22,7 @@
     "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "react-native-flash-message": "^0.1.9",
     "react-native-gifted-chat": "^0.4.3",
     "react-native-router-flux": "^4.0.0-beta.28",
     "react-redux": "^5.0.7",

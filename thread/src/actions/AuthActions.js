@@ -41,16 +41,14 @@ export const loginPasswordChanged = (text) => ({
     payload: text
 });
 
-export const loginUser = ({ email, password }) => {
-    return (dispatch) => {
-        Keyboard.dismiss();
+export const loginUser = ({ email, password }) => dispatch => {
+    Keyboard.dismiss();
 
-        dispatch({ type: LOGIN_USER });
-        
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(user => loginUserSuccess(dispatch, user, email, password))
-            .catch(error => loginUserFail(dispatch, error));
-    };
+    dispatch({ type: LOGIN_USER });
+    
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(user => loginUserSuccess(dispatch, user, email, password))
+        .catch(error => loginUserFail(dispatch, error));
 };
 
 export const publicInitChatkit = (dispatch, userID, email, password) => {
@@ -372,15 +370,13 @@ const loginUserFail = (dispatch, { code, message }) => {
     });
 };
 
-export const logoutUser = () => {
-    return (dispatch) => {
-        firebase.auth().signOut()
-            .then(() => logoutUserSuccess(dispatch))
-            .catch(error => logoutUserFail(dispatch, error));
-    };
+export const logoutUser = () => dispatch => {
+    firebase.auth().signOut()
+        .then(() => logoutUserSuccess(dispatch))
+        .catch(error => logoutUserFail(dispatch, error));
 };
 
-const logoutUserSuccess = async (dispatch) => {
+const logoutUserSuccess = async dispatch => {
     dispatch({
         type: LOGOUT_USER_SUCCESS
     });
