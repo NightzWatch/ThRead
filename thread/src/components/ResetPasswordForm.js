@@ -31,7 +31,7 @@ class ForgotPasswordForm extends Component {
                           onChangeText={this.props.secondEmailChanged}
                           value={this.props.second_email}
                           style={{marginTop:30}}
-                          label={'Re-enter email Address'}
+                          label={'Re-enter Email Address'}
                         />
                     </Form>
                     <LoadingButton
@@ -51,9 +51,7 @@ class ForgotPasswordForm extends Component {
 let styles = StyleSheet.create({
 
      buttonStyle: {
-        marginTop: 25,
-        alignItems: 'center',
-        justifyContent: 'center'
+        marginTop: 25
      }
 
  })
