@@ -53,9 +53,7 @@ let styles = StyleSheet.create({
      buttonStyle: {
         marginTop: 25,
         alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 20,
-        width: 340
+        justifyContent: 'center'
      }
 
  })
