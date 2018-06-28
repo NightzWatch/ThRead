@@ -42,8 +42,17 @@ class Chat extends Component {
 	}
 
 	componentWillUnmount() {
-		this.props.chatUser.roomSubscriptions[this.props.roomID].cancel();
-		this.props.clearChatRoom();
+		try {
+			this.props.chatUser.roomSubscriptions[this.props.roomID].cancel();
+		} catch (err) {
+			console.log('chatkit error, either connection to chat is closed or chatkit is not responding');
+		}
+
+		try {
+			this.props.clearChatRoom();
+		} catch (err) {
+			console.log('device error with clearing redux state for current chat room');
+		}
 	}
 
 	addMessage(message, newMessage = true) {
@@ -55,7 +64,8 @@ class Chat extends Component {
 			text: messageText,
 			createdAt: new Date(message.createdAt),
 			user: {
-				_id: message.sender.id, // WE CAN SEARCH THE CONTACTS IF WE KNOW THIS PERSON, TO GET NAME, ELSE LEAVE IT AS IT IS
+				_id: message.sender.id,
+				// TODO: WE CAN SEARCH THE CONTACTS IF WE KNOW THIS PERSON TO GET THE NAME BY ID, ELSE LEAVE IT AS IT IS
 				name: message.sender.name,
 				avatar: message.sender.avatarURL,
 			}
@@ -157,7 +167,7 @@ class Chat extends Component {
 		}
 	}
 
-	onSend(messages = []) {
+	onSend = async (messages = []) => {
 		const message = messages[0];
 		let text = message.text.trim();
 		
@@ -167,14 +177,13 @@ class Chat extends Component {
 		
 		Keyboard.dismiss();
 
-		this.props.chatUser.sendMessage({
-			text: text,
-			roomId: this.props.roomID
-		})
-		.then(messageId => {
+		try {
+			const messageId = await this.props.chatUser.sendMessage({
+				text: text,
+				roomId: this.props.roomID
+			});
+
 			console.log(`Added message to ${this.props.title}, with the ID of ${messageId}`);
-			// LETS SEND A NOTIFICATION
-			console.log('users in this chat room: ', this.props.users.length);
 
 			const { users, first_name, last_name, chatName, roomID, isGroup } = this.props;
 			const userIds = users.map(user => user.id);
@@ -187,135 +196,22 @@ class Chat extends Component {
 				userIds.splice(index, 1);
 			}
 
-			/*
-				TODO:
-					- CLEAR ALL NOTIFICATIONS
-					- CLEAN UP CODE
-			*/
-
-			console.log('is group chat: ', isGroup);
-			console.log('users IDS in this chat room: ', userIds);
-			console.log('text: ', text);
-
-			/*
-
-			users IDS in this chat room:  Array [
-			"C7z98cAX3pNx0DDqno5bohY2fOE3",
-			"CbYORA0rcKftREBTFuR40d3Bo393",
-			"SasW1TNWQARnMu3lPHRexsR4CJJ2",
-			"tAQhu2sBiQRHn8668UfwlTKF21D3",
-			"vc8Yi9IKYEf4WySPbhEVfza8Yg23",
-			]
-
-			*/
-
-			axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/messengerMessageNotification', {
+			await axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/messengerMessageNotification', {
 				userIds, text: messageBody, title, roomID, isGroup
-			})
-			.then(response => {
-				console.log(response);
-			})
-			.catch(error => {
-				console.log(error);
 			});
-
-			/**
-			 {
-				"avatarURL": undefined,
-				"createdAt": "2018-05-01T16:14:39Z",
-				"customData": undefined,
-				"id": "vc8Yi9IKYEf4WySPbhEVfza8Yg23",
-				"name": "vc8Yi9IKYEf4WySPbhEVfza8Yg23",
-				"presenceStore": e {
-				"get": [Function anonymous],
-				"getSync": [Function anonymous],
-				"initialize": [Function anonymous],
-				"pendingGets": Array [],
-				"pendingSets": Array [],
-				"pop": [Function anonymous],
-				"set": [Function anonymous],
-				"snapshot": [Function anonymous],
-				"store": Object {
-					"0mjDrXZnkAOKtP9kOUyvfVsHPKJ2": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "0mjDrXZnkAOKtP9kOUyvfVsHPKJ2",
-					},
-					"AipCxefrUlQfzS2PGHYeDyJEAYE3": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "AipCxefrUlQfzS2PGHYeDyJEAYE3",
-					},
-					"C7z98cAX3pNx0DDqno5bohY2fOE3": Object {
-					"lastSeenAt": "2018-06-10T14:07:08Z",
-					"state": "offline",
-					"userId": "C7z98cAX3pNx0DDqno5bohY2fOE3",
-					},
-					"CbYORA0rcKftREBTFuR40d3Bo393": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "CbYORA0rcKftREBTFuR40d3Bo393",
-					},
-					"EyTjZdlbGpRn3qmCrKAv48wxXCd2": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "EyTjZdlbGpRn3qmCrKAv48wxXCd2",
-					},
-					"SasW1TNWQARnMu3lPHRexsR4CJJ2": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "SasW1TNWQARnMu3lPHRexsR4CJJ2",
-					},
-					"XonnrPW4HBTJ7bKkfA3qqiuOi6N2": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "XonnrPW4HBTJ7bKkfA3qqiuOi6N2",
-					},
-					"pXUKS2I7waadhI9SEnkezMiAz0R2": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "pXUKS2I7waadhI9SEnkezMiAz0R2",
-					},
-					"sLyvUwzo1cUrz1ZgVXAQdSU5JjE3": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "sLyvUwzo1cUrz1ZgVXAQdSU5JjE3",
-					},
-					"tAQhu2sBiQRHn8668UfwlTKF21D3": Object {
-					"lastSeenAt": "2018-06-12T20:06:28Z",
-					"state": "offline",
-					"userId": "tAQhu2sBiQRHn8668UfwlTKF21D3",
-					},
-					"v01Ikq8OZtWtzaUs6tbnrHQN7fy2": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "v01Ikq8OZtWtzaUs6tbnrHQN7fy2",
-					},
-					"vUUOsynx0LU8cgooPuiWy55OCOr1": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "vUUOsynx0LU8cgooPuiWy55OCOr1",
-					},
-					"vc8Yi9IKYEf4WySPbhEVfza8Yg23": Object {
-					"lastSeenAt": null,
-					"state": "online",
-					"userId": "vc8Yi9IKYEf4WySPbhEVfza8Yg23",
-					},
-					"waYHYuTlLTcgCn9O2LOu4Q1Kt0o1": Object {
-					"lastSeenAt": null,
-					"state": "unknown",
-					"userId": "waYHYuTlLTcgCn9O2LOu4Q1Kt0o1",
-					},
-				},
-				"update": [Function anonymous],
-				},
-				"updatedAt": "2018-05-01T16:14:39Z",
+		} catch (err) {
+			switch (err.message) {
+				case 'Request failed with status code 500':
+					console.log(`Error with push notification server for room ${this.props.title}`);
+					break;
+				case 'Request failed with status code 408':
+					console.log(`Push notification server for room ${this.props.title} timeout`);
+					break;
+				default:
+					console.log(`Error adding message to ${this.props.title}: ${err}`);
+					break;
 			}
-			 */
-		})
-		.catch(err => {
-			console.log(`Error adding message to ${this.props.title}: ${err}`)
-		});
+		}
 	}
 
 	renderSend = (props) => {
@@ -368,7 +264,7 @@ class Chat extends Component {
 		return (
 			<GiftedChat
 				messages={this.state.messages}
-				onSend={messages => this.onSend(messages)}
+				onSend={this.onSend}
 				user={{
 					_id: this.props.user.uid
 				}}

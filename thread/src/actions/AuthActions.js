@@ -35,15 +35,24 @@ export const loginUser = ({ email, password }) => dispatch => {
     Keyboard.dismiss();
 
     dispatch({ type: LOGIN_USER });
-    
+
     firebase.auth().signInWithEmailAndPassword(email, password)
         .then(user => loginUserSuccess(dispatch, user, email, password))
         .catch(error => loginUserFail(dispatch, error));
 };
 
 export const publicInitChatkit = (dispatch, userID, email, password) => {
-    initChatkit(dispatch, userID);
-    storeUserAuthDetails(email, password);
+    initChatkit(dispatch, userID, chatKitSuccess, {
+        CHAT_ROOMS_ADDED_TO_ROOM,
+        LOGIN_CHAT_USER_SUCCESS,
+        CHAT_ROOMS_SET_ROOMS
+    });
+    storeUserAuthDetailsOnDevice(email, password);
+};
+
+const chatKitSuccess = (dispatch, userID) => {
+    fetchProfile(dispatch, userID);
+    Actions.main({ type: 'reset' });
 };
 
 const loginUserSuccess = (dispatch, user, email, password) => {
@@ -54,13 +63,10 @@ const loginUserSuccess = (dispatch, user, email, password) => {
 
     storeDevicePushTokenId();
     storeUserAuthDetailsOnDevice(email, password);
-    initChatkit(dispatch, user.uid, {
+    initChatkit(dispatch, user.uid, chatKitSuccess, {
         CHAT_ROOMS_ADDED_TO_ROOM,
         LOGIN_CHAT_USER_SUCCESS,
         CHAT_ROOMS_SET_ROOMS
-    }, () => {
-        fetchProfile(dispatch, user.uid);
-        Actions.main({ type: 'reset' });
     });
 };
 
@@ -261,6 +267,8 @@ export const logoutUser = () => dispatch => {
 };
 
 const logoutUserSuccess = async dispatch => {
+    deleteUserAuthDetailsFromDevice();
+
     dispatch({
         type: LOGOUT_USER_SUCCESS
     });
@@ -270,7 +278,6 @@ const logoutUserSuccess = async dispatch => {
 
 const logoutUserFail = (dispatch, { message }) => {
     dispatch({ type: LOGOUT_USER_FAIL });
-    deleteUserAuthDetailsFromDevice();
 
     Toast.show({
         text: message,

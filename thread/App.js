@@ -74,8 +74,8 @@ class App extends Component {
             <Provider store={store}>
                 <StyleProvider style={getTheme(platformStyles)}>
                     <Root>
-                        <FlashMessage position="top" />
                         <Router />
+                        <FlashMessage position="top" />
                     </Root>
                 </StyleProvider>
             </Provider>

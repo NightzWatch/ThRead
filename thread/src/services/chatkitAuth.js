@@ -1,6 +1,6 @@
 import { ChatManager, TokenProvider } from '@pusher/chatkit';
 
-export const initChatkit = async (dispatch, userId, actionTypes, successCallback) => {
+export const initChatkit = async (dispatch, userId, successCallback, actionTypes) => {
     const { CHAT_ROOMS_ADDED_TO_ROOM, LOGIN_CHAT_USER_SUCCESS, CHAT_ROOMS_SET_ROOMS } = actionTypes;
     const chatManager = new ChatManager({
         userId,
@@ -31,7 +31,7 @@ export const initChatkit = async (dispatch, userId, actionTypes, successCallback
             payload: currentUser.rooms
         });
 
-        successCallback();
+        successCallback(dispatch, userId);
     } catch (err) {
         console.log('Error on chatkit connection: ', err);   
     }

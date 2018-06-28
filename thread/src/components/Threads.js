@@ -3,98 +3,24 @@ import { connect } from 'react-redux';
 import { Container, Content, List, ListItem, Body, Right, Text, H3 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { CommonButton, CentredContent, ContentSpinner } from './Common';
-import {
-    setChatRoom
-} from '../actions';
-
+import * as actions from '../actions';
+import { handleIncomingNotification } from '../services';
 import { Notifications } from 'expo';
-import { showMessage, hideMessage } from "react-native-flash-message";
 
 class Threads extends Component {
 
-    constructor(props) {
-        super(props);
-
-        console.log('JORDAN I HAVE BEEN INSTANTIATED');
-    }
-
-    async componentDidMount() {
-        // Handle notifications that are received or selected while the app
-        // is open. If the app was closed and then opened by tapping the
-        // notification (rather than just tapping the app icon to open it),
-        // this function will fire on the next tick after the app starts
-        // with the notification data.
-        this.notificationSubscription = Notifications.addListener(this.handleNotification);
-
-
-        /**
-         * On iOS, when the notifications badge is set to zero, all the notifications are cleared
-         */
-        await Notifications.setBadgeNumberAsync(0);
-    }
-
-    handleNotification = notification => {
-        console.log('PRE NOTIFICATION: ', notification);
-        const { type, roomID, isGroup, message, title } = notification.data; // DO SOMETHING WITH TYPE 
-        
-        if (notification.origin === 'selected') {
-            
-
-            console.log('notification: ', notification);
-            // console.log('screen: ', screen);
-
-            const room = this.props.rooms.find(room => room.id === roomID);
-            const { name } = room;
-
-            console.log('ROOM NAME: ', name);
-            console.log('ROOM ID: ', roomID);
-
-            /**
-             BUGS:
-                i. if the user is already on a screen, reset all the screens then navigate - DONE
-            */
-
-            // getRoomProperties
-
-            Actions.reset('main');
-            this.onThreadPress(room, name, isGroup);
-
-            /*
-                DATA NEEDED FOR SCREEN:
-
-                - roomID,
-                - title/room_name
-                - isGroup
-             */
-
-            // FIND ROOM BASED ON ITS ID
-
-
-
-            // Actions[screen]({
-            //     roomID,
-            //     title: name,
-            //     left:  () => <CommonButton onPress={() => Actions.pop()} name={'arrow-back'} />,
-            //     right: () => <CommonButton onPress={() => Actions.info()} name={"information-circle"} />
-            // });
-        } else if (notification.origin === 'received' && this.props.chatRoom.id !== roomID) {
-            // const { message, title } = notification.data;
-
-            // Alert.alert(
-            //     title,
-            //     message,
-            //     [{ text: 'THIS IS A BAD NOTIFICATION' }]
-            // );
-
-            showMessage({
-                message: title,
-                description: message,
-                type: "success",
-                duration: 2000
-            });
-        }
-
-        return notification;
+    componentDidMount() {
+        this.notificationSubscription = Notifications.addListener(
+            notification => handleIncomingNotification(
+                notification,
+                this.props.chatRoom,
+                this.props.rooms,
+                (room, isGroup) => {
+                    Actions.reset('main');
+                    this.onThreadPress(room, room.name, isGroup);
+                }
+            )
+        );
     }
 
     componentWillUnmount() {
@@ -192,12 +118,11 @@ class Threads extends Component {
 
 
     renderThreadList() {
-        const { rooms } = this.props;
-        rooms.sort(this.orderRooms);
-
         if (this.props.loading) {
             return <ContentSpinner />;
         }
+
+        const { rooms } = this.props;
 
         if (rooms.length === 0) {
             return (
@@ -207,6 +132,8 @@ class Threads extends Component {
                 </CentredContent>
             );
         };
+
+        rooms.sort(this.orderRooms);
 
         return (
             <Content>
@@ -236,4 +163,4 @@ const mapStateToProps = ({ auth, chatRooms, chatRoom, contacts }) => {
     return { user, chatUser, chatRoom, rooms, contact_list, loading };
 };
 
-export default connect(mapStateToProps, { setChatRoom })(Threads);
+export default connect(mapStateToProps, actions)(Threads);
