@@ -179,8 +179,21 @@ class Threads extends Component {
         );
     }
 
+    orderRooms(a,b) {
+        const date1 = new Date(a.updatedAt);
+        const date2 = new Date(b.updatedAt);
+
+        if (date1 === date2) {
+            return 0;
+        }
+
+        return date1 < date2 ? 1 : -1;
+    };
+
+
     renderThreadList() {
         const { rooms } = this.props;
+        rooms.sort(this.orderRooms);
 
         if (this.props.loading) {
             return <ContentSpinner />;
