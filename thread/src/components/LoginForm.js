@@ -3,9 +3,17 @@ import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import * as actions from '../actions';
-import { LoadingButton } from './Common';
+import { LoadingButton, ContentSpinner } from './Common';
 
 class LoginForm extends Component {
+
+    constructor(props) {
+        super(props);
+        
+        if (props.autoLogIn) {
+            this.onSubmitPress();
+        }
+    }
     
     onSubmitPress = () => {
         const { email, password } = this.props;
@@ -14,6 +22,14 @@ class LoginForm extends Component {
     }
 
     render() {
+        if (this.props.autoLogIn) {
+            return (
+                <Container>
+                    <ContentSpinner />
+                </Container>
+            );
+        }
+
         return (
             <Container>
                 <Content>
@@ -53,9 +69,9 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { email, password, loading } = auth;
+    const { email, password, loading, autoLogIn } = auth;
 
-    return { email, password, loading };
+    return { email, password, loading, autoLogIn };
 };
 
 export default connect(mapStateToProps, actions)(LoginForm);

@@ -13,6 +13,7 @@ import {
 const INITIAL_STATE = {
     email: '',
     password: '',
+    autoLogIn: false,
     user: null,
     chatUser: null,
     loading: false
