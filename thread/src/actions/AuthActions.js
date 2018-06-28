@@ -1,34 +1,24 @@
-import { ChatManager, TokenProvider } from '@pusher/chatkit';
 import { Keyboard } from 'react-native';
 import { Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { SecureStore, Permissions, Notifications } from 'expo';
 import firebase from 'firebase';
+
+import { 
+    storeDevicePushTokenId,
+    storeUserAuthDetailsOnDevice,
+    deleteUserAuthDetailsFromDevice,
+    initChatkit
+} from '../services';
+
 import {
-    EMAIL_CHANGED,
-    PASSWORD_CHANGED,
-    LOGIN_USER,
-    LOGIN_USER_FAIL,
-    LOGIN_USER_SUCCESS,
-    LOGOUT_USER_SUCCESS,
-    LOGOUT_USER_FAIL,
-    LOGIN_CHAT_USER_SUCCESS,
-    CHAT_ROOMS_ADDED_TO_ROOM,
-    CHAT_ROOMS_SET_ROOMS,
-    PROFILE_FETCH,
-    PROFILE_SET,
-    CONTACTS_ADD,
-    CONTACTS_RESET,
-    CONTACTS_FETCHED,
-    CONTACTS_DATA_FETCHED,
-    REQUESTS_SENT_ADD,
-    REQUESTS_SENT_RESET,
-    REQUESTS_SENT_FETCHED,
-    REQUESTS_SENT_DATA_FETCHED,
-    REQUESTS_RECEIVED_ADD,
-    REQUESTS_RECEIVED_RESET,
-    REQUESTS_RECEIVED_FETCHED,
-    REQUESTS_RECEIVED_DATA_FETCHED
+    EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER, LOGIN_USER_FAIL,
+    LOGIN_USER_SUCCESS, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAIL,
+    LOGIN_CHAT_USER_SUCCESS, CHAT_ROOMS_ADDED_TO_ROOM,
+    CHAT_ROOMS_SET_ROOMS, PROFILE_FETCH, PROFILE_SET, CONTACTS_ADD,
+    CONTACTS_RESET, CONTACTS_FETCHED, CONTACTS_DATA_FETCHED,
+    REQUESTS_SENT_ADD, REQUESTS_SENT_RESET, REQUESTS_SENT_FETCHED,
+    REQUESTS_SENT_DATA_FETCHED, REQUESTS_RECEIVED_ADD, REQUESTS_RECEIVED_RESET,
+    REQUESTS_RECEIVED_FETCHED, REQUESTS_RECEIVED_DATA_FETCHED
 } from './types';
 
 export const loginEmailChanged = (text) => ({
@@ -63,120 +53,14 @@ const loginUserSuccess = (dispatch, user, email, password) => {
     });
 
     storeDevicePushTokenId();
-
-    storeUserAuthDetails(email, password);
-
-    initChatkit(dispatch, user.uid, email, password);
-};
-
-const storeUserAuthDetails = async (email, password) => {
-    try {
-        await SecureStore.setItemAsync('email', email);
-        await SecureStore.setItemAsync('password', password);        
-    } catch (error) {
-        console.warn(error);
-    }
-};
-
-const deviceAllowedNotifications = async () => {
-    const { status: existingStatus } = await Permissions.getAsync(
-        Permissions.NOTIFICATIONS
-    );
-    
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== 'granted') {
-        /*
-            Android remote notification permissions are granted during the app
-            install, so this will only ask on iOS
-        */
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
-    }
-
-    return finalStatus === 'granted';
-};
-
-const storeDevicePushTokenId = async () => {
-    // console.log('allowed token: ', deviceAllowedNotifications());
-    // if (!deviceAllowedNotifications()) {
-    //     return;
-    // }
-
-    const { status: existingStatus } = await Permissions.getAsync(
-        Permissions.NOTIFICATIONS
-    );
-    
-    let finalStatus = existingStatus;
-
-    console.log('existingStatus: ', existingStatus);
-
-    if (existingStatus !== 'granted') {
-        /*
-            Android remote notification permissions are granted during the app
-            install, so this will only ask on iOS
-        */
-        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-        finalStatus = status;
-    }
-
-    console.log('finalStatus', finalStatus);
-
-    if (finalStatus !== 'granted') {
-        return;
-    }
-
-    /* Get the token that uniquely identifies this device */
-    let token = await Notifications.getExpoPushTokenAsync();
-
-    const { currentUser } = firebase.auth();
-    const db = firebase.firestore();
-    const docRef = db.doc(`users/${currentUser.uid}`);
-
-    console.log('token: ', token);
-
-    docRef.set({ token }, { merge: true })
-    .then(response => console.log('YES IT SAVED'))
-    .catch(error => console.warn(error));
-};
-
-const initChatkit = (dispatch, userId) => {
-    const chatManager = new ChatManager({
-        userId,
-        instanceLocator: 'v1:us1:ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea',
-        tokenProvider: new TokenProvider({
-            url: 'https://us-central1-reactnative-auth-66287.cloudfunctions.net/chatkitAuthToken',
-            queryParams: { userId }
-        })
-    });
- 
-    chatManager.connect({
-        onAddedToRoom: room => {
-            console.log(`Added to room ${room.name}`);
-
-            dispatch({
-                type: CHAT_ROOMS_ADDED_TO_ROOM,
-                payload: room
-            });
-        }
-    })
-    .then(currentUser => {
-        dispatch({
-            type: LOGIN_CHAT_USER_SUCCESS,
-            payload: currentUser
-        });
-
-        dispatch({
-            type: CHAT_ROOMS_SET_ROOMS,
-            payload: currentUser.rooms
-        });
-
-        fetchProfile(dispatch, userId);
-
+    storeUserAuthDetailsOnDevice(email, password);
+    initChatkit(dispatch, user.uid, {
+        CHAT_ROOMS_ADDED_TO_ROOM,
+        LOGIN_CHAT_USER_SUCCESS,
+        CHAT_ROOMS_SET_ROOMS
+    }, () => {
+        fetchProfile(dispatch, user.uid);
         Actions.main({ type: 'reset' });
-    })
-    .catch(err => {
-        console.log('Error on connection', err);
     });
 };
 
@@ -381,20 +265,12 @@ const logoutUserSuccess = async dispatch => {
         type: LOGOUT_USER_SUCCESS
     });
 
-    try {
-        await SecureStore.deleteItemAsync('email');
-        await SecureStore.deleteItemAsync('password');
-    } catch (error) {
-        console.warn(error);
-    }
-
     Actions.login({ type: 'reset' });
 };
 
-const logoutUserFail = (dispatch, { code, message }) => {
-    dispatch({
-        type: LOGOUT_USER_FAIL
-    });
+const logoutUserFail = (dispatch, { message }) => {
+    dispatch({ type: LOGOUT_USER_FAIL });
+    deleteUserAuthDetailsFromDevice();
 
     Toast.show({
         text: message,

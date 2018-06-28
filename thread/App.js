@@ -39,22 +39,6 @@ class App extends Component {
         firebase.initializeApp(config);
     }
 
-    // componentDidMount() {
-    //     // Handle notifications that are received or selected while the app
-    //     // is open. If the app was closed and then opened by tapping the
-    //     // notification (rather than just tapping the app icon to open it),
-    //     // this function will fire on the next tick after the app starts
-    //     // with the notification data.
-    //     this._notificationSubscription = Notifications.addListener(this.handleNotification);
-    // }
-
-    // handleNotification = notification => {
-    //     console.log('notification: ', notification);
-    //     const { screen } = notification.data;
-
-    //     console.log('screen: ', screen);
-    // }
-
     startAsync = async () => {
         try {
             const email = await SecureStore.getItemAsync('email') || '';
@@ -90,8 +74,8 @@ class App extends Component {
             <Provider store={store}>
                 <StyleProvider style={getTheme(platformStyles)}>
                     <Root>
-                        <Router />
                         <FlashMessage position="top" />
+                        <Router />
                     </Root>
                 </StyleProvider>
             </Provider>
