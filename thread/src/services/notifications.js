@@ -44,16 +44,20 @@ export const handleIncomingNotification = async (notification, chatRoom, rooms, 
         const { roomID, isGroup, message, title } = notification.data;
         const isUserNotInRoom = chatRoom.id !== roomID;
 
-        if (notification.origin === 'selected' && isUserNotInRoom) {
+        const redirectAction = () => {
             const room = rooms.find(room => room.id === roomID);
-
             textSuccessCallback(room, isGroup);
+        };
+
+        if (notification.origin === 'selected' && isUserNotInRoom) {
+            redirectAction();
         } else if (notification.origin === 'received' && isUserNotInRoom) {
             showMessage({
                 message: title,
                 description: message,
                 type: "success",
-                duration: 2000
+                duration: 2000,
+                onPress: () => redirectAction()
             });
         }
     } else if (type === 'contact_request') {
