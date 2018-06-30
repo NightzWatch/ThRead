@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { Root, StyleProvider } from 'native-base';
-import { AppLoading, SecureStore, Notifications } from 'expo';
+import { AppLoading, SecureStore } from 'expo';
 import ReduxThunk from 'redux-thunk';
 import Router from './src/Router';
 import firebase from 'firebase';
