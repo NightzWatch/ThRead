@@ -1,8 +1,8 @@
 import firebase from 'firebase';
-import { Permissions, Notifications } from 'expo';
+import { Permissions, Notifications, Constants } from 'expo';
 import { showMessage } from "react-native-flash-message";
 
-export const storeDevicePushTokenId = async () => {
+export const storeDevicePushToken = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
     );
@@ -25,11 +25,26 @@ export const storeDevicePushTokenId = async () => {
     let token = await Notifications.getExpoPushTokenAsync();
     const { currentUser } = firebase.auth();
     const db = firebase.firestore();
-    const docRef = db.doc(`users/${currentUser.uid}`);
+    const deviceRef = db.collection('users').doc(currentUser.uid).collection('devices').doc(Constants.deviceId);
+    const platformDetails = Constants.android || Constants.platform.ios;
 
-    docRef.set({ token }, { merge: true })
-        .then(() => console.log('Device saved push notification token successfully!'))
-        .catch(error => console.warn(error));
+    try {
+        await deviceRef.set({
+            token,
+            ...platformDetails,
+            id: Constants.deviceId,
+            date_created: new Date()
+        });
+    } catch (err) {
+        console.log('Error storing device push notifications token');
+    }
+};
+
+export const deleteDevicePushToken = () => {
+    const { currentUser } = firebase.auth();
+    const db = firebase.firestore();
+
+    return db.collection('users').doc(currentUser.uid).collection('devices').doc(Constants.deviceId).delete();
 };
 
 export const handleIncomingNotification = async (notification, chatRoom, rooms, textSuccessCallback) => {

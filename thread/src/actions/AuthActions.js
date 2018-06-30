@@ -4,7 +4,8 @@ import { Actions } from 'react-native-router-flux';
 import firebase from 'firebase';
 
 import { 
-    storeDevicePushTokenId,
+    storeDevicePushToken,
+    deleteDevicePushToken,
     storeUserAuthDetailsOnDevice,
     deleteUserAuthDetailsFromDevice,
     initChatkit
@@ -61,7 +62,7 @@ const loginUserSuccess = (dispatch, user, email, password) => {
         payload: user
     });
 
-    storeDevicePushTokenId();
+    storeDevicePushToken();
     storeUserAuthDetailsOnDevice(email, password);
     initChatkit(dispatch, user.uid, chatKitSuccess, {
         CHAT_ROOMS_ADDED_TO_ROOM,
@@ -260,13 +261,17 @@ const loginUserFail = (dispatch, { code, message }) => {
     });
 };
 
-export const logoutUser = () => dispatch => {
-    firebase.auth().signOut()
-        .then(() => logoutUserSuccess(dispatch))
-        .catch(error => logoutUserFail(dispatch, error));
+export const logoutUser = () => async dispatch => {
+    try {
+        await deleteDevicePushToken();
+        await firebase.auth().signOut();
+        logoutUserSuccess(dispatch);
+    } catch (err) {
+        logoutUserFail(dispatch, error)
+    }
 };
 
-const logoutUserSuccess = async dispatch => {
+const logoutUserSuccess = dispatch => {
     deleteUserAuthDetailsFromDevice();
 
     dispatch({

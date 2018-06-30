@@ -195,22 +195,28 @@ class Chat extends Component {
 			if (index > -1) {
 				userIds.splice(index, 1);
 			}
-
-			await axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/messengerMessageNotification', {
-				userIds, text: messageBody, title, roomID, isGroup
+			
+			userIds.forEach(async userId => {
+				try {
+					await axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/messengerMessageNotification', {
+						userId, text: messageBody, title, roomID, isGroup
+					});
+				} catch (err) {
+					switch (err.message) {
+						case 'Request failed with status code 500':
+							console.log(`Error with push notification server for room ${this.props.title}`);
+							break;
+						case 'Request failed with status code 408':
+							console.log(`Push notification server for room ${this.props.title} timeout`);
+							break;
+						default:
+							console.log(`Error sending push notification message for ${this.props.title}: ${err}`);
+							break;
+					}
+				}
 			});
 		} catch (err) {
-			switch (err.message) {
-				case 'Request failed with status code 500':
-					console.log(`Error with push notification server for room ${this.props.title}`);
-					break;
-				case 'Request failed with status code 408':
-					console.log(`Push notification server for room ${this.props.title} timeout`);
-					break;
-				default:
-					console.log(`Error adding message to ${this.props.title}: ${err}`);
-					break;
-			}
+			console.log(`Error adding message to ${this.props.title}: ${err}`);
 		}
 	}
 
@@ -221,7 +227,7 @@ class Chat extends Component {
 				alwaysShowSend={true}
 			>
 				<View style={{marginRight: 10 }}>
-					<Icon name='logo-octocat' style={{ fontSize: 24, color: '#007aff', marginRight: 0, marginLeft: 16 }} />
+					<Icon name='logo-octocat' style={{ fontSize: 32, color: '#007aff', marginRight: 0, marginLeft: 16, marginTop: 0 }} />
 				</View>
 			</Send>
 		);
