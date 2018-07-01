@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner, Icon } from 'native-base';
 import {StyleSheet} from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { LoadingButton, CommonField, CommonContainer } from './Common';
+import * as actions from '../actions/index';
 import { connect } from 'react-redux';
 import {
     register,
@@ -26,6 +28,7 @@ const TermsTextStyle = styled(Text)`
   font-size:14px;
   text-align:center;
   color:white;
+  margin-top:20px;
 `;
 
 const TermsButtonStyle = styled(Text)`
@@ -67,82 +70,57 @@ class RegisterForm extends Component {
         this.props.registerPhoneChanged(text);
     }
 
-    renderRegisterButton() {
-        if (this.props.loading) {
-            return (
-                <Button full disabled style={{ marginTop: 25 }}>
-                    <Spinner size="small" color="#fff" />
-                    <Text>Registering</Text>
-                </Button>
-            );
-        }
 
-        return (
-            <Button rounded style={styles.buttonStyle} onPress={this.onSubmitPress}>
-                <Text>Register</Text>
-            </Button>
-        );
-    }
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#8bc34a' }}>
+            <CommonContainer>
                 <Content>
-                    <Form style={{padding:20, marginLeft: -20}}>
-                        <Item stackedLabel>
+                    <Form style={{padding:5, marginLeft:-10}}>
 
-                            <TextStyle>First Name</TextStyle>
-                            <Input
-                                placeholder=''
-                                style={{fontSize:13}}
-                                onChangeText={this.onFirstNameChange}
-                                value={this.props.first_name}
-                            />
+                        <CommonField
+                          onChangeText={this.onFirstNameChange}
+                          value={this.props.first_name}
+                          style={{marginTop:10}}
+                          label={'First Name'}
+                        />
 
-                        </Item>
-                        <Item style={{marginTop:20}} stackedLabel>
-                          <TextStyle>Last Name</TextStyle>
-                            <Input
-                                style={{fontSize:13}}
-                                onChangeText={this.onLastNameChange}
-                                value={this.props.last_name}
-                            />
-                        </Item>
-                        <Item style={{marginTop:20}} stackedLabel>
-                          <TextStyle>Phone Number</TextStyle>
-                          <Input
-                                style={{fontSize:13}}
-                                keyboardType="numeric"
-                                onChangeText={this.onPhoneChange}
-                                value={this.props.phone_number}
-                            />
-                        </Item>
-                        <Item style={{marginTop:20}} stackedLabel>
-                          <TextStyle>Email</TextStyle>
-                          <Input
-                                style={{fontSize:13}}
-                                onChangeText={this.onEmailChange}
-                                value={this.props.email}
-                            />
-                        </Item>
-                        <Item style={{marginTop:20}} stackedLabel>
-                            <TextStyle>Password</TextStyle>
-                            <Input
-                                style={{fontSize:13}}
-                                secureTextEntry
-                                onChangeText={this.onPasswordChange}
-                                value={this.props.password}
-                            />
-                        </Item>
-                        <Item style={{marginTop:20}} stackedLabel>
-                            <TextStyle>Confirm Password</TextStyle>
-                            <Input
-                                style={{fontSize:13}}
-                                secureTextEntry
-                                onChangeText={this.onSecondPasswordChange.bind(this)}
-                                value={this.props.second_password}
-                            />
-                        </Item>
+                        <CommonField
+                          onChangeText={this.onLastNameChange}
+                          value={this.props.last_name}
+                          style={{marginTop:20}}
+                          label={'Last Name'}
+                        />
+
+                        <CommonField
+                          onChangeText={this.props.registerPhoneChanged}
+                          value={this.props.phone_number}
+                          style={{marginTop:20}}
+                          label={'Phone Number'}
+                        />
+
+                        <CommonField
+                          onChangeText={this.onEmailChange}
+                          value={this.props.email}
+                          style={{marginTop:20}}
+                          label={'Email'}
+                        />
+
+                        <CommonField
+                          onChangeText={this.props.registerPasswordChanged}
+                          value={this.props.password}
+                          style={{marginTop:20}}
+                          label={'Password'}
+                            secureTextEntry
+                        />
+
+                        <CommonField
+                          secureTextEntry
+                          onChangeText={this.props.secondPasswordChanged}
+                          value={this.props.second_password}
+                          style={{marginTop:20}}
+                          label={'Confirm Password'}
+                        />
                     </Form>
                     <TermsTextStyle>By pressing "Register" I agree that I have read:</TermsTextStyle>
 
@@ -150,9 +128,16 @@ class RegisterForm extends Component {
 
                         <TermsButtonStyle onPress={() => Actions.privacyPolicy()}>Privacy Policy  </TermsButtonStyle>
 
-                      {this.renderRegisterButton()}
+                        <LoadingButton
+                            loading={this.props.loading}
+                            style={styles.buttonStyle}
+                            onPress={this.onSubmitPress}
+                            text="Register"
+                            rounded
+                            full
+                        />
                 </Content>
-            </Container>
+            </CommonContainer>
         );
     }
 }
@@ -161,11 +146,7 @@ class RegisterForm extends Component {
 let styles = StyleSheet.create({
 
     buttonStyle: {
-       marginTop: 25,
-       alignItems: 'center',
-       justifyContent: 'center',
-       marginLeft: 15,
-       width: 340
+       marginTop: 15
     }
 })
 
@@ -176,12 +157,4 @@ const mapStateToProps = ({ register }) => {
     return { first_name, last_name, email, password, second_password, phone_number, loading };
 };
 
-export default connect(mapStateToProps, {
-    register,
-    registerEmailChanged,
-    registerFirstNameChanged,
-    registerLastNameChanged,
-    registerPasswordChanged,
-    secondPasswordChanged,
-    registerPhoneChanged
-})(RegisterForm);
+export default connect(mapStateToProps, actions)(RegisterForm);
