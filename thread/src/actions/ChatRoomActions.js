@@ -3,16 +3,12 @@ import {
     CHAT_ROOM_ADD_USER
 } from './types';
 
-export const setChatRoom = (room) => {
-    return {
-        type: CHAT_ROOM_SET,
-        payload: room
-    };
-};
+export const setChatRoom = (room) => ({
+    type: CHAT_ROOM_SET,
+    payload: room
+});
 
-export const addUserToRoom = (user) => {
-    return {
-        type: CHAT_ROOM_ADD_USER,
-        payload: user
-    };
-};
+export const addUserToRoom = (user) => ({
+    type: CHAT_ROOM_ADD_USER,
+    payload: user
+});
