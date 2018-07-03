@@ -4,59 +4,11 @@ import { connect } from 'react-redux';
 import {  View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import  Logo  from './Logo';
-import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
-import styled from "styled-components";
-
-
-
-const StyledView = styled.View`
-  background-color: #8bc34a;
-  padding:5px;
-  height:100%;
-`;
-
-const InputWrapper = styled.View`
-
-  width: 100%;
-  height: 250px;
-  padding-top:50px;
-`;
-
-const InputStyle = styled(Input)`
-  width:340px;
-  color: #424242;
-  padding:10px;
-  background-color:white;
-  margin-bottom:20px;
-  text-align:center;
-
-`;
-
-const TextStyle = styled(Text)`
-
-  font-size:15px;
-  text-align:center;
-  font-weight:700;
-  margin-bottom:10px;
-  color:white;
-  margin-left:-15px;
-`;
-
-const buttonWrapper = styled.View`
-  padding: 10px;
-  width: 100%;
-  height: 250px;
-`;
-
-const ForgotStyle = styled(Text)`
-    font-size:15px;
-    text-align:center;
-    font-weight:700;
-    color:white;
-    text-decoration:underline;
-    text-decoration-color: #fff;
-    margin-top:30px;
-`;
+import * as actions from '../actions/index';
+import styled from 'styled-components/native';
+import { CommonContainer } from './Common';
+import { CommonField } from './Common';
+import {LoadingButton} from './Common'
 
 
 
@@ -68,41 +20,54 @@ class LoginForm extends Component {
         this.props.loginUser({ email, password });
     }
 
+
+
     render() {
         return (
-            <Container>
+            <CommonContainer>
+
+              <Logo />
                 <Content>
-                    <Form>
-                        <Item stackedLabel>
-                            <Label>Email</Label>
-                            <Input
-                                onChangeText={this.props.loginEmailChanged}
-                                value={this.props.email}
-                            />
-                        </Item>
-                        <Item stackedLabel last>
-                            <Label>Password</Label>
-                            <Input
-                                secureTextEntry
-                                onChangeText={this.props.loginPasswordChanged}
-                                value={this.props.password}
-                            />
-                        </Item>
-                    </Form>
-                    <LoadingButton
-                        loading={this.props.loading}
-                        style={{ marginTop: 25 }}
-                        onPress={this.onSubmitPress}
-                        text="Login"
-                    />
-                    <Button bordered full style={{ marginTop: 15 }} onPress={() => Actions.register() }>
-                        <Text>Register</Text>
-                    </Button>
+
+                        <Form style={{padding:5, marginLeft:-10}}>
+                          <CommonField
+
+                            style={{marginTop:10}}
+                            label={'Email'}
+                          />
+
+                          <CommonField
+
+                            style={{marginTop:10}}
+                            label={'Password'}
+                          />
+
+                        </Form>
+
+                        <LoadingButton
+                                  loading={this.props.loading}
+                                  style={styles.buttonStyle}
+                                  onPress={this.onSubmitPress}
+                                  text="Login"
+                                  rounded
+                                  full
+                              />
+
+                        <LoadingButton
+                                  loading={this.props.loading}
+                                  style={styles.buttonStyle}
+                                  onPress={() => Actions.register() }
+                                  text="Register"
+                                  rounded
+                                  full
+                              />
+
+
                     <Button transparent full small style={{ marginTop: 15 }} onPress={() => Actions.resetPassword() }>
                         <Text>Forgot password?</Text>
                     </Button>
                 </Content>
-            </Container>
+            </CommonContainer>
 
         );
     }
@@ -110,34 +75,13 @@ class LoginForm extends Component {
 
 let styles = StyleSheet.create({
 
-  TextStyle: {
-      color: '#fff',
-      fontSize: 13,
-      alignItems: 'center',
-      justifyContent: 'center',
-
-      marginTop: 20,
-      fontWeight: 'bold'
-  },
-
-  inputStyle:{
-    width: 340,
-    marginBottom: 30,
-
-  },
 
   buttonStyle: {
-    marginTop: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 10,
-    width: 340
+    marginTop: 15,
+
   },
 
-  viewStyle: {
-    flex: 1,
-    marginTop: 20
-  }
+
 });
 
 const mapStateToProps = ({ auth }) => {
@@ -146,4 +90,6 @@ const mapStateToProps = ({ auth }) => {
     return { email, password, loading };
 };
 
-export default connect(mapStateToProps, actions)(LoginForm);
+export default connect(mapStateToProps, {
+    loginEmailChanged, loginPasswordChanged, loginUser
+})(LoginForm);

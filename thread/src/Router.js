@@ -27,6 +27,7 @@ class RouterComponent extends Component {
                         key="login"
                         component={LoginForm}
                         initial
+                        hideNavBar={true}
 
                     />
                     <Scene
