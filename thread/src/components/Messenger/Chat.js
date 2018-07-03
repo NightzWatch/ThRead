@@ -1,6 +1,6 @@
 import React, { Component }  from 'react';
 import { Keyboard, Platform, StyleSheet } from 'react-native';
-import { GiftedChat, Send } from 'react-native-gifted-chat';
+import { GiftedChat, Send, Actions } from 'react-native-gifted-chat';
 import { View, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import Message from './Message';
@@ -8,6 +8,8 @@ import emojiUtils from 'emoji-utils';
 import  * as actions from '../../actions';
 import axios from 'axios';
 
+import CustomActions from './Actions';
+import CustomView from './CustomView';
 class Chat extends Component {
 	state = {
 		messages: [],
@@ -234,6 +236,12 @@ class Chat extends Component {
 	}
 
 	renderMessage(props) {
+		// const regex = /^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/gm;
+
+    	// if (regex.test(props.currentMessage.text)) {
+		// 	return null;
+		// }
+
 		const { currentMessage: { text: currText } } = props;
 
 		let messageTextStyle;
@@ -248,6 +256,7 @@ class Chat extends Component {
 		}
 
 		return (
+			// <CustomView {...props} />
 			<Message {...props} messageTextStyle={messageTextStyle} />
 		);
 	}
@@ -264,6 +273,29 @@ class Chat extends Component {
 		}
 
 		return null;
+	}
+
+	renderActions(props) {
+		if (Platform.OS === 'ios') {
+		  	return <CustomActions {...props} />;
+		}
+
+		const options = {
+			'Action 1': props => {
+				alert('option 1');
+			},
+			'Action 2': props => {
+				alert('option 2');
+			},
+			'Cancel': () => {}
+		};
+
+		return (
+			<Actions
+				{...props}
+				options={options}
+			/>
+		);
 	}
 
 	render() {
@@ -283,6 +315,8 @@ class Chat extends Component {
 				onInputTextChanged={this.onUserTyping}
 				alwaysShowSend={true}
 				isAnimated={true}
+				renderActions={this.renderActions}
+				renderCustomView={CustomView}
 			/>
 		);
 	}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Content, List, ListItem, Text, Left, Body, Thumbnail, Separator, Icon } from 'native-base';
+import { Container, Content, List, ListItem, Text, Left, Body, Thumbnail, Separator, Header, Icon, Right, Button, Title } from 'native-base';
+
 import { Actions } from 'react-native-router-flux';
 
 class Info extends Component {

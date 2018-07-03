@@ -76,6 +76,7 @@ class Bubble extends Component {
                 />
             );
         }
+
         return null;
     }
 
@@ -164,6 +165,28 @@ class Bubble extends Component {
             </View>
         );
 
+        const messageBody = () => {
+            const regex = /^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/gm;
+    
+            if (regex.test(this.props.currentMessage.text)) {
+                return (
+                    <View>
+                        {messageHeader}
+                        {this.renderCustomView()}
+                    </View>
+                );
+            }
+            
+            return (
+                <View>
+                    {messageHeader}
+                    {this.renderCustomView()}
+                    {this.renderMessageImage()}
+                    {this.renderMessageText()}
+                </View>
+            );
+        }
+
         return (
             <View style={[styles.container, this.props.containerStyle]}>
                 <TouchableOpacity
@@ -177,12 +200,7 @@ class Bubble extends Component {
                         this.props.wrapperStyle,
                         ]}
                     >
-                        <View>
-                            {this.renderCustomView()}
-                            {messageHeader}
-                            {this.renderMessageImage()}
-                            {this.renderMessageText()}
-                        </View>
+                        {messageBody()}
                     </View>
                 </TouchableOpacity>
             </View>
