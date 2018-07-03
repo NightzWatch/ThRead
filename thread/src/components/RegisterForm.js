@@ -5,24 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import { LoadingButton, CommonField, CommonContainer } from './Common';
 import * as actions from '../actions/index';
 import { connect } from 'react-redux';
-import {
-    register,
-    registerEmailChanged,
-    registerFirstNameChanged,
-    registerLastNameChanged,
-    registerPasswordChanged,
-    secondPasswordChanged,
-    registerPhoneChanged
-} from '../actions/index';
 import styled from "styled-components";
-
-const TextStyle = styled(Text)`
-   font-size:13px;
-   text-align:center;
-   font-weight:700;
-   color:white;
-   margin-top:10px;
- `;
 
 const TermsTextStyle = styled(Text)`
   font-size:14px;
@@ -45,32 +28,6 @@ class RegisterForm extends Component {
 
         this.props.register({ phone_number, first_name, last_name, email, password, second_password });
     }
-
-    onEmailChange = (text) => {
-        this.props.registerEmailChanged(text);
-    }
-
-    onFirstNameChange = (text) =>  {
-        this.props.registerFirstNameChanged(text);
-    }
-
-    onLastNameChange = (text) => {
-        this.props.registerLastNameChanged(text);
-    }
-
-    onPasswordChange = (text) => {
-        this.props.registerPasswordChanged(text);
-    }
-
-    onSecondPasswordChange = (text) => {
-        this.props.secondPasswordChanged(text);
-    }
-
-    onPhoneChange = (text) => {
-        this.props.registerPhoneChanged(text);
-    }
-
-
 
     render() {
         return (
@@ -141,7 +98,6 @@ class RegisterForm extends Component {
         );
     }
 }
-
 
 let styles = StyleSheet.create({
 

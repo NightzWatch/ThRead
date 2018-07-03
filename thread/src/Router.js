@@ -21,7 +21,7 @@ import FooterTabs from './components/FooterTabs';
 class RouterComponent extends Component {
     render() {
         return (
-            <Router navigationBarStyle={{backgroundColor:'white'}} titleStyle={{color:'#8bc34a'}}>
+            <Router>
                 <Scene key="root" {...sceneConfig}>
                     <Scene
                         key="login"
