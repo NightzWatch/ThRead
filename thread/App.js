@@ -8,6 +8,7 @@ import firebase from 'firebase';
 import reducers from './src/reducers';
 import getTheme from './native-base-theme/components';
 import platformStyles from './native-base-theme/variables/platform';
+import registerValidation from './src/middleware/RegisterValidation';
 
 /**
  * Firebase quirk for firestore
@@ -32,7 +33,7 @@ class App extends Component {
 	}
   
 	render() {
-		const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+		const store = createStore(reducers, {}, applyMiddleware(ReduxThunk, registerValidation));
 
 		return (
 			<Provider store={store}>

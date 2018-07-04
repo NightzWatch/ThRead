@@ -49,47 +49,16 @@ export const secondPasswordChanged = (text) => ({
     payload: text
 });
 
-export const register = ({ phone_number, first_name, last_name, email, password, second_password }) => {
-    return (dispatch) => {
+export const register = () => dispatch => {
         Keyboard.dismiss();
-        dispatch({ type: REGISTER_USER });
+        dispatch({ type: REGISTER_USER, callback: registerUserFirbase });
+    };
 
-        if (!first_name) {
-            registerFail(dispatch, { message: 'First name is missing.' });
-
-            return false;
-        }
-
-        if (!last_name) {
-            registerFail(dispatch, { message: 'Last name is missing.' });
-
-            return false;
-        }
-
-        if (!phone_number) {
-            registerFail(dispatch, { message: 'Phone number is missing.' });
-
-            return false;
-        }
-
-        if (!password) {
-            registerFail(dispatch, { message: 'Password is missing.' });
-
-            return false;
-        }
-
-        if (password !== second_password) {
-            registerFail(dispatch, { message: 'Password does not match.' });
-
-            return false;
-        }
-
-
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+const registerUserFirbase = (dispatch, { first_name, last_name, email, phone_number, password }) => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(() => createUserProfile(dispatch, { first_name, last_name, email, phone_number }))
             .catch(error => registerFail(dispatch, error));
-    };
-};
+}
 
 const createUserProfile = (dispatch, { first_name, last_name, email, phone_number }) => {
     const { currentUser } = firebase.auth();
@@ -128,7 +97,7 @@ const registerSuccess = (dispatch, user) => {
     publicInitChatkit(dispatch, user.uid);
 };
 
-const registerFail = (dispatch, { code, message }) => {
+export const registerFail = (dispatch, { code, message }) => {
     dispatch({ type: REGISTER_FAIL });
 
     Toast.show({

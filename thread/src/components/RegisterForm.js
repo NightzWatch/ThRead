@@ -6,12 +6,6 @@ import { LoadingButton } from './Common';
 import * as actions from '../actions/index';
 
 class RegisterForm extends Component {
-    onSubmitPress = () => {
-        const { phone_number, first_name, last_name, email, password, second_password } = this.props;
-
-        this.props.register({ phone_number, first_name, last_name, email, password, second_password });
-    }
-
     render() {
         return (
             <Container>
@@ -75,7 +69,7 @@ class RegisterForm extends Component {
                     <LoadingButton
                         loading={this.props.loading}
                         style={{ marginTop: 25 }}
-                        onPress={this.onSubmitPress}
+                        onPress={this.props.register}
                         text="Register"
                     />
                 </Content>
