@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Router, Scene, Stack, Modal, Tabs } from 'react-native-router-flux';
 import { Actions } from 'react-native-router-flux';
 
-import CommonButton from './components/common/CommonButton'
+import CommonButton from './components/Common/CommonButton'
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
@@ -110,7 +110,7 @@ class RouterComponent extends Component {
                                     hideNavBar={false}
                                 />
                                 <Scene
-                                     navigationBarStyle={{backgroundColor:'#8bc34a'}}
+                                     navigationBarStyle={{backgroundColor:'#66bb6a'}}
                                      titleStyle={{color:'white'}}
                                     key="addMembersForm"
                                     title="Add Members"
