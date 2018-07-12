@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import { Router, Scene, Stack, Modal, Tabs } from 'react-native-router-flux';
-import { Icon } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
+import { CommonButton } from './components/Common';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import Chat from './components//Messenger/Chat';
 import ThreadList from './components/Threads';
-import CreateThreadButton from './components/CreateThreadButton';
 import CreateTreadForm from './components/CreateTreadForm';
-import Contacts from './components/Contacts';
-import ContactTabs from './components/ContactTabs';
+import ContactTabs from './components/Contacts/Tabs';
+import AddContactForm from './components/Contacts/AddContactForm';
 import Profile from './components/Profile';
-import AddContactButton from './components/AddContactButton';
-import AddContactForm from './components/AddContactForm';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
 import Info from './components/Messenger/Info';
 import AddMembersForm from './components/Messenger/AddMembersForm';
+import FooterTabs from './components/FooterTabs';
 
 class RouterComponent extends Component {
     render() {
@@ -39,6 +38,7 @@ class RouterComponent extends Component {
                         key="resetPassword"
                         title="Reset Password"
                         component={ResetPasswordForm}
+
                     />
                     <Scene
                         key="privacyPolicy"
@@ -56,27 +56,32 @@ class RouterComponent extends Component {
                         panHandlers={null}
                     >
                          <Modal>
-                            <Tabs key="tabbar">
+                            <Tabs key="tabbar" tabBarComponent={FooterTabs}>
                                 <Scene
                                     key="contacts"
                                     title="Contacts"
                                     component={ContactTabs}
-                                    renderRightButton={() => <AddContactButton />}
-                                    icon={() => <Icon name="people" />}
+                                    renderRightButton={() => (
+                                      <CommonButton
+                                        onPress={() => Actions.addContact()}
+                                        name={'add'} />
+                                    )}
                                 />
                                 <Scene
                                     key="threads"
                                     title="ThRead"
                                     component={ThreadList}
-                                    renderRightButton={() => <CreateThreadButton />}
-                                    icon={() => <Icon name="logo-octocat" />}
+                                    renderRightButton={() => (
+                                      <CommonButton
+                                        onPress={() => Actions.createThread()}
+                                        name={'add'} />
+                                    )}
                                     initial
                                 />
                                 <Scene
                                     key="profile"
                                     title="Profile"
                                     component={Profile}
-                                    icon={() => <Icon name="person" />}
                                 />
                             </Tabs>
                             <Scene
@@ -89,6 +94,16 @@ class RouterComponent extends Component {
                                 title="Send Request"
                                 component={AddContactForm}
                             />
+                            <Scene
+                                key="dmThread"
+                                hideNavBar
+                            >
+                                 <Scene
+                                    key="chat"
+                                    component={Chat}
+                                    hideNavBar={false}
+                                />
+                            </Scene>
                             <Scene
                                 key="thread"
                                 hideNavBar

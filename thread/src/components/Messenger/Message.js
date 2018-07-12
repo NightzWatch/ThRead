@@ -20,7 +20,8 @@ class Message extends Component {
             ...props,
             position: 'left',
             isSameUser,
-            isSameDay
+            isSameDay,
+            renderAvatarOnTop: true
         };
     }
 
@@ -48,24 +49,13 @@ class Message extends Component {
         return <Bubble {...bubbleProps} />;
     }
 
-    renderAvatar() {
-        let extraStyle;
-        
-        if (
-            isSameUser(this.props.currentMessage, this.props.previousMessage)
-            && isSameDay(this.props.currentMessage, this.props.previousMessage)
-            && false // TODO: FIX ALIGNMENT ISSUE, ONCE FIXED REMOVE THIS
-        ) {
-            /** Set the invisible avatar height to 0, but keep the width, padding, etc. */
-            extraStyle = { height: 0 };
-        }
-        
+    renderAvatar() {        
         const avatarProps = this.getInnerComponentProps();
 
         return (
             <Avatar
                 {...avatarProps}
-                imageStyle={{ left: [styles.slackAvatar, avatarProps.imageStyle, extraStyle] }}
+                imageStyle={{ left: [styles.slackAvatar, avatarProps.imageStyle] }}
             />
         );
     }
@@ -96,17 +86,15 @@ export default Message;
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-start',
         marginLeft: 8,
         marginRight: 0,
     },
     slackAvatar: {
         /** The bottom should roughly line up with the first line of message text. */
-        height: 40,
-        width: 40,
-        borderRadius: 3
-    }
+        height: 45,
+        width: 45,
+        borderRadius: 3,
+    },
 });
 
 Message.defaultProps = {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, H3, Thumbnail, Button, Text, Spinner } from 'native-base';
+import { ContentSpinner } from './Common';
 import { connect } from 'react-redux';
 import {
     logoutUser
@@ -8,7 +9,7 @@ import {
 class Profile extends Component {
     renderPage() {
         if (this.props.loading) {
-            return <Spinner color="blue" style={{ flex: 1 }} />
+            return <ContentSpinner />;
         }
 
         return (
@@ -17,10 +18,6 @@ class Profile extends Component {
 
                 <H3 style={{ marginTop: 10 }}>{this.props.first_name} {this.props.last_name}</H3>
                 <Text style={{ marginTop: 10 }}>{this.props.phone_number}</Text>
-
-                <Button primary full style={{ marginTop: 100 }}>
-                    <Text>Edit Profile</Text>
-                </Button>
 
                 <Button primary full style={{ marginTop: 25 }} onPress={() => this.props.logoutUser()}>
                     <Text>Logout</Text>
@@ -31,7 +28,7 @@ class Profile extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 {this.renderPage()}
             </Container>
         );

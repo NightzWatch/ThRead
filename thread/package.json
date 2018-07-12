@@ -1,6 +1,17 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
+  "scripts": {
+    "test": "node_modules/.bin/jest"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-helpers": "^6.24.1",
+    "babel-jest": "^23.0.1",
+    "jest-expo": "^27.0.1",
+    "react-test-renderer": "^16.4.0",
+    "regenerator-runtime": "^0.11.1"
+  },
   "dependencies": {
     "@pusher/chatkit": "^0.7.12",
     "axios": "^0.18.0",
@@ -16,6 +27,12 @@
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "styled-components": "^3.3.2"
+    "styled-components": "^3.3.3"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!react-native|react-navigation|expo|native-base-shoutem-theme|@shoutem|react-clone-referenced-element|native-base|@expo|mobx-react)"
+    ]
   }
 }
