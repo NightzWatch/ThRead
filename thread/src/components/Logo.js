@@ -14,7 +14,7 @@ const StyledView = styled.View`
 `;
 
 
-var logoIMG = require('../../assets/threadlogo.png');
+var logoIMG = require('../../assets/threadlogoMid.png');
 
 class Logo extends Component{
   render(){
