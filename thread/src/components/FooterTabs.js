@@ -18,14 +18,14 @@ const FooterTabs = ({ navigationState }) => {
 
     return (
         <Footer style={{height: 27}}>
-            <FooterTab style={{backgroundColor: '#8bc34a'}}>
+            <FooterTab style={{backgroundColor: '#66bb6a'}}>
                 {routes.map(({ key }, routeIndex) => {
                     const iconName = getRouteIcon(key);
                     const active = index === routeIndex;
 
                     return (
                         <Button onPress={() => Actions[key]()} key={key} active={active}>
-                            <Icon name={iconName} active={active} />
+                            <Icon style={{color: '#fff'}} name={iconName} active={active} />
                         </Button>
                     );
                 })}
