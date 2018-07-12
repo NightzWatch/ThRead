@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, H3, Thumbnail, Button, Text, Spinner } from 'native-base';
+import { ContentSpinner } from './Common';
 import { connect } from 'react-redux';
 import {
     logoutUser
@@ -9,7 +10,7 @@ import {StyleSheet} from 'react-native';
 class Profile extends Component {
     renderPage() {
         if (this.props.loading) {
-            return <Spinner color="blue" style={{ flex: 1 }} />
+            return <ContentSpinner />;
         }
 
         return (
@@ -28,7 +29,7 @@ class Profile extends Component {
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 {this.renderPage()}
             </Container>
         );

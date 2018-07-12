@@ -1,12 +1,14 @@
 import {
     CONTACTS_ADD,
     CONTACTS_RESET,
-    CONTACTS_FETCHED
+    CONTACTS_FETCHED,
+    CONTACTS_DATA_FETCHED
 } from '../actions/types';
 
 const INITIAL_STATE = {
     contact_list: [],
-    loading: true
+    loading: true,
+    size: 0
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -16,6 +18,8 @@ export default (state = INITIAL_STATE, action) => {
         case CONTACTS_RESET:
             return {...state, ...INITIAL_STATE};
         case CONTACTS_FETCHED:
+            return {...state, ...action.payload};
+        case CONTACTS_DATA_FETCHED:
             return {...state, loading: false};
         default:
             return state;
