@@ -24,7 +24,7 @@ class Profile extends Component {
 
         return (
 
-              <Content>
+              <Content contentContainerStyle={{ alignItems: 'center' }}>
                 <Thumbnail clarge source={{uri: 'http://cdn.onlinewebfonts.com/svg/img_568656.png' }}  />
 
                 <TermsTextStyle>{this.props.first_name} {this.props.last_name}</TermsTextStyle>
