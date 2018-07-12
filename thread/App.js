@@ -7,7 +7,7 @@ import Router from './src/Router';
 import firebase from 'firebase';
 import reducers from './src/reducers';
 import getTheme from './native-base-theme/components';
-import platformStyles from './native-base-theme/variables/platform';
+import ThReadStyles from './native-base-theme/variables/ThRead';
 
 /**
  * Firebase quirk for firestore
@@ -27,16 +27,16 @@ class App extends Component {
 			storageBucket: "reactnative-auth-66287.appspot.com",
 			messagingSenderId: "381362358898"
 		};
-		
+
 		firebase.initializeApp(config);
 	}
-  
+
 	render() {
 		const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
 		return (
 			<Provider store={store}>
-				<StyleProvider style={getTheme(platformStyles)}>
+				<StyleProvider style={getTheme(ThReadStyles)}>
 					<Root>
 						<Router />
 					</Root>
