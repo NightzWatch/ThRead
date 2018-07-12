@@ -6,7 +6,7 @@ class RequestsSent extends Component {
     renderList() {
         if (this.props.loading) {
             return (
-                <Content contentContainerStyle={{ 
+                <Content contentContainerStyle={{
                     flex: 1,
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -19,7 +19,7 @@ class RequestsSent extends Component {
 
         if (this.props.contact_requests_sent.length === 0) {
             return (
-                <Content contentContainerStyle={{ 
+                <Content contentContainerStyle={{
                     flex: 1,
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -29,7 +29,7 @@ class RequestsSent extends Component {
                 </Content>
             );
         }
-        
+
         return (
             <Content>
                 <List

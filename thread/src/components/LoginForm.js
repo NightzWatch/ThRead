@@ -2,16 +2,10 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { loginEmailChanged, loginPasswordChanged, loginUser } from '../actions';
+import * as actions from '../actions';
+import { LoadingButton } from './Common';
 
 class LoginForm extends Component {
-    onEmailChange = (text) => {
-        this.props.loginEmailChanged(text);
-    }
-
-    onPasswordChange = (text) => {
-        this.props.loginPasswordChanged(text);
-    }
 
     onSubmitPress = () => {
         const { email, password } = this.props;
@@ -19,31 +13,15 @@ class LoginForm extends Component {
         this.props.loginUser({ email, password });
     }
 
-    renderSignInButton() {
-        if (this.props.loading) {
-            return (
-                <Button disabled full style={{ marginTop: 25 }}>
-                    <Spinner size="small" color="#fff" />
-                </Button>
-            );
-        }
-
-        return (
-            <Button full style={{ marginTop: 25 }} onPress={this.onSubmitPress}>
-                <Text>Login</Text>
-            </Button>
-        );
-    }
-
     render() {
         return (
-            <Container style={{ backgroundColor: '#fff' }}>
+            <Container>
                 <Content>
                     <Form>
                         <Item stackedLabel>
                             <Label>Email</Label>
                             <Input
-                                onChangeText={this.onEmailChange}
+                                onChangeText={this.props.loginEmailChanged}
                                 value={this.props.email}
                             />
                         </Item>
@@ -51,14 +29,17 @@ class LoginForm extends Component {
                             <Label>Password</Label>
                             <Input
                                 secureTextEntry
-                                onChangeText={this.onPasswordChange}
+                                onChangeText={this.props.loginPasswordChanged}
                                 value={this.props.password}
                             />
                         </Item>
                     </Form>
-
-                    {this.renderSignInButton()}
-
+                    <LoadingButton
+                        loading={this.props.loading}
+                        style={{ marginTop: 25 }}
+                        onPress={this.onSubmitPress}
+                        text="Login"
+                    />
                     <Button bordered full style={{ marginTop: 15 }} onPress={() => Actions.register() }>
                         <Text>Register</Text>
                     </Button>
@@ -77,6 +58,4 @@ const mapStateToProps = ({ auth }) => {
     return { email, password, loading };
 };
 
-export default connect(mapStateToProps, {
-    loginEmailChanged, loginPasswordChanged, loginUser
-})(LoginForm);
+export default connect(mapStateToProps, actions)(LoginForm);

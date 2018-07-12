@@ -20,6 +20,7 @@ export const REGISTER_EMAIL_CHANGED = 'register_email_changed';
 export const REGISTER_PASSWORD_CHANGED = 'register_password_changed';
 export const REGISTER_SECOND_PASSWORD_CHANGED = 'register_second_password_changed';
 export const REGISTER_USER = 'register_user';
+export const REGISTER_SUCCESS = 'register_success';
 export const REGISTER_FAIL = 'register_fail';
 
 /**
@@ -49,6 +50,7 @@ export const PROFILE_SET = 'profile_set';
 export const CONTACTS_ADD = 'contacts_add';
 export const CONTACTS_RESET = 'contacts_reset';
 export const CONTACTS_FETCHED = 'contacts_fetched';
+export const CONTACTS_DATA_FETCHED = 'contacts_data_fetched';
 
 /**
  * Requests Sent Actions
@@ -56,6 +58,7 @@ export const CONTACTS_FETCHED = 'contacts_fetched';
 export const REQUESTS_SENT_ADD = 'requests_sent_add';
 export const REQUESTS_SENT_RESET = 'requests_sent_reset';
 export const REQUESTS_SENT_FETCHED = 'requests_sent_fetched';
+export const REQUESTS_SENT_DATA_FETCHED = 'requests_sent_data_fetched';
 
 /**
  * Requests Received Actions
@@ -63,6 +66,7 @@ export const REQUESTS_SENT_FETCHED = 'requests_sent_fetched';
 export const REQUESTS_RECEIVED_ADD = 'requests_received_add';
 export const REQUESTS_RECEIVED_RESET = 'requests_received_reset';
 export const REQUESTS_RECEIVED_FETCHED = 'requests_received_fetched';
+export const REQUESTS_RECEIVED_DATA_FETCHED = 'requests_received_data_fetched';
 
 /**
  * Chat Room Actions
