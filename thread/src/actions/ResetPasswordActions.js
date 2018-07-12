@@ -9,19 +9,15 @@ import {
     RESET_PASSWORD_FAIL
 } from './types';
 
-export const firstEmailChanged = (text) => {
-    return {
-        type: RESET_PASSWORD_FIRST_EMAIL_CHANGED,
-        payload: text
-    };
-};
+export const firstEmailChanged = (text) => ({
+    type: RESET_PASSWORD_FIRST_EMAIL_CHANGED,
+    payload: text
+});
 
-export const secondEmailChanged = (text) => {
-    return {
-        type: RESET_PASSWORD_SECOND_EMAIL_CHANGED,
-        payload: text
-    };
-};
+export const secondEmailChanged = (text) => ({
+    type: RESET_PASSWORD_SECOND_EMAIL_CHANGED,
+    payload: text
+});
 
 export const resetPassword = ({ first_email, second_email }) => {
     return (dispatch) => {

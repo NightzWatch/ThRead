@@ -26,13 +26,13 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, password: action.payload};
         case LOGIN_USER:
             return {...state, loading: true};
+        case REGISTER_SUCCESS:
         case LOGIN_USER_SUCCESS:
             return {...state, user: action.payload};
         case LOGIN_USER_FAIL:
             return {...state, password: '', loading: false};
         case LOGOUT_USER_SUCCESS:
             return {...state, ...INITIAL_STATE};
-        case REGISTER_SUCCESS:
         case LOGIN_CHAT_USER_SUCCESS:
             return {...state, ...INITIAL_STATE, user: state.user, chatUser: action.payload};
         case LOGOUT_USER_FAIL:
