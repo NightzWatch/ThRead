@@ -6,6 +6,15 @@ import {
     logoutUser
 } from '../actions';
 import {StyleSheet} from 'react-native';
+import {LoadingButton, CommonContainer} from './Common';
+import styled from "styled-components";
+
+const TermsTextStyle = styled(Text)`
+  font-size:14px;
+  text-align:center;
+  color:white;
+  margin-top:20px;
+`;
 
 class Profile extends Component {
     renderPage() {
@@ -14,24 +23,32 @@ class Profile extends Component {
         }
 
         return (
-            <Content contentContainerStyle={{ alignItems: 'center' }}>
-                <Thumbnail large source={{uri: 'http://cdn.onlinewebfonts.com/svg/img_568656.png' }} style={{ marginTop: 50 }} />
 
-                <H3 style={{ marginTop: 10 }}>{this.props.first_name} {this.props.last_name}</H3>
-                <Text style={{ marginTop: 10 }}>{this.props.phone_number}</Text>
+              <Content>
+                <Thumbnail clarge source={{uri: 'http://cdn.onlinewebfonts.com/svg/img_568656.png' }}  />
 
-                <Button rounded style={styles.buttonStyle} onPress={() => this.props.logoutUser()}>
-                    <Text>Logout</Text>
-                </Button>
-            </Content>
+                <TermsTextStyle>{this.props.first_name} {this.props.last_name}</TermsTextStyle>
+                <TermsTextStyle>{this.props.phone_number}</TermsTextStyle>
+
+                <LoadingButton
+                  loading={this.props.loading}
+                  style={styles.buttonStyle}
+                  text="Logout"
+                  onPress={() => this.props.logoutUser()}
+                  rounded
+                  full
+                />
+
+              </Content>
+
         );
     }
 
     render() {
         return (
-            <Container>
+            <CommonContainer>
                 {this.renderPage()}
-            </Container>
+            </CommonContainer>
         );
     }
 }
@@ -39,12 +56,9 @@ class Profile extends Component {
 let styles = StyleSheet.create({
 
       buttonStyle: {
-         marginTop: 25,
-         alignItems: 'center',
-        justifyContent: 'center',
-         marginLeft: 20,
-         width: 340
-      }
+         marginTop: 25
+      },
+
   })
 
 const mapStateToProps = ({ profile }) => {
