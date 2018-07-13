@@ -1,7 +1,5 @@
 import React from 'react';
-import { Item, Input, Text, Button } from 'native-base';
-import styled from 'styled-components';
-
+import {Text, Button } from 'native-base';
 
 const TransparentButton = ({label, onPress}) => (
   <Button transparent light full onPress={onPress}>

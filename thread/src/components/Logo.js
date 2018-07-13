@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { Text } from 'native-base';
+import { Image } from 'react-native';
 import styled from "styled-components";
 
 

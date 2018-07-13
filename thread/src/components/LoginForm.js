@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
+import {Content, Form } from 'native-base';
 import { connect } from 'react-redux';
 import {  View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import * as actions from '../actions';
-import styled from 'styled-components';
 import Logo from './Logo';
 import {LoadingButton, CommonContainer, CommonField, TransparentButton} from './Common';
 
