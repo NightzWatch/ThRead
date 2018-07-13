@@ -15,12 +15,13 @@ const InputStyle = styled(Input)`
   text-align:center;
 `;
 
-const CommonField = ({onChangeText, value, label, style}) => (
+const CommonField = ({onChangeText, value, label, style, secureTextEntry = false}) => (
   <Item style={style} stackedLabel>
       <TextStyle>{label}</TextStyle>
       <InputStyle
           onChangeText={onChangeText}
           value={value}
+          secureTextEntry = {secureTextEntry}
       />
   </Item>
 );
