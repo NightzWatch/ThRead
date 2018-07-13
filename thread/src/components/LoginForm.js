@@ -6,15 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import * as actions from '../actions';
 import styled from 'styled-components';
 import Logo from './Logo';
-import {LoadingButton, CommonContainer, CommonField} from './Common';
-
-const TermsButtonStyle = styled(Text)`
-  font-size:14px;
-  text-align:center;
-  color:white;
-  margin-top:20px;
-
-`;
+import {LoadingButton, CommonContainer, CommonField, TransparentButton} from './Common';
 
 
 class LoginForm extends Component {
@@ -58,7 +50,8 @@ class LoginForm extends Component {
                       onPress={() => Actions.register() }
                       text="Register"
                     />
-                    <TermsButtonStyle onPress={() => Actions.resetPassword() }>Forgot password? Click here!</TermsButtonStyle>
+
+                    <TransparentButton onPress={() => Actions.resetPassword() } label="Forgot Password? Click here!" />
 
                 </Content>
             </CommonContainer>
