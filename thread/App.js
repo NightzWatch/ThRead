@@ -19,6 +19,7 @@ class App extends Component {
 	constructor() {
 		super();
 
+		//Fix for android
 		const originalSend = XMLHttpRequest.prototype.send;
 			XMLHttpRequest.prototype.send = function(body) {
 				if (body === '') {
