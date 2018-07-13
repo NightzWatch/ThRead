@@ -65,6 +65,7 @@ let styles = StyleSheet.create({
   },
   registerButton: {
       marginTop: 35,
+      marginBottom: 15,
       backgroundColor:'#4eaded'
   }
 });

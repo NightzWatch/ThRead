@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 
 const TransparentButton = ({label, onPress}) => (
-  <Button transparent light onPress={onPress}>
-         <Text style={{marginLeft: 40, marginTop: 70, marginBottom: 30}}>{label}</Text>
+  <Button transparent light full onPress={onPress}>
+         <Text>{label}</Text>
   </Button>
 );
 
