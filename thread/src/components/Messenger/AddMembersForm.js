@@ -85,30 +85,30 @@ class AddMembersForm extends Component {
             return <Spinner color="blue" />;
         }
 
-        const listItems = this.props.contact_list.map((d) => {
-            const isMember = this.isUserMember(d.id);
-            const isChecked = isMember ? true : this.state.added_contacts.indexOf(d.id) !== -1;
-            const color = isMember ? 'blue' : '';
+  const listItems = this.props.contact_list.map((d) => {
+      const isMember = this.isUserMember(d.id);
+      const isChecked = isMember ? true : this.state.added_contacts.indexOf(d.id) !== -1;
+      const color = isMember ? 'blue' : '';
 
-            return (
-                <ListItem key={d.id}>
-                    <CheckBox checked={isChecked} disabled={isMember} color={color} onPress={() => {
-                        this.onCheckboxPress(d);
-                    }} />
-                    <Body>
-                        <Text>{d.first_name} {d.last_name}</Text>
-                        {this.renderNote(isMember)}
-					</Body>
-				</ListItem>
-			);
-		});
+      return (
+          <ListItem key={d.id}>
+              <CheckBox checked={isChecked} disabled={isMember} color={color} onPress={() => {
+                  this.onCheckboxPress(d);
+              }} />
+              <Body>
+                  <Text>{d.first_name} {d.last_name}</Text>
+                  {this.renderNote(isMember)}
+    					</Body>
+    				</ListItem>
+    			);
+    		});
 
-		return (
-			<List>
-				{listItems}
-			</List>
-		);
-	}
+    		return (
+    			<List>
+    				{listItems}
+    			</List>
+    		);
+    	}
 
 	render() {
 		return (
@@ -130,7 +130,6 @@ class AddMembersForm extends Component {
 }
 
 let styles = StyleSheet.create({
-
       buttonStyle: {
          marginTop: 25,
       }
