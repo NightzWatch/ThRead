@@ -12,8 +12,8 @@ const TermsButtonStyle = styled(Text)`
   font-size:14px;
   text-align:center;
   color:white;
+  margin-top:20px;
 
-  margin-top:40px;
 `;
 
 
@@ -29,7 +29,7 @@ class LoginForm extends Component {
         return (
 
             <CommonContainer>
-              <Content style={{padding:20}}>
+              <Content  style={{ paddingLeft: 20, paddingRight: 20 }}>
                 <Logo />
                   <Form>
                       <CommonField
