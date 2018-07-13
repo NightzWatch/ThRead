@@ -37,19 +37,19 @@ class LoginForm extends Component {
         return (
 
             <CommonContainer>
-              <Content>
+              <Content style={{padding:20}}>
                 <Logo />
                   <Form>
                       <CommonField
                           onChangeText={this.onEmailChange.bind(this)}
                           value={this.props.email}
-                          style={{marginTop: 30, marginLeft: -10}}
+                          style={{marginTop: 30,  marginLeft: -5 }}
                           label="Username"
                           />
                         <CommonField
                           onChangeText={this.onPasswordChange.bind(this)}
                           value={this.props.password}
-                          style={{marginTop: 30, marginLeft: -10}}
+                          style={{marginTop: 30, marginLeft: -5}}
                           secureTextEntry = {true}
                           label="Password"
                         />

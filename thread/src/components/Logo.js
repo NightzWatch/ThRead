@@ -6,11 +6,12 @@ import styled from "styled-components";
 
 const StyledView = styled.View`
 
-  padding-left:70px;
-  padding-top:120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom:30px;
   width:100%;
-
+  padding-top:35%;
 `;
 
 
