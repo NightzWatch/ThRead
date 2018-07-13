@@ -19,7 +19,6 @@ const CommonField = ({onChangeText, value, label, style}) => (
   <Item style={style} stackedLabel>
       <TextStyle>{label}</TextStyle>
       <InputStyle
-
           onChangeText={onChangeText}
           value={value}
       />

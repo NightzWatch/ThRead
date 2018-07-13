@@ -19,6 +19,15 @@ class App extends Component {
 	constructor() {
 		super();
 
+		const originalSend = XMLHttpRequest.prototype.send;
+			XMLHttpRequest.prototype.send = function(body) {
+				if (body === '') {
+					originalSend.call(this);
+				} else {
+					originalSend.call(this, body);
+				}
+			};
+
 		const config = {
 			apiKey: "AIzaSyBOE0wGW9TRzP_InQz0cOnh-OR7SwyLM9w",
 			authDomain: "reactnative-auth-66287.firebaseapp.com",

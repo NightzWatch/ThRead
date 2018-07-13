@@ -6,8 +6,9 @@ import styled from "styled-components";
 
 const StyledView = styled.View`
 
-  padding-left:80px;
-  padding-top:140px;
+  padding-left:70px;
+  padding-top:120px;
+  margin-bottom:30px;
   width:100%;
 
 `;
