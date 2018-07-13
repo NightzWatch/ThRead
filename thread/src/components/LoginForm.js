@@ -50,7 +50,7 @@ class LoginForm extends Component {
                       text="Register"
                     />
 
-                    <TransparentButton onPress={() => Actions.resetPassword() } label="Forgot Password? Click here!" />
+                    <TransparentButton onPress={() => Actions.resetPassword() } text="Forgot Password? Click here!" />
 
                 </Content>
             </CommonContainer>

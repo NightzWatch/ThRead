@@ -1,9 +1,9 @@
 import React from 'react';
 import {Text, Button } from 'native-base';
 
-const TransparentButton = ({label, onPress}) => (
+const TransparentButton = ({text, onPress}) => (
   <Button transparent light full onPress={onPress}>
-         <Text>{label}</Text>
+         <Text>{text}</Text>
   </Button>
 );
 
