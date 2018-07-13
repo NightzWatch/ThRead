@@ -6,14 +6,14 @@ import { Actions } from 'react-native-router-flux';
 import * as actions from '../actions';
 import styled from 'styled-components';
 import Logo from './Logo';
-import {LoadingButton, CommonContainer, CommonField} from './Common';
+import {LoadingButton, CommonContainer, CommonField, CommonPassword} from './Common';
 
 const TermsButtonStyle = styled(Text)`
   font-size:14px;
   text-align:center;
   color:white;
 
-  margin-top:70px;
+  margin-top:40px;
 `;
 
 
@@ -46,12 +46,11 @@ class LoginForm extends Component {
                           style={{marginTop: 30, marginLeft: -10}}
                           label="Username"
                           />
-                        <CommonField
+                        <CommonPassword
                           onChangeText={this.onPasswordChange.bind(this)}
                           value={this.props.password}
                           style={{marginTop: 30, marginLeft: -10}}
                           label="Password"
-                          secureTextEntry
                         />
                     </Form>
                     <LoadingButton
