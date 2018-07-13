@@ -19,19 +19,11 @@ const TermsButtonStyle = styled(Text)`
 
 class LoginForm extends Component {
 
-  onEmailChange(text) {
-     this.props.loginEmailChanged(text);
-     }
+  onSubmitPress = () => {
+        const { email, password } = this.props;
 
-     onPasswordChange(text) {
-         this.props.loginPasswordChanged(text);
-     }
-
-   onSubmitPress = () => {
-       const { email, password } = this.props;
-
-       this.props.loginUser({ email, password });
-   }
+        this.props.loginUser({ email, password });
+    }
 
     render() {
         return (
@@ -41,13 +33,13 @@ class LoginForm extends Component {
                 <Logo />
                   <Form>
                       <CommonField
-                          onChangeText={this.onEmailChange.bind(this)}
+                          onChangeText={this.props.loginEmailChanged}
                           value={this.props.email}
                           style={{marginTop: 30,  marginLeft: -5 }}
                           label="Username"
                           />
                         <CommonField
-                          onChangeText={this.onPasswordChange.bind(this)}
+                          onChangeText={this.props.loginPasswordChanged}
                           value={this.props.password}
                           style={{marginTop: 30, marginLeft: -5}}
                           secureTextEntry = {true}
