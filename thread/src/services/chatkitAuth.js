@@ -1,4 +1,4 @@
-import { ChatManager, TokenProvider } from '@pusher/chatkit';
+import { ChatManager, TokenProvider } from '@pusher/chatkit/react-native';
 
 export const initChatkit = async (dispatch, userId, successCallback, actionTypes) => {
     const { CHAT_ROOMS_ADDED_TO_ROOM, LOGIN_CHAT_USER_SUCCESS, CHAT_ROOMS_SET_ROOMS } = actionTypes;

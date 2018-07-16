@@ -13,7 +13,7 @@
     "regenerator-runtime": "^0.11.1"
   },
   "dependencies": {
-    "@pusher/chatkit": "^0.7.12",
+    "@pusher/chatkit": "^0.7.16",
     "axios": "^0.18.0",
     "emoji-utils": "^1.0.1",
     "expo": "^25.0.0",
