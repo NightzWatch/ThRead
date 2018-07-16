@@ -110,8 +110,10 @@ class Actions extends Component {
                     this.setModalVisible(false);
 
                     const images = this.getImages().map((image) => {
+                        console.log(image);
+                        
                         return {
-                        image: image.uri,
+                            image: image.uri,
                         };
                     });
 

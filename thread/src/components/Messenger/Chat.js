@@ -3,13 +3,14 @@ import { Keyboard, Platform, StyleSheet } from 'react-native';
 import { GiftedChat, Send, Actions } from 'react-native-gifted-chat';
 import { View, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
-import Message from './Message';
 import emojiUtils from 'emoji-utils';
-import  * as actions from '../../actions';
 import axios from 'axios';
+import  * as actions from '../../actions';
 
+import Message from './Message';
 import CustomActions from './Actions';
 import CustomView from './CustomView';
+
 class Chat extends Component {
 	state = {
 		messages: [],
@@ -140,7 +141,7 @@ class Chat extends Component {
 	}
 
 	getCatGif() {
-		const cat = [
+		const kittens = [
 			'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
 			'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
 			'https://media.giphy.com/media/xBAreNGk5DapO/giphy.gif',
@@ -152,9 +153,9 @@ class Chat extends Component {
 			'https://media.giphy.com/media/VxbvpfaTTo3le/giphy.gif'
 		];
 
-		const kitten = Math.floor(Math.random() * (cat.length));
+		const basket = Math.floor(Math.random() * (kittens.length));
 
-		return cat[kitten];
+		return kittens[basket];
 	}
 
 	onUserTyping = async cat => {

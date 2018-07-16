@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function CustomView(props) {
+export default (props) => {
     const regex = /^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/gm;
 
     if (regex.test(props.currentMessage.text)) {
