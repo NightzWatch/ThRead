@@ -18,6 +18,7 @@ export const REGISTER_LAST_NAME_CHANGED = 'register_last_name_changed';
 export const REGISTER_PHONE_CHANGED = 'register_phone_changed';
 export const REGISTER_EMAIL_CHANGED = 'register_email_changed';
 export const REGISTER_PASSWORD_CHANGED = 'register_password_changed';
+export const REGISTER_PHONE_EXT_CHANGED = 'register_phone_ext_changed';
 export const REGISTER_SECOND_PASSWORD_CHANGED = 'register_second_password_changed';
 export const REGISTER_USER = 'register_user';
 export const REGISTER_SUCCESS = 'register_success';

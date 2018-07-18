@@ -1,11 +1,31 @@
 import React, { Component } from 'react';
-import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner } from 'native-base';
+import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner, Picker } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { LoadingButton } from './Common';
 import * as actions from '../actions/index';
+import axios from 'axios';
 
 class RegisterForm extends Component {
+
+    renderPicker() {
+        const countryCodes = require('../data/countriesCodes.json');
+        const arr = Object.keys(countryCodes).map(code => {
+            return {
+                code,
+                ...countryCodes[code]
+            }
+        });
+            return arr.map(({ code, country_name, dialling_code }) => (
+                <Picker.Item
+                        label={country_name}
+                        value={code}
+                        key={code}
+                    />
+                )
+            );
+    }
+
     render() {
         return (
             <Container>
@@ -24,6 +44,17 @@ class RegisterForm extends Component {
                                 onChangeText={this.props.registerLastNameChanged}
                                 value={this.props.last_name}
                             />
+                        </Item>
+                        <Item stackedLabel last style={{alignItems: 'flex-start'}}>
+                            <Label>Phone Extension</Label>
+                            <Picker
+                                textStyle={{marginLeft: 0, paddingLeft: 0, fontSize: 17}}
+                                placeholder="Choose Phone Extension"
+                                selectedValue={this.props.phone_ext}
+                                onValueChange={this.props.registerPhoneExtension}
+                            >
+                            {this.renderPicker()}
+                            </Picker>
                         </Item>
                         <Item stackedLabel last>
                             <Label>Phone Number</Label>
@@ -79,9 +110,9 @@ class RegisterForm extends Component {
 }
 
 const mapStateToProps = ({ register }) => {
-    const { first_name, last_name, email, password, second_password, phone_number, loading } = register;
+    const { first_name, last_name, email, password, second_password, phone_number, loading, phone_ext } = register;
 
-    return { first_name, last_name, email, password, second_password, phone_number, loading };
+    return { first_name, last_name, email, password, second_password, phone_number, loading, phone_ext };
 };
 
 export default connect(mapStateToProps, actions)(RegisterForm);

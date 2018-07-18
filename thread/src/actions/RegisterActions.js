@@ -10,6 +10,7 @@ import {
     REGISTER_PHONE_CHANGED,
     REGISTER_PASSWORD_CHANGED,
     REGISTER_SECOND_PASSWORD_CHANGED,
+    REGISTER_PHONE_EXT_CHANGED,
     REGISTER_USER,
     REGISTER_SUCCESS,
     REGISTER_FAIL
@@ -18,6 +19,11 @@ import {
 import {
     publicInitChatkit
 } from './';
+
+export const registerPhoneExtension = (text) => ({
+    type: REGISTER_PHONE_EXT_CHANGED,
+    payload: text
+});
 
 export const registerPhoneChanged = (text) => ({
     type: REGISTER_PHONE_CHANGED,
