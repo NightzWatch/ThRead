@@ -25,6 +25,7 @@ class Chat extends Component {
 			roomId: props.roomID,
 			hooks: {
 				onNewMessage: message => {
+					console.log('NEW MESSAGE INCOMING: ', message);
 					this.addMessage(message);
 				},
 				onUserStartedTyping: user => {
