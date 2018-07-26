@@ -4,9 +4,6 @@ import { ListItem, Body, Right, Text } from 'native-base';
 import * as actions from '../../actions';
 
 class Item extends Component {
-    getLatestMessage() {
-        // TODO: FETCH LATEST MESSAGE
-    }
 
     formatDate(dateTime) {
         return (
@@ -48,14 +45,13 @@ class Item extends Component {
     }
     
     render() {
-        const { id, name, updatedAt } = this.props.room;
+        const { name, updatedAt } = this.props.room;
         const { room_name, isGroup } = this.getRoomProperties(name);
 
         return (
             <ListItem avatar onPress={() => this.props.onThreadPress(this.props.room, room_name, isGroup)}>
                 <Body>
                     <Text>{room_name}</Text>
-                    <Text note>ID: {id}</Text>
                 </Body>
                 <Right>
                     <Text note>
