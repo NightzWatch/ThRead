@@ -10,7 +10,7 @@ import {LoadingButton, CommonContainer, CommonField, TransparentButton} from './
 
 class LoginForm extends Component {
 
-  onSubmitPress = () => {
+    onSubmitPress = () => {
         const { email, password } = this.props;
 
         this.props.loginUser({ email, password });
@@ -20,7 +20,7 @@ class LoginForm extends Component {
         return (
 
             <CommonContainer>
-              <Content  style={{ paddingLeft: 20, paddingRight: 20 }}>
+              <Content style={{ paddingLeft: 20, paddingRight: 20 }}>
                 <Logo />
                   <Form>
                       <CommonField
