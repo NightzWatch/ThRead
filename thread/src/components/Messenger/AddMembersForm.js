@@ -104,7 +104,7 @@ class AddMembersForm extends Component {
     		});
 
     		return (
-    			<List>
+    			<List style={{ paddingRight: 20}}>
     				{listItems}
     			</List>
     		);
@@ -113,7 +113,7 @@ class AddMembersForm extends Component {
 	render() {
 		return (
 			<CommonContainer>
-				<Content style= {{paddingRight: 20}}>
+				<Content>
 					{this.renderContacts()}
           <LoadingButton
             loading={this.props.loading}
@@ -131,7 +131,7 @@ class AddMembersForm extends Component {
 
 let styles = StyleSheet.create({
       buttonStyle: {
-         marginTop: 25,
+         marginTop: 25
       }
   })
 
