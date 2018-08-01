@@ -6,7 +6,7 @@ const CommonContainer = (props) => (
 
   <Container
     {...props}
-    style={{backgroundColor:'#66bb6a'}}
+    style={{backgroundColor:'#66bb6a', padding:20}}
   />
 
 );
