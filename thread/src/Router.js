@@ -81,8 +81,6 @@ class RouterComponent extends Component {
                                 />
                                 <Scene
                                     key="profile"
-                                    navigationBarStyle={{backgroundColor:'#66bb6a'}}
-                                    titleStyle={{color:'white'}}
                                     title="Profile"
                                     component={Profile}
                                 />
