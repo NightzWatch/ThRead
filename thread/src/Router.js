@@ -121,6 +121,8 @@ class RouterComponent extends Component {
                                     hideNavBar={false}
                                 />
                                 <Scene
+                                     navigationBarStyle={{backgroundColor:'#66bb6a'}}
+                                     titleStyle={{color:'white'}}
                                     key="addMembersForm"
                                     title="Add Members"
                                     component={AddMembersForm}
