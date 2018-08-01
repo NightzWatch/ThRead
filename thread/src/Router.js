@@ -25,9 +25,9 @@ class RouterComponent extends Component {
                 <Scene key="root" {...sceneConfig}>
                     <Scene
                         key="login"
-                        title="Login"
                         component={LoginForm}
                         initial
+                        hideNavBar={true}
 
                     />
                     <Scene
@@ -71,8 +71,6 @@ class RouterComponent extends Component {
                                 <Scene
                                     key="threads"
                                     title="ThRead"
-                                    navigationBarStyle={{backgroundColor:'#66bb6a'}}
-                                    titleStyle={{color:'white'}}
                                     component={ThreadList}
                                     renderRightButton={() => (
                                       <CommonButton
@@ -123,6 +121,8 @@ class RouterComponent extends Component {
                                     hideNavBar={false}
                                 />
                                 <Scene
+                                     navigationBarStyle={{backgroundColor:'#66bb6a'}}
+                                     titleStyle={{color:'white'}}
                                     key="addMembersForm"
                                     title="Add Members"
                                     component={AddMembersForm}
