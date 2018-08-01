@@ -104,7 +104,7 @@ class Threads extends Component {
         };
 
         return (
-            <Content>
+            <Content style={{padding:20, marginLeft: -23}}>
                 <List
                     dataArray={rooms}
                     renderRow={item => this.renderThreadItem(item)}
