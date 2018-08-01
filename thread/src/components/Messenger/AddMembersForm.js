@@ -113,7 +113,7 @@ class AddMembersForm extends Component {
 	render() {
 		return (
 			<CommonContainer>
-				<Content>
+				<Content style= {{paddingRight: 20}}>
 					{this.renderContacts()}
           <LoadingButton
             loading={this.props.loading}
