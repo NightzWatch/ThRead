@@ -4,3 +4,4 @@ export { default as ContentSpinner } from './ContentSpinner';
 export { default as LoadingButton } from './LoadingButton';
 export { default as CommonField } from './CommonField';
 export { default as CommonContainer } from './CommonContainer';
+export { default as TransparentButton } from './TransparentButton';

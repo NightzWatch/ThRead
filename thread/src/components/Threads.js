@@ -58,17 +58,17 @@ class Threads extends Component {
 
     getRoomProperties(room_name) {
         const { uid } = this.props.user;
-        const property = (room_name.indexOf(uid) !== -1) ? { 
+        const property = (room_name.indexOf(uid) !== -1) ? {
             room_name: this.getContactName(uid, room_name),
             isGroup: false
-        } : { 
+        } : {
             room_name: room_name,
             isGroup: true
         };
 
         return property;
     }
-    
+
     renderThreadItem(room) {
         const { id, name, updatedAt, users } = room;
         const { room_name, isGroup } = this.getRoomProperties(name);
@@ -104,7 +104,7 @@ class Threads extends Component {
         };
 
         return (
-            <Content>
+            <Content style={{padding:20, marginLeft: -23}}>
                 <List
                     dataArray={rooms}
                     renderRow={item => this.renderThreadItem(item)}
