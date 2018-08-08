@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import {
     logoutUser
 } from '../actions';
+import {StyleSheet} from 'react-native';
+import {LoadingButton, CommonContainer, CommonText} from './Common';
+
 
 class Profile extends Component {
     renderPage() {
@@ -13,27 +16,41 @@ class Profile extends Component {
         }
 
         return (
-            <Content contentContainerStyle={{ alignItems: 'center' }}>
-                <Thumbnail large source={{uri: 'http://cdn.onlinewebfonts.com/svg/img_568656.png' }} style={{ marginTop: 50 }} />
+          <Content contentContainerStyle={{ alignItems: 'center' }} style={{padding: 20}}>
+            <Thumbnail clarge source={{uri: 'http://cdn.onlinewebfonts.com/svg/img_568656.png' }}  />
 
-                <H3 style={{ marginTop: 10 }}>{this.props.first_name} {this.props.last_name}</H3>
-                <Text style={{ marginTop: 10 }}>{this.props.phone_number}</Text>
+            <CommonText text={this.props.first_name} secondaryText={this.props.last_name} />
+            <CommonText text={this.props.phone_number} />
 
-                <Button primary full style={{ marginTop: 25 }} onPress={() => this.props.logoutUser()}>
-                    <Text>Logout</Text>
-                </Button>
-            </Content>
+            <LoadingButton
+              loading={this.props.loading}
+              style={styles.buttonStyle}
+              text="Logout"
+              onPress={() => this.props.logoutUser()}
+              rounded
+              full
+            />
+
+          </Content>
         );
     }
 
     render() {
         return (
-            <Container>
+            <CommonContainer>
                 {this.renderPage()}
-            </Container>
+            </CommonContainer>
         );
     }
 }
+
+let styles = StyleSheet.create({
+
+      buttonStyle: {
+         marginTop: 25
+      },
+
+  })
 
 const mapStateToProps = ({ profile }) => {
     const { loading, first_name, last_name, avatar, phone_number } = profile;
