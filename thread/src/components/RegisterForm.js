@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner, Icon } from 'native-base';
 import {StyleSheet} from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { LoadingButton, CommonField, CommonContainer } from './Common';
+import { LoadingButton, CommonField, CommonContainer, CommonText } from './Common';
 import * as actions from '../actions/index';
 import { connect } from 'react-redux';
 import styled from "styled-components";
@@ -36,14 +36,14 @@ class RegisterForm extends Component {
                     <Form style={{padding:5, marginLeft:-10}}>
 
                         <CommonField
-                          onChangeText={this.onFirstNameChange}
+                          onChangeText={this.props.registerFirstNameChanged}
                           value={this.props.first_name}
                           style={{marginTop:10}}
                           label={'First Name'}
                         />
 
                         <CommonField
-                          onChangeText={this.onLastNameChange}
+                          onChangeText={this.props.registerLastNameChanged}
                           value={this.props.last_name}
                           style={{marginTop:20}}
                           label={'Last Name'}
@@ -57,7 +57,7 @@ class RegisterForm extends Component {
                         />
 
                         <CommonField
-                          onChangeText={this.onEmailChange}
+                          onChangeText={this.props.registerEmailChanged}
                           value={this.props.email}
                           style={{marginTop:20}}
                           label={'Email'}
@@ -79,7 +79,7 @@ class RegisterForm extends Component {
                           label={'Confirm Password'}
                         />
                     </Form>
-                    <TermsTextStyle>By pressing "Register" I agree that I have read:</TermsTextStyle>
+                    <CommonText text={"By pressing Register I agree that I have read:"} />
 
                         <TermsButtonStyle onPress={() => Actions.termsAndConditions()}>Terms and conditions </TermsButtonStyle>
 
