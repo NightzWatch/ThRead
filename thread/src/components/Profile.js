@@ -6,15 +6,8 @@ import {
     logoutUser
 } from '../actions';
 import {StyleSheet} from 'react-native';
-import {LoadingButton, CommonContainer} from './Common';
-import styled from "styled-components";
+import {LoadingButton, CommonContainer, CommonText} from './Common';
 
-const TermsTextStyle = styled(Text)`
-  font-size:14px;
-  text-align:center;
-  color:white;
-  margin-top:20px;
-`;
 
 class Profile extends Component {
     renderPage() {
@@ -23,24 +16,22 @@ class Profile extends Component {
         }
 
         return (
+          <Content contentContainerStyle={{ alignItems: 'center' }} style={{padding: 20}}>
+            <Thumbnail clarge source={{uri: 'http://cdn.onlinewebfonts.com/svg/img_568656.png' }}  />
 
-              <Content contentContainerStyle={{ alignItems: 'center' }} style={{padding: 20}}>
-                <Thumbnail clarge source={{uri: 'http://cdn.onlinewebfonts.com/svg/img_568656.png' }}  />
+            <CommonText text={this.props.first_name} secondaryText={this.props.last_name} />
+            <CommonText text={this.props.phone_number} />
 
-                <TermsTextStyle>{this.props.first_name} {this.props.last_name}</TermsTextStyle>
-                <TermsTextStyle>{this.props.phone_number}</TermsTextStyle>
+            <LoadingButton
+              loading={this.props.loading}
+              style={styles.buttonStyle}
+              text="Logout"
+              onPress={() => this.props.logoutUser()}
+              rounded
+              full
+            />
 
-                <LoadingButton
-                  loading={this.props.loading}
-                  style={styles.buttonStyle}
-                  text="Logout"
-                  onPress={() => this.props.logoutUser()}
-                  rounded
-                  full
-                />
-
-              </Content>
-
+          </Content>
         );
     }
 
