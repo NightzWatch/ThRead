@@ -118,16 +118,16 @@ export default {
 
   // Footer
   footerHeight: isIphoneX ? 89 : 55,
-  footerDefaultBg: platform === "ios" ? "#F8F8F8" : "#3F51B5",
+  footerDefaultBg: platform === "ios" ? "#66bb6a" : "#3F51B5",
   footerPaddingBottom: isIphoneX ? 34 : 0,
 
   // FooterTab
-  tabBarTextColor: platform === "ios" ? "#6b6b6b" : "#b3c7f9",
+  tabBarTextColor: platform === "ios" ? "#fff" : "#b3c7f9",
   tabBarTextSize: platform === "ios" ? 14 : 11,
   activeTab: platform === "ios" ? "#007aff" : "#fff",
   sTabBarActiveTextColor: "#007aff",
-  tabBarActiveTextColor: platform === "ios" ? "#007aff" : "#fff",
-  tabActiveBgColor: platform === "ios" ? "#cde1f9" : "#3F51B5",
+  tabBarActiveTextColor: platform === "ios" ? "#66bb6a" : "#fff",
+  tabActiveBgColor: platform === "ios" ? "#fff" : "#3F51B5",
 
   // Header
   toolbarBtnColor: platform === "ios" ? "#007aff" : "#fff",
