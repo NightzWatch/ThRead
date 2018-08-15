@@ -7,23 +7,28 @@ const TextStyle = styled(Text)`
     text-align:center;
     font-weight:700;
     color:white;
-  `;
-
-const InputStyle = styled(Input)`
-  color: white;
-  font-size:15px;
-  text-align:center;
 `;
 
-const CommonField = ({onChangeText, value, label, style, secureTextEntry = false}) => (
-  <Item style={style} stackedLabel>
-      <TextStyle>{label}</TextStyle>
-      <InputStyle
-          onChangeText={onChangeText}
-          value={value}
-          secureTextEntry = {secureTextEntry}
-      />
-  </Item>
+const InputStyle = styled(Input)`
+    color: white;
+    font-size: 15px;
+    text-align: center;
+`;
+
+const StyledItem = styled(Item)`
+    margin-top: 20px;
+    margin-left: -5px;
+`;
+
+const CommonField = ({ onChangeText, value, label, style, secureTextEntry = false }) => (
+    <StyledItem stackedLabel>
+        <TextStyle>{label}</TextStyle>
+        <InputStyle
+            onChangeText={onChangeText}
+            value={value}
+            secureTextEntry = {secureTextEntry}
+        />
+    </StyledItem>
 );
 
 export default CommonField;

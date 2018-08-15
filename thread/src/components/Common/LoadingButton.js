@@ -1,19 +1,24 @@
 import React from 'react';
 import { Button, Spinner, Text } from 'native-base';
+import styled from 'styled-components';
 
-const LoadingButton = ({ loading, style, text, onPress}) => {
+const StyledButton = styled(Button)`
+    ${props => props.noMargin ? '' : 'margin-top: 20px;'}
+`;
+
+const LoadingButton = ({ loading, text, onPress, noMargin = false }) => {
     if (loading) {
         return (
-            <Button disabled full rounded style={style}>
+            <StyledButton disabled full rounded noMargin={noMargin}>
                 <Spinner size="small" color="#fff" />
-            </Button>
+            </StyledButton>
         );
     }
 
     return (
-        <Button light full rounded style={style} onPress={onPress}>
+        <StyledButton light full rounded onPress={onPress} noMargin={noMargin}>
             <Text>{text}</Text>
-        </Button>
+        </StyledButton>
     );
 };
 
