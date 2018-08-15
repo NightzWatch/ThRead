@@ -2,17 +2,10 @@ import React, { Component } from 'react';
 import { Container, Content, Form, Item, Input, Label, Footer, FooterTab, Button, Text, Spinner, Icon } from 'native-base';
 import {StyleSheet} from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { LoadingButton, CommonField, CommonContainer, CommonText } from './Common';
+import { LoadingButton, CommonField, CommonContainer, CommonText, CommonHyperlink } from './Common';
 import * as actions from '../actions/index';
 import { connect } from 'react-redux';
-import styled from "styled-components";
-
-const TermsTextStyle = styled(Text)`
-  font-size:14px;
-  text-align:center;
-  color:white;
-  margin-top:20px;
-`;
+import styled from 'styled-components';
 
 const TermsButtonStyle = styled(Text)`
   font-size:14px;
@@ -28,6 +21,7 @@ class RegisterForm extends Component {
 
         this.props.register({ phone_number, first_name, last_name, email, password, second_password });
     }
+
 
     render() {
         return (
@@ -81,9 +75,9 @@ class RegisterForm extends Component {
                     </Form>
                     <CommonText text={"By pressing Register I agree that I have read:"} />
 
-                        <TermsButtonStyle onPress={() => Actions.termsAndConditions()}>Terms and conditions </TermsButtonStyle>
+                        <TermsButtonStyle onPress={() =>Actions.termsAndConditions()}> Terms and conditions </TermsButtonStyle>
 
-                        <TermsButtonStyle onPress={() => Actions.privacyPolicy()}>Privacy Policy  </TermsButtonStyle>
+                        <TermsButtonStyle onPress={() => Actions.privacyPolicy()}> Privacy Policy </TermsButtonStyle>
 
                         <LoadingButton
                             loading={this.props.loading}
