@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { Container, Header, Content, Form, Item, Input, Label, Icon, Button, Text, Toast, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { LoadingButton } from '../Common';
+import { LoadingButton, CommonContainer, CommonField } from '../Common';
 
 class AddContactForm extends Component {
     state = {
@@ -48,25 +48,21 @@ class AddContactForm extends Component {
 
     render() {
         return (
-            <Container>
-                <Content>
-                    <Form>
-                        <Item stackedLabel>
-                            <Label>Phone number</Label>
-                            <Input
-                                value={this.state.phone_number}
-                                onChangeText={this.onPhoneNumberChange}
-                            />
-                        </Item>
-                    </Form>
-                    <LoadingButton
-                        loading={this.state.requesting}
-                        style={{ marginTop: 50 }}
-                        onPress={this.requestContact}
-                        text="Send"
+            <CommonContainer paddedContent={true}>
+                <Form>
+                <CommonField
+                        onChangeText={this.onPhoneNumberChange}
+                        value={this.state.phone_number}
+                        style={{marginTop:20}}
+                        label={'Phone Number'}
                     />
-                </Content>
-            </Container>
+                </Form>
+                <LoadingButton
+                    loading={this.state.requesting}
+                    onPress={this.requestContact}
+                    text="Send"
+                />
+            </CommonContainer>
         );
     }
 }

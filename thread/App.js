@@ -8,7 +8,7 @@ import Router from './src/Router';
 import firebase from 'firebase';
 import reducers from './src/reducers';
 import getTheme from './native-base-theme/components';
-import platformStyles from './native-base-theme/variables/platform';
+import thReadStyles from './native-base-theme/variables/ThRead';
 
 /**
  * Firebase quirk for firestore
@@ -25,6 +25,16 @@ class App extends Component {
 
     constructor() {
         super();
+
+        //Fix for android
+		const originalSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.send = function(body) {
+            if (body === '') {
+                originalSend.call(this);
+            } else {
+                originalSend.call(this, body);
+            }
+        };
 
         const config = {
             apiKey: "AIzaSyBOE0wGW9TRzP_InQz0cOnh-OR7SwyLM9w",
@@ -71,7 +81,7 @@ class App extends Component {
 
         return (
             <Provider store={store}>
-                <StyleProvider style={getTheme(platformStyles)}>
+                <StyleProvider style={getTheme(thReadStyles)}>
                     <Root>
                         <Router />
                     </Root>

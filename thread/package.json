@@ -26,7 +26,8 @@
     "react-native-router-flux": "^4.0.0-beta.28",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "styled-components": "^3.3.3"
   },
   "jest": {
     "preset": "jest-expo",

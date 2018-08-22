@@ -25,9 +25,10 @@ class RouterComponent extends Component {
                 <Scene key="root" {...sceneConfig}>
                     <Scene
                         key="login"
-                        title="Login"
                         component={LoginForm}
                         initial
+                        hideNavBar={true}
+
                     />
                     <Scene
                         key="register"
@@ -38,6 +39,7 @@ class RouterComponent extends Component {
                         key="resetPassword"
                         title="Reset Password"
                         component={ResetPasswordForm}
+
                     />
                     <Scene
                         key="privacyPolicy"
