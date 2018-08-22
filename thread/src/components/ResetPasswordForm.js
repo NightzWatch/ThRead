@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Content, Form, Item, Label, Input, Button, Text, Spinner } from 'native-base';
-import { LoadingButton } from './Common';
+import { LoadingButton, CommonField, CommonContainer } from './Common';
+import { Form } from 'native-base';
 import * as actions from '../actions/index';
 
 class ForgotPasswordForm extends Component {
@@ -14,32 +14,29 @@ class ForgotPasswordForm extends Component {
 
     render() {
         return(
-            <Container>
-                <Content>
-                    <Form>
-                        <Item stackedLabel>
-                            <Label>Email address</Label>
-                            <Input
-                                onChangeText={this.props.firstEmailChanged}
-                                value={this.props.first_email}
-                            />
-                        </Item>
-                        <Item stackedLabel>
-                            <Label>Re-enter email address</Label>
-                            <Input
-                                onChangeText={this.props.secondEmailChanged}
-                                value={this.props.second_email}
-                            />
-                        </Item>
-                    </Form>
-                    <LoadingButton
-                        loading={this.props.loading}
-                        style={{ marginTop: 25 }}
-                        onPress={this.onSubmitPress}
-                        text="Reset password"
+            <CommonContainer paddedContent={true}>
+                <Form>
+                    <CommonField
+                        onChangeText={this.props.firstEmailChanged}
+                        value={this.props.first_email}
+                        label={'Email Address'}
                     />
-                </Content>
-            </Container>
+
+                    <CommonField
+                        onChangeText={this.props.secondEmailChanged}
+                        value={this.props.second_email}
+                        label={'Re-enter Email Address'}
+                    />
+                </Form>
+                <LoadingButton
+                    loading={this.props.loading}
+                    style={{ marginTop: 25 }}
+                    onPress={this.onSubmitPress}
+                    text="Reset password"
+                    rounded
+                    full
+                />
+            </CommonContainer>
         );
     }
 }
