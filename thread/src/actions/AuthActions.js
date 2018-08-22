@@ -261,14 +261,12 @@ const loginUserFail = (dispatch, { code, message }) => {
     });
 };
 
-export const logoutUser = () => async dispatch => {
-    try {
-        await deleteDevicePushToken();
-        await firebase.auth().signOut();
-        logoutUserSuccess(dispatch);
-    } catch (err) {
-        logoutUserFail(dispatch, error)
-    }
+export const logoutUser = () => {
+    return (dispatch) => {
+        firebase.auth().signOut()
+            .then(() => logoutUserSuccess(dispatch))
+            .catch(error => logoutUserFail(dispatch, error));
+    };
 };
 
 const logoutUserSuccess = dispatch => {
