@@ -86,12 +86,12 @@ export const register = ({ phone_number, first_name, last_name, email, password,
 
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => createUserProfile(dispatch, { first_name, last_name, email, phone_number }))
+            .then(() => createUserProfile(dispatch, { first_name, last_name, email, password, phone_number }))
             .catch(error => registerFail(dispatch, error));
     };
 };
 
-const createUserProfile = (dispatch, { first_name, last_name, email, phone_number }) => {
+const createUserProfile = (dispatch, { first_name, last_name, email, password, phone_number }) => {
     const { currentUser } = firebase.auth();
     const db = firebase.firestore();
     const docRef = db.doc(`users/${currentUser.uid}`);
@@ -107,25 +107,25 @@ const createUserProfile = (dispatch, { first_name, last_name, email, phone_numbe
         contacts: [],
         avatar: ''
     })
-    .then(() => createChatUser(dispatch, { id: currentUser.uid, first_name, last_name }, currentUser))
+    .then(() => createChatUser(dispatch, { id: currentUser.uid, first_name, last_name, email, password }, currentUser))
     .catch(error => registerFail(dispatch, error));
 };
 
-const createChatUser = (dispatch, { id, first_name, last_name }, user) => {
+const createChatUser = (dispatch, { id, first_name, last_name, email, password }, user) => {
     axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/chatkitCreateUser', {
         user: { id, first_name, last_name }
     })
     .then(result => {
-        registerSuccess(dispatch, user);
+        registerSuccess(dispatch, user, email, password);
     })
     .catch(error => {
         registerFail(dispatch, error)
     });
 }
 
-const registerSuccess = (dispatch, user) => {
+const registerSuccess = (dispatch, user, email, password) => {
     dispatch({ type: REGISTER_SUCCESS, payload: user });
-    publicInitChatkit(dispatch, user.uid);
+    publicInitChatkit(dispatch, user.uid, email, password);
 };
 
 const registerFail = (dispatch, { code, message }) => {

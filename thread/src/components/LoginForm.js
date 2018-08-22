@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
-import {Content, Form } from 'native-base';
+import { Form, Container } from 'native-base';
 import { connect } from 'react-redux';
-import { StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import * as actions from '../actions';
 import Logo from './Logo';
-import { LoadingButton, CommonContainer, CommonField, TransparentButton } from './Common';
+import { LoadingButton, ContentSpinner, CommonContainer, CommonField, TransparentButton } from './Common';
+
 class LoginForm extends Component {
+
+    constructor(props) {
+        super(props);
+        
+        if (props.autoLogIn) {
+            this.onSubmitPress();
+        }
+    }
+    
     onSubmitPress = () => {
         const { email, password } = this.props;
 
@@ -14,6 +23,14 @@ class LoginForm extends Component {
     }
 
     render() {
+        if (this.props.autoLogIn) {
+            return (
+                <Container>
+                    <ContentSpinner />
+                </Container>
+            );
+        }
+
         return (
             <CommonContainer paddedContent={true}>
                 <Logo />
@@ -48,9 +65,9 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = ({ auth }) => {
-    const { email, password, loading } = auth;
+    const { email, password, loading, autoLogIn } = auth;
 
-    return { email, password, loading };
+    return { email, password, loading, autoLogIn };
 };
 
 export default connect(mapStateToProps, actions)(LoginForm);
