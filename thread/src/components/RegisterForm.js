@@ -12,6 +12,7 @@ class RegisterForm extends Component {
         this.props.register({ phone_number, first_name, last_name, email, password, second_password });
     }
 
+
     render() {
         return (
             <CommonContainer paddedContent={true}>
