@@ -48,23 +48,20 @@ class AddContactForm extends Component {
 
     render() {
         return (
-            <CommonContainer>
-                <Content>
-                    <Form>
-                    <CommonField
-                         onChangeText={this.onPhoneNumberChange}
-                         value={this.state.phone_number}
-                         style={{marginTop:20}}
-                         label={'Phone Number'}
-                       />
-                    </Form>
-                    <LoadingButton
-                        loading={this.state.requesting}
-                        style={{ marginTop: 50 }}
-                        onPress={this.requestContact}
-                        text="Send"
+            <CommonContainer paddedContent={true}>
+                <Form>
+                <CommonField
+                        onChangeText={this.onPhoneNumberChange}
+                        value={this.state.phone_number}
+                        style={{marginTop:20}}
+                        label={'Phone Number'}
                     />
-                </Content>
+                </Form>
+                <LoadingButton
+                    loading={this.state.requesting}
+                    onPress={this.requestContact}
+                    text="Send"
+                />
             </CommonContainer>
         );
     }
