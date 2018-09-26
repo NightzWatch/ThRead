@@ -1,11 +1,12 @@
 import React, { Component }  from 'react';
 import { Keyboard, Platform, StyleSheet } from 'react-native';
-import { GiftedChat, Actions, SystemMessage, Send } from 'react-native-gifted-chat';
-import { View, Button, Icon, Text } from 'native-base';
+import { GiftedChat, Send } from 'react-native-gifted-chat';
+import { View, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import Message from './Message';
 import emojiUtils from 'emoji-utils';
-import { addUserToRoom } from '../../actions';
+import  * as actions from '../../actions';
+import axios from 'axios';
 
 class Chat extends Component {
 	state = {
@@ -27,7 +28,7 @@ class Chat extends Component {
 					this.addMessage(message);
 				},
 				onUserStartedTyping: user => {
-					this.setState({ typingText: `${user.name} is typing` });
+					this.setState({ typingText: `${this.props.first_name} ${this.props.last_name} is typing` });
 				},
 				onUserStoppedTyping: user => {
 					this.setState({ typingText: null });
@@ -40,8 +41,22 @@ class Chat extends Component {
 		});
 	}
 
+	componentWillUnmount() {
+		try {
+			this.props.chatUser.roomSubscriptions[this.props.roomID].cancel();
+		} catch (err) {
+			console.log('chatkit error, either connection to chat is closed or chatkit is not responding');
+		}
+
+		try {
+			this.props.clearChatRoom();
+		} catch (err) {
+			console.log('device error with clearing redux state for current chat room');
+		}
+	}
+
 	addMessage(message, newMessage = true) {
-		const isGif = this.checkMessageIsGif(message.text);
+		const isGif = this.checkTextIsMediaLink(message.text);
 		const messageText = isGif ? '' : message.text;
 
 		const messages = [{
@@ -50,6 +65,7 @@ class Chat extends Component {
 			createdAt: new Date(message.createdAt),
 			user: {
 				_id: message.sender.id,
+				// TODO: WE CAN SEARCH THE CONTACTS IF WE KNOW THIS PERSON TO GET THE NAME BY ID, ELSE LEAVE IT AS IT IS
 				name: message.sender.name,
 				avatar: message.sender.avatarURL,
 			}
@@ -115,7 +131,7 @@ class Chat extends Component {
 			});
 	}
 
-	checkMessageIsGif(text) {
+	checkTextIsMediaLink(text) {
 		const allowedContentTypes = ['.gif', '.png', '.jpg', '.jpeg'];
 
 		return allowedContentTypes.indexOf(text.slice(-4)) !== -1;
@@ -139,40 +155,69 @@ class Chat extends Component {
 		return cat[kitten];
 	}
 
-	onUserTyping = (cat) => {
+	onUserTyping = async cat => {
 		const shavedCat = cat.trim();
 
 		if (shavedCat) {
-			this.props.chatUser.isTypingIn({ roomId: this.props.roomID })
-				.then(() => {
-					console.log('Success!')
-				})
-				.catch(err => {
-					console.log(`Error sending typing indicator: ${err}`)
-				});
+			try {
+				await this.props.chatUser.isTypingIn({ roomId: this.props.roomID });
+			} catch (error) {
+				console.log(`Error sending typing indicator: ${error}`)
+			}
 		}
 	}
 
-	onSend(messages = []) {
+	onSend = async (messages = []) => {
 		const message = messages[0];
 		let text = message.text.trim();
-
+		
 		if (!text) {
 			text = this.getCatGif();
 		}
-
+		
 		Keyboard.dismiss();
 
-		this.props.chatUser.sendMessage({
-			text: text,
-			roomId: this.props.roomID
-		})
-		.then(messageId => {
-			console.log(`Added message to ${this.props.title}`);
-		})
-		.catch(err => {
-			console.log(`Error adding message to ${this.props.title}: ${err}`)
-		});
+		try {
+			const messageId = await this.props.chatUser.sendMessage({
+				text: text,
+				roomId: this.props.roomID
+			});
+
+			console.log(`Added message to ${this.props.title}, with the ID of ${messageId}`);
+
+			const { users, first_name, last_name, chatName, roomID, isGroup } = this.props;
+			const userIds = users.map(user => user.id);
+			const title = isGroup ? `${first_name} ${last_name} @ ${chatName}` : `${first_name} ${last_name}`;
+			const isGif = this.checkTextIsMediaLink(text);
+			const messageBody = isGif ? '🐱 GIF' : text; // THIS IS TEMP, TBH WE SHOULD REALLY DO THIS ON THE SERVER
+			const index = userIds.indexOf(this.props.user.uid);
+
+			if (index > -1) {
+				userIds.splice(index, 1);
+			}
+			
+			userIds.forEach(async userId => {
+				try {
+					await axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/messengerMessageNotification', {
+						userId, text: messageBody, title, roomID, isGroup
+					});
+				} catch (err) {
+					switch (err.message) {
+						case 'Request failed with status code 500':
+							console.log(`Error with push notification server for room ${this.props.title}`);
+							break;
+						case 'Request failed with status code 408':
+							console.log(`Push notification server for room ${this.props.title} timeout`);
+							break;
+						default:
+							console.log(`Error sending push notification message for ${this.props.title}: ${err}`);
+							break;
+					}
+				}
+			});
+		} catch (err) {
+			console.log(`Error adding message to ${this.props.title}: ${err}`);
+		}
 	}
 
 	renderSend = (props) => {
@@ -182,7 +227,7 @@ class Chat extends Component {
 				alwaysShowSend={true}
 			>
 				<View style={{marginRight: 10 }}>
-					<Icon name='logo-octocat' style={{ fontSize: 24, color: '#007aff', marginRight: 0, marginLeft: 16 }} />
+					<Icon name='logo-octocat' style={{ fontSize: 32, color: '#007aff', marginRight: 0, marginLeft: 16, marginTop: 0 }} />
 				</View>
 			</Send>
 		);
@@ -225,7 +270,7 @@ class Chat extends Component {
 		return (
 			<GiftedChat
 				messages={this.state.messages}
-				onSend={messages => this.onSend(messages)}
+				onSend={this.onSend}
 				user={{
 					_id: this.props.user.uid
 				}}
@@ -243,13 +288,15 @@ class Chat extends Component {
 	}
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, chatRoom, profile }) => {
 	const { user, chatUser } = auth;
+	const { id, users, name, isGroup } = chatRoom;
+	const { first_name, last_name } = profile;
 
-	return { user, chatUser };
+	return { user, users, chatUser, first_name, last_name, chatId: id, chatName: name, isGroup };
 };
 
-export default connect(mapStateToProps, { addUserToRoom })(Chat);
+export default connect(mapStateToProps, actions)(Chat);
 
 
 const styles = StyleSheet.create({

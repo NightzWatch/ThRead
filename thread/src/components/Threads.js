@@ -1,15 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Content, List, ListItem, Left, Body, Right, Thumbnail, Text, Spinner, H3 } from 'native-base';
+import { Container, Content, List, ListItem, Body, Right, Text, H3 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { CommonButton, CentredContent, ContentSpinner } from './Common';
-import {
-    setChatRoom
-} from '../actions';
+import * as actions from '../actions';
+import { handleIncomingNotification } from '../services';
+import { Notifications } from 'expo';
 
 class Threads extends Component {
 
-    formatDate(dateTime){
+    componentDidMount() {
+        this.notificationSubscription = Notifications.addListener(
+            notification => handleIncomingNotification(
+                notification,
+                this.props.chatRoom,
+                this.props.rooms,
+                (room, isGroup) => {
+                    Actions.reset('main');
+                    this.onThreadPress(room, room.name, isGroup);
+                }
+            )
+        );
+    }
+
+    componentWillUnmount() {
+        this.notificationSubscription.remove();
+    }
+
+    formatDate(dateTime) {
         return (
             dateTime
             .split(/[T|-]/, 3)
@@ -31,12 +49,12 @@ class Threads extends Component {
     }
 
     onThreadPress(room, room_name, isGroup) {
-        const { createdAt, createdByUserId, id, isPrivate, name, updatedAt, users } = room;
+        const { createdAt, createdByUserId, id, isPrivate, updatedAt, users } = room;
         const action = isGroup ? 'thread' : 'dmThread';
         const rightComponent = isGroup ? <CommonButton onPress={() => Actions.info()} name={"information-circle"} /> : null;
 
         this.props.setChatRoom({
-            createdAt, createdByUserId, id, isPrivate, name: room_name, updatedAt, users
+            createdAt, createdByUserId, id, isPrivate, name: room_name, updatedAt, users, isGroup
         });
 
         Actions[action]({
@@ -70,7 +88,7 @@ class Threads extends Component {
     }
 
     renderThreadItem(room) {
-        const { id, name, updatedAt, users } = room;
+        const { id, name, updatedAt } = room;
         const { room_name, isGroup } = this.getRoomProperties(name);
 
         return (
@@ -100,12 +118,11 @@ class Threads extends Component {
 
 
     renderThreadList() {
-        const { rooms } = this.props;
-        rooms.sort(this.orderRooms);
-
         if (this.props.loading) {
             return <ContentSpinner />;
         }
+
+        const { rooms } = this.props;
 
         if (rooms.length === 0) {
             return (
@@ -115,6 +132,8 @@ class Threads extends Component {
                 </CentredContent>
             );
         };
+
+        rooms.sort(this.orderRooms);
 
         return (
             <Content>
@@ -136,12 +155,12 @@ class Threads extends Component {
     }
 }
 
-const mapStateToProps = ({ auth, chatRooms, contacts }) => {
+const mapStateToProps = ({ auth, chatRooms, chatRoom, contacts }) => {
     const { user, chatUser } = auth;
     const { rooms } = chatRooms;
     const { contact_list, loading } = contacts;
 
-    return { user, chatUser, rooms, contact_list, loading };
+    return { user, chatUser, chatRoom, rooms, contact_list, loading };
 };
 
-export default connect(mapStateToProps, { setChatRoom })(Threads);
+export default connect(mapStateToProps, actions)(Threads);

@@ -99,7 +99,7 @@ class RouterComponent extends Component {
                                 key="dmThread"
                                 hideNavBar
                             >
-                                 <Scene
+                                <Scene
                                     key="chat"
                                     component={Chat}
                                     hideNavBar={false}

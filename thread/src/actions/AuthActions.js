@@ -1,34 +1,25 @@
-import { ChatManager, TokenProvider } from '@pusher/chatkit';
 import { Keyboard } from 'react-native';
 import { Toast } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import { SecureStore } from 'expo';
 import firebase from 'firebase';
+
+import { 
+    storeDevicePushToken,
+    deleteDevicePushToken,
+    storeUserAuthDetailsOnDevice,
+    deleteUserAuthDetailsFromDevice,
+    initChatkit
+} from '../services';
+
 import {
-    EMAIL_CHANGED,
-    PASSWORD_CHANGED,
-    LOGIN_USER,
-    LOGIN_USER_FAIL,
-    LOGIN_USER_SUCCESS,
-    LOGOUT_USER_SUCCESS,
-    LOGOUT_USER_FAIL,
-    LOGIN_CHAT_USER_SUCCESS,
-    CHAT_ROOMS_ADDED_TO_ROOM,
-    CHAT_ROOMS_SET_ROOMS,
-    PROFILE_FETCH,
-    PROFILE_SET,
-    CONTACTS_ADD,
-    CONTACTS_RESET,
-    CONTACTS_FETCHED,
-    CONTACTS_DATA_FETCHED,
-    REQUESTS_SENT_ADD,
-    REQUESTS_SENT_RESET,
-    REQUESTS_SENT_FETCHED,
-    REQUESTS_SENT_DATA_FETCHED,
-    REQUESTS_RECEIVED_ADD,
-    REQUESTS_RECEIVED_RESET,
-    REQUESTS_RECEIVED_FETCHED,
-    REQUESTS_RECEIVED_DATA_FETCHED
+    EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER, LOGIN_USER_FAIL,
+    LOGIN_USER_SUCCESS, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAIL,
+    LOGIN_CHAT_USER_SUCCESS, CHAT_ROOMS_ADDED_TO_ROOM,
+    CHAT_ROOMS_SET_ROOMS, PROFILE_FETCH, PROFILE_SET, CONTACTS_ADD,
+    CONTACTS_RESET, CONTACTS_FETCHED, CONTACTS_DATA_FETCHED,
+    REQUESTS_SENT_ADD, REQUESTS_SENT_RESET, REQUESTS_SENT_FETCHED,
+    REQUESTS_SENT_DATA_FETCHED, REQUESTS_RECEIVED_ADD, REQUESTS_RECEIVED_RESET,
+    REQUESTS_RECEIVED_FETCHED, REQUESTS_RECEIVED_DATA_FETCHED
 } from './types';
 
 export const loginEmailChanged = (text) => ({
@@ -41,21 +32,28 @@ export const loginPasswordChanged = (text) => ({
     payload: text
 });
 
-export const loginUser = ({ email, password }) => {
-    return (dispatch) => {
-        Keyboard.dismiss();
+export const loginUser = ({ email, password }) => dispatch => {
+    Keyboard.dismiss();
 
-        dispatch({ type: LOGIN_USER });
-        
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(user => loginUserSuccess(dispatch, user, email, password))
-            .catch(error => loginUserFail(dispatch, error));
-    };
+    dispatch({ type: LOGIN_USER });
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(user => loginUserSuccess(dispatch, user, email, password))
+        .catch(error => loginUserFail(dispatch, error));
 };
 
 export const publicInitChatkit = (dispatch, userID, email, password) => {
-    initChatkit(dispatch, userID);
-    storeUserAuthDetails(email, password);
+    initChatkit(dispatch, userID, chatKitSuccess, {
+        CHAT_ROOMS_ADDED_TO_ROOM,
+        LOGIN_CHAT_USER_SUCCESS,
+        CHAT_ROOMS_SET_ROOMS
+    });
+    storeUserAuthDetailsOnDevice(email, password);
+};
+
+const chatKitSuccess = (dispatch, userID) => {
+    fetchProfile(dispatch, userID);
+    Actions.main({ type: 'reset' });
 };
 
 const loginUserSuccess = (dispatch, user, email, password) => {
@@ -64,57 +62,12 @@ const loginUserSuccess = (dispatch, user, email, password) => {
         payload: user
     });
 
-    storeUserAuthDetails(email, password);
-
-    initChatkit(dispatch, user.uid, email, password);
-};
-
-const storeUserAuthDetails = async (email, password) => {
-    try {
-        await SecureStore.setItemAsync('email', email);
-        await SecureStore.setItemAsync('password', password);        
-    } catch (error) {
-        console.warn(error);
-    }
-};
-
-const initChatkit = (dispatch, userId) => {
-    const chatManager = new ChatManager({
-        userId,
-        instanceLocator: 'v1:us1:ce5dc7d7-09b5-4259-a8ce-55d1bcf999ea',
-        tokenProvider: new TokenProvider({
-            url: 'https://us-central1-reactnative-auth-66287.cloudfunctions.net/chatkitAuthToken',
-            queryParams: { userId }
-        })
-    });
- 
-    chatManager.connect({
-        onAddedToRoom: room => {
-            console.log(`Added to room ${room.name}`);
-
-            dispatch({
-                type: CHAT_ROOMS_ADDED_TO_ROOM,
-                payload: room
-            });
-        }
-    })
-    .then(currentUser => {
-        dispatch({
-            type: LOGIN_CHAT_USER_SUCCESS,
-            payload: currentUser
-        });
-
-        dispatch({
-            type: CHAT_ROOMS_SET_ROOMS,
-            payload: currentUser.rooms
-        });
-
-        fetchProfile(dispatch, userId);
-
-        Actions.main({ type: 'reset' });
-    })
-    .catch(err => {
-        console.log('Error on connection', err);
+    storeDevicePushToken();
+    storeUserAuthDetailsOnDevice(email, password);
+    initChatkit(dispatch, user.uid, chatKitSuccess, {
+        CHAT_ROOMS_ADDED_TO_ROOM,
+        LOGIN_CHAT_USER_SUCCESS,
+        CHAT_ROOMS_SET_ROOMS
     });
 };
 
@@ -316,25 +269,18 @@ export const logoutUser = () => {
     };
 };
 
-const logoutUserSuccess = async (dispatch) => {
+const logoutUserSuccess = dispatch => {
+    deleteUserAuthDetailsFromDevice();
+
     dispatch({
         type: LOGOUT_USER_SUCCESS
     });
 
-    try {
-        await SecureStore.deleteItemAsync('email');
-        await SecureStore.deleteItemAsync('password');
-    } catch (error) {
-        console.warn(error);
-    }
-
     Actions.login({ type: 'reset' });
 };
 
-const logoutUserFail = (dispatch, { code, message }) => {
-    dispatch({
-        type: LOGOUT_USER_FAIL
-    });
+const logoutUserFail = (dispatch, { message }) => {
+    dispatch({ type: LOGOUT_USER_FAIL });
 
     Toast.show({
         text: message,

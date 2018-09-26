@@ -49,46 +49,45 @@ export const secondPasswordChanged = (text) => ({
     payload: text
 });
 
-export const register = ({ phone_number, first_name, last_name, email, password, second_password }) => {
-    return (dispatch) => {
-        Keyboard.dismiss();
-        dispatch({ type: REGISTER_USER });
+export const register = ({ phone_number, first_name, last_name, email, password, second_password }) => dispatch => {
+    Keyboard.dismiss();
+    dispatch({ type: REGISTER_USER });
 
-        if (!first_name) {
-            registerFail(dispatch, { message: 'First name is missing.' });
+    if (!first_name) {
+        registerFail(dispatch, { message: 'First name is missing.' });
 
-            return false;
-        }
+        return false;
+    }
 
-        if (!last_name) {
-            registerFail(dispatch, { message: 'Last name is missing.' });
+    if (!last_name) {
+        registerFail(dispatch, { message: 'Last name is missing.' });
 
-            return false;
-        }
+        return false;
+    }
 
-        if (!phone_number) {
-            registerFail(dispatch, { message: 'Phone number is missing.' });
+    if (!phone_number) {
+        registerFail(dispatch, { message: 'Phone number is missing.' });
 
-            return false;
-        }
+        return false;
+    }
 
-        if (!password) {
-            registerFail(dispatch, { message: 'Password is missing.' });
+    if (!password) {
+        registerFail(dispatch, { message: 'Password is missing.' });
 
-            return false;
-        }
+        return false;
+    }
 
-        if (password !== second_password) {
-            registerFail(dispatch, { message: 'Password does not match.' });
+    if (password !== second_password) {
+        registerFail(dispatch, { message: 'Password does not match.' });
 
-            return false;
-        }
+        return false;
+    }
 
 
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => createUserProfile(dispatch, { first_name, last_name, email, password, phone_number }))
-            .catch(error => registerFail(dispatch, error));
-    };
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => createUserProfile(dispatch, { first_name, last_name, email, password, phone_number }))
+        .catch(error => registerFail(dispatch, error));
+    
 };
 
 const createUserProfile = (dispatch, { first_name, last_name, email, password, phone_number }) => {

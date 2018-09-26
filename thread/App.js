@@ -9,6 +9,7 @@ import firebase from 'firebase';
 import reducers from './src/reducers';
 import getTheme from './native-base-theme/components';
 import thReadStyles from './native-base-theme/variables/ThRead';
+import FlashMessage from "react-native-flash-message";
 
 /**
  * Firebase quirk for firestore
@@ -84,6 +85,7 @@ class App extends Component {
                 <StyleProvider style={getTheme(thReadStyles)}>
                     <Root>
                         <Router />
+                        <FlashMessage position="top" />
                     </Root>
                 </StyleProvider>
             </Provider>

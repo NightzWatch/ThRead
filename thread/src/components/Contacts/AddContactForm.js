@@ -34,7 +34,8 @@ class AddContactForm extends Component {
 
         axios.post('https://us-central1-reactnative-auth-66287.cloudfunctions.net/firestoreSendRequest', {
             userId: this.props.user.uid,
-            phoneNumber: this.state.phone_number
+            phoneNumber: this.state.phone_number,
+            name: this.props.name
         })
         .then(response => {
             Actions.pop();
@@ -67,10 +68,12 @@ class AddContactForm extends Component {
     }
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, profile }) => {
     const { user } = auth;
+    const { first_name, last_name } = profile;
+    const name = `${first_name} ${last_name}`;
 
-    return { user };
+    return { user, name };
 };
 
 export default connect(mapStateToProps, {})(AddContactForm);
