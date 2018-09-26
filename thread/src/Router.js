@@ -19,120 +19,91 @@ import AddMembersForm from './components/Messenger/AddMembersForm';
 import FooterTabs from './components/FooterTabs';
 
 const RouterComponent = () => (
-    <Router>
-        <Scene key="root" {...sceneConfig}>
+  <Router>
+    <Scene key="root" {...sceneConfig}>
+      <Scene key="login" title="Login" component={LoginForm} initial />
+      <Scene key="register" title="Register" component={RegisterForm} />
+      <Scene
+        key="resetPassword"
+        title="Reset Password"
+        component={ResetPasswordForm}
+      />
+      <Scene
+        key="privacyPolicy"
+        title="Privacy Policy"
+        component={PrivacyPolicy}
+      />
+      <Scene
+        key="termsAndConditions"
+        title="Terms and Conditions"
+        component={TermsAndConditions}
+      />
+      <Scene key="main" hideNavBar panHandlers={null}>
+        <Modal>
+          <Tabs key="tabbar" tabBarComponent={FooterTabs}>
             <Scene
-                key="login"
-                title="Login"
-                component={LoginForm}
-                initial
+              key="contacts"
+              title="Contacts"
+              component={ContactTabs}
+              renderRightButton={() => (
+                <CommonButton
+                  onPress={() => Actions.addContact()}
+                  name={'add'}
+                />
+              )}
             />
             <Scene
-                key="register"
-                title="Register"
-                component={RegisterForm}
+              key="threads"
+              title="ThRead"
+              component={ThreadList}
+              renderRightButton={() => (
+                <CommonButton
+                  onPress={() => Actions.createThread()}
+                  name={'add'}
+                />
+              )}
+              initial
+            />
+            <Scene key="profile" title="Profile" component={Profile} />
+          </Tabs>
+          <Scene
+            key="createThread"
+            title="Create"
+            component={CreateTreadForm}
+          />
+          <Scene
+            key="addContact"
+            title="Send Request"
+            component={AddContactForm}
+          />
+          <Scene key="dmThread" hideNavBar>
+            <Scene key="chat" component={Chat} hideNavBar={false} />
+          </Scene>
+          <Scene key="thread" hideNavBar>
+            <Scene key="chat" component={Chat} hideNavBar={false} />
+            <Scene
+              key="info"
+              title="Info"
+              component={Info}
+              hideNavBar={false}
             />
             <Scene
-                key="resetPassword"
-                title="Reset Password"
-                component={ResetPasswordForm}
+              key="addMembersForm"
+              title="Add Members"
+              component={AddMembersForm}
+              hideNavBar={false}
             />
-            <Scene
-                key="privacyPolicy"
-                title="Privacy Policy"
-                component={PrivacyPolicy}
-            />
-            <Scene
-                key="termsAndConditions"
-                title="Terms and Conditions"
-                component={TermsAndConditions}
-            />
-            <Scene
-                key="main"
-                hideNavBar
-                panHandlers={null}
-            >
-                    <Modal>
-                    <Tabs key="tabbar" tabBarComponent={FooterTabs}>
-                        <Scene
-                            key="contacts"
-                            title="Contacts"
-                            component={ContactTabs}
-                            renderRightButton={() => (
-                                <CommonButton
-                                onPress={() => Actions.addContact()}
-                                name={'add'} />
-                            )}
-                        />
-                        <Scene
-                            key="threads"
-                            title="ThRead"
-                            component={ThreadList}
-                            renderRightButton={() => (
-                                <CommonButton
-                                onPress={() => Actions.createThread()}
-                                name={'add'} />
-                            )}
-                            initial
-                        />
-                        <Scene
-                            key="profile"
-                            title="Profile"
-                            component={Profile}
-                        />
-                    </Tabs>
-                    <Scene
-                        key="createThread"
-                        title="Create"
-                        component={CreateTreadForm}
-                    />
-                    <Scene
-                        key="addContact"
-                        title="Send Request"
-                        component={AddContactForm}
-                    />
-                    <Scene
-                        key="dmThread"
-                        hideNavBar
-                    >
-                        <Scene
-                            key="chat"
-                            component={Chat}
-                            hideNavBar={false}
-                        />
-                    </Scene>
-                    <Scene
-                        key="thread"
-                        hideNavBar
-                    >
-                            <Scene
-                            key="chat"
-                            component={Chat}
-                            hideNavBar={false}
-                        />
-                        <Scene
-                            key="info"
-                            title="Info"
-                            component={Info}
-                            hideNavBar={false}
-                        />
-                        <Scene
-                            key="addMembersForm"
-                            title="Add Members"
-                            component={AddMembersForm}
-                            hideNavBar={false}
-                        />
-                    </Scene>
-                </Modal>
-            </Scene>
-        </Scene>
-    </Router>
+          </Scene>
+        </Modal>
+      </Scene>
+    </Scene>
+  </Router>
 );
 
 export default RouterComponent;
 
 const sceneConfig = {
-    cardStyle: {
-        backgroundColor: 'white'
-    }
+  cardStyle: {
+    backgroundColor: 'white'
+  }
 };

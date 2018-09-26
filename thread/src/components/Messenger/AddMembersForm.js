@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container, Content, Form, Item, Input, Label, Button, Text, Toast, Spinner, ListItem, CheckBox, Body, List } from 'native-base';
-import { LoadingButton } from '../Common';
+import { Content, Text, Toast, Spinner, ListItem, CheckBox, Body, List, Footer, FooterTab } from 'native-base';
+import { LoadingButton, CommonContainer } from '../Common';
 import { Actions } from 'react-native-router-flux';
 
 class AddMembersForm extends Component {
@@ -9,7 +9,7 @@ class AddMembersForm extends Component {
         button_loading: false,
         added_contacts: []
     }
-    
+
     onAddButtonPress = () => {
         this.setState({
             button_loading: true
@@ -57,7 +57,7 @@ class AddMembersForm extends Component {
         }
     }
 
-    search(keyValue, array){
+    search(keyValue, array) {
         for (let i = 0; i < array.length; i++) {
             if (array[i].id === keyValue) {
                 return array[i];
@@ -66,7 +66,7 @@ class AddMembersForm extends Component {
 
         return null;
     }
-    
+
     isUserMember(userID) {
         var weFoundSomeoneThatLikesCats = this.search(userID, this.props.users);
 
@@ -87,7 +87,7 @@ class AddMembersForm extends Component {
         const listItems = this.props.contact_list.map((d) => {
             const isMember = this.isUserMember(d.id);
             const isChecked = isMember ? true : this.state.added_contacts.indexOf(d.id) !== -1;
-            const color = isMember ? 'green' : '';
+            const color = isMember ? 'blue' : '';
 
             return (
                 <ListItem key={d.id}>
@@ -103,7 +103,7 @@ class AddMembersForm extends Component {
         });
 
         return (
-            <List>
+            <List style={{ paddingRight: 20}}>
                 {listItems}
             </List>
         );
@@ -111,17 +111,21 @@ class AddMembersForm extends Component {
 
     render() {
         return (
-            <Container>
+            <CommonContainer inverse={true}>
                 <Content>
                     {this.renderContacts()}
-                    <LoadingButton
-                        loading={this.state.button_loading}
-                        style={{ marginTop: 50 }}
-                        onPress={this.onAddButtonPress}
-                        text="Add New Members"
-                    />
                 </Content>
-            </Container>
+                <Footer>
+                    <FooterTab>
+                        <LoadingButton
+                            loading={this.props.loading}
+                            onPress={this.onAddButtonPress}
+                            text="Add New Members"
+                            noMargin={true}
+                        />
+                    </FooterTab>
+                </Footer>
+            </CommonContainer>
         );
     }
 }
